@@ -1,0 +1,16 @@
+{
+  "item.sabi.small_sabi": "Xiao Sabi",
+  "item.sabi.medium_sabi": "Zhong Sabi",
+  "item.sabi.big_sabi": "Da Sabi",
+  "item.sabi.giant_sabi": "Ju Sabi",
+  "item.sabi.advanced_redstone_core": "Advanced Redstone Core",
+  "item.sabi.pawn_machine": "Pawn Machine",
+  "block.sabi.pawn_machine": "Pawn Machine",
+  "message.sabi.deposited_currency": "Deposited %s Xiao Sabi",
+  "tooltip.sabi.account_balance": "Account balance: %s Xiao Sabi",
+  "screen.sabi.account": "Sabi Account",
+  "screen.sabi.current_balance": "Current balance: %s Xiao Sabi",
+  "screen.sabi.withdraw_amount": "Withdraw amount",
+  "button.sabi.withdraw": "Withdraw",
+  "button.sabi.deposit_all": "Deposit All"
+}

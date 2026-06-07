@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "sabi:block/pawn_machine_side",
+    "down": "sabi:block/pawn_machine_bottom",
+    "up": "sabi:block/pawn_machine_top",
+    "north": "sabi:block/pawn_machine_front",
+    "south": "sabi:block/pawn_machine_side",
+    "west": "sabi:block/pawn_machine_side",
+    "east": "sabi:block/pawn_machine_side"
+  }
+}

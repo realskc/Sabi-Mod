@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "OEO",
+    "ECE",
+    "OXO"
+  ],
+  "key": {
+    "O": "minecraft:obsidian",
+    "E": "minecraft:emerald_block",
+    "C": "sabi:advanced_redstone_core",
+    "X": "minecraft:ender_chest"
+  },
+  "result": {
+    "id": "sabi:pawn_machine",
+    "count": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "item.sabi.small_sabi": "小撒币",
+  "item.sabi.medium_sabi": "中撒币",
+  "item.sabi.big_sabi": "大撒币",
+  "item.sabi.giant_sabi": "巨撒币",
+  "item.sabi.advanced_redstone_core": "高级红石核心",
+  "item.sabi.pawn_machine": "典当机",
+  "block.sabi.pawn_machine": "典当机",
+  "message.sabi.deposited_currency": "已存入 %s 小撒币",
+  "tooltip.sabi.account_balance": "账户余额：%s 小撒币",
+  "screen.sabi.account": "撒币账户",
+  "screen.sabi.current_balance": "当前余额：%s 小撒币",
+  "screen.sabi.withdraw_amount": "提现数量",
+  "button.sabi.withdraw": "提现",
+  "button.sabi.deposit_all": "全部存入"
+}
