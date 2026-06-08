@@ -6,8 +6,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import top.sabi.Sabi;
 import top.sabi.SabiClientState;
 
 public final class SabiClient {
@@ -18,8 +20,20 @@ public final class SabiClient {
     }
 
     public static void register(IEventBus modEventBus) {
+        modEventBus.addListener(SabiClient::registerMenuScreens);
         NeoForge.EVENT_BUS.addListener(SabiClient::onScreenRender);
         NeoForge.EVENT_BUS.addListener(SabiClient::onScreenMousePressed);
+    }
+
+    private static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(Sabi.PAWN_MACHINE_MENU.get(), SabiPawnMachineScreen::new);
+    }
+
+    public static void openPawnMachine(top.sabi.SabiNetwork.PawnMachinePayload payload) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
+            pawnMachineScreen.update(payload);
+        }
     }
 
     private static void onScreenMousePressed(ScreenEvent.MouseButtonPressed.Pre event) {

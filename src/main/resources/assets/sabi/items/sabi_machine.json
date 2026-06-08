@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "sabi:block/pawn_machine"
+    "model": "sabi:block/sabi_machine"
   }
 }

@@ -43,7 +43,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "sabi:pawn_machine"
+        "recipe": "sabi:sabi_machine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -59,7 +59,7 @@
   ],
   "rewards": {
     "recipes": [
-      "sabi:pawn_machine"
+      "sabi:sabi_machine"
     ]
   }
 }

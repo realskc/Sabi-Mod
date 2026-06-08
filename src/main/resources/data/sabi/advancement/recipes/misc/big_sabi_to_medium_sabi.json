@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_big_sabi": {
+      "conditions": {
+        "items": [
+          {
+            "items": "sabi:big_sabi"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "sabi:big_sabi_to_medium_sabi"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_big_sabi"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sabi:big_sabi_to_medium_sabi"
+    ]
+  }
+}

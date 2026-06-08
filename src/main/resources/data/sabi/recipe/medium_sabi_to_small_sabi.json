@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "sabi:medium_sabi"
+  ],
+  "result": {
+    "id": "sabi:small_sabi",
+    "count": 64
+  }
+}

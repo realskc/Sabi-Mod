@@ -1,0 +1,37 @@
+{
+  "comment": "撒币机物品配置。默认典当价/赎回价单位都是小撒币；include_all_registered_items 会从当前版本物品注册表生成候选列表，再应用排除规则和单项价格覆盖。",
+  "include_all_registered_items": true,
+  "default_pawn_price": 1,
+  "default_redeem_price": 2,
+  "exclude_id_suffixes": [
+    "_spawn_egg"
+  ],
+  "exclude_items": [
+    "minecraft:air",
+    "minecraft:cave_air",
+    "minecraft:void_air",
+    "minecraft:bedrock",
+    "minecraft:barrier",
+    "minecraft:light",
+    "minecraft:command_block",
+    "minecraft:chain_command_block",
+    "minecraft:repeating_command_block",
+    "minecraft:command_block_minecart",
+    "minecraft:structure_block",
+    "minecraft:structure_void",
+    "minecraft:jigsaw",
+    "minecraft:debug_stick",
+    "minecraft:knowledge_book",
+    "minecraft:player_head",
+    "minecraft:spawner",
+    "minecraft:trial_spawner",
+    "minecraft:end_portal_frame",
+    "minecraft:reinforced_deepslate",
+    "minecraft:petrified_oak_slab",
+    "sabi:small_sabi",
+    "sabi:medium_sabi",
+    "sabi:big_sabi",
+    "sabi:giant_sabi"
+  ],
+  "price_overrides": {}
+}

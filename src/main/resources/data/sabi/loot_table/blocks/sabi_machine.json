@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "sabi:pawn_machine"
+          "name": "sabi:sabi_machine"
         }
       ],
       "conditions": [

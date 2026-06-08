@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "sabi:block/sabi_machine"
+    }
+  }
+}

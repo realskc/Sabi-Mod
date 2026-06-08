@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "sabi:block/sabi_machine_side",
+    "down": "sabi:block/sabi_machine_bottom",
+    "up": "sabi:block/sabi_machine_top",
+    "north": "sabi:block/sabi_machine_front",
+    "south": "sabi:block/sabi_machine_side",
+    "west": "sabi:block/sabi_machine_side",
+    "east": "sabi:block/sabi_machine_side"
+  }
+}
