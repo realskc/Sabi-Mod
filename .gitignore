@@ -4,6 +4,7 @@ run/
 
 *.class
 *.log
+__pycache__/
 
 .idea/
 *.iml

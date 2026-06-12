@@ -45,27 +45,31 @@ public final class SabiPawnMachineConfig {
             pawn = Math.max(0, pawn);
             redeem = Math.max(0, redeem);
         }
+
+        public Price(int pawn) {
+            this(pawn, redeemPrice(pawn));
+        }
+
+        private static int redeemPrice(int pawn) {
+            int nonNegativePawn = Math.max(0, pawn);
+            return (int)Math.min(Integer.MAX_VALUE, (nonNegativePawn * 6L + 4L) / 5L);
+        }
+    }
+
+    public record Entry(Item item, Price price) {
     }
 
     public static final class Config {
-        private final boolean includeAllRegisteredItems;
-        private final int defaultPawnPrice;
-        private final int defaultRedeemPrice;
-        private final Set<String> excludedItems;
-        private final Set<String> excludedSuffixes;
-        private final Map<String, Price> overrides;
+        private final List<Entry> entries;
+        private final Map<String, Price> pricesById;
 
-        private Config(boolean includeAllRegisteredItems, int defaultPawnPrice, int defaultRedeemPrice, Set<String> excludedItems, Set<String> excludedSuffixes, Map<String, Price> overrides) {
-            this.includeAllRegisteredItems = includeAllRegisteredItems;
-            this.defaultPawnPrice = Math.max(0, defaultPawnPrice);
-            this.defaultRedeemPrice = Math.max(0, defaultRedeemPrice);
-            this.excludedItems = excludedItems;
-            this.excludedSuffixes = excludedSuffixes;
-            this.overrides = overrides;
+        private Config(List<Entry> entries, Map<String, Price> pricesById) {
+            this.entries = List.copyOf(entries);
+            this.pricesById = Map.copyOf(pricesById);
         }
 
         public static Config defaults() {
-            return new Config(true, 1, 2, new HashSet<>(), new HashSet<>(), new HashMap<>());
+            return new Config(List.of(), Map.of());
         }
 
         public static Config fromJson(JsonObject root) {
@@ -73,42 +77,52 @@ public final class SabiPawnMachineConfig {
                 return defaults();
             }
 
-            boolean includeAll = getBoolean(root, "include_all_registered_items", true);
-            int defaultPawn = getInt(root, "default_pawn_price", 1);
-            int defaultRedeem = getInt(root, "default_redeem_price", 2);
-            Set<String> excludedItems = stringSet(root.getAsJsonArray("exclude_items"));
-            Set<String> excludedSuffixes = stringSet(root.getAsJsonArray("exclude_id_suffixes"));
-            Map<String, Price> overrides = new HashMap<>();
+            List<Entry> entries = new ArrayList<>();
+            Map<String, Price> pricesById = new HashMap<>();
+            Set<String> seen = new HashSet<>();
+            JsonArray groupArray = root.getAsJsonArray("groups");
+            if (groupArray == null) {
+                return defaults();
+            }
 
-            JsonObject overrideRoot = root.getAsJsonObject("price_overrides");
-            if (overrideRoot != null) {
-                for (Map.Entry<String, JsonElement> entry : overrideRoot.entrySet()) {
-                    if (entry.getValue().isJsonObject()) {
-                        JsonObject price = entry.getValue().getAsJsonObject();
-                        overrides.put(entry.getKey(), new Price(getInt(price, "pawn", defaultPawn), getInt(price, "redeem", defaultRedeem)));
+            for (JsonElement element : groupArray) {
+                if (!element.isJsonObject()) {
+                    continue;
+                }
+
+                JsonObject groupObject = element.getAsJsonObject();
+                Price price = new Price(getInt(groupObject, "pawn_price", 1));
+                JsonArray itemArray = groupObject.getAsJsonArray("items");
+                if (itemArray == null) {
+                    continue;
+                }
+
+                for (JsonElement itemElement : itemArray) {
+                    if (!itemElement.isJsonPrimitive()) {
+                        continue;
                     }
+
+                    Identifier id = Identifier.tryParse(itemElement.getAsString());
+                    if (id == null || !seen.add(id.toString())) {
+                        continue;
+                    }
+
+                    Item item = BuiltInRegistries.ITEM.getValue(id);
+                    if (item == null || new ItemStack(item).isEmpty()) {
+                        continue;
+                    }
+
+                    entries.add(new Entry(item, price));
+                    pricesById.put(id.toString(), price);
                 }
             }
 
-            return new Config(includeAll, defaultPawn, defaultRedeem, excludedItems, excludedSuffixes, overrides);
+            return new Config(entries, pricesById);
         }
 
         public boolean isAllowed(Item item) {
             Identifier id = BuiltInRegistries.ITEM.getKey(item);
-            if (id == null || new ItemStack(item).isEmpty()) {
-                return false;
-            }
-
-            String key = id.toString();
-            if (this.excludedItems.contains(key)) {
-                return false;
-            }
-            for (String suffix : this.excludedSuffixes) {
-                if (!suffix.isEmpty() && key.endsWith(suffix)) {
-                    return false;
-                }
-            }
-            return this.includeAllRegisteredItems || this.overrides.containsKey(key);
+            return id != null && this.pricesById.containsKey(id.toString());
         }
 
         public Price price(Item item) {
@@ -116,34 +130,20 @@ public final class SabiPawnMachineConfig {
             if (id == null) {
                 return new Price(0, 0);
             }
-            return this.overrides.getOrDefault(id.toString(), new Price(this.defaultPawnPrice, this.defaultRedeemPrice));
+            return this.pricesById.getOrDefault(id.toString(), new Price(0, 0));
         }
 
         public List<Item> allowedItems() {
             List<Item> items = new ArrayList<>();
-            BuiltInRegistries.ITEM.stream().filter(this::isAllowed).forEach(items::add);
+            for (Entry entry : this.entries) {
+                items.add(entry.item());
+            }
             return items;
-        }
-
-        private static boolean getBoolean(JsonObject object, String name, boolean fallback) {
-            JsonElement element = object.get(name);
-            return element == null ? fallback : element.getAsBoolean();
         }
 
         private static int getInt(JsonObject object, String name, int fallback) {
             JsonElement element = object.get(name);
             return element == null ? fallback : element.getAsInt();
-        }
-
-        private static Set<String> stringSet(JsonArray array) {
-            Set<String> result = new HashSet<>();
-            if (array == null) {
-                return result;
-            }
-            for (JsonElement element : array) {
-                result.add(element.getAsString());
-            }
-            return result;
         }
     }
 }

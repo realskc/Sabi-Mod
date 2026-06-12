@@ -1,37 +1,2964 @@
 {
-  "comment": "撒币机物品配置。默认典当价/赎回价单位都是小撒币；include_all_registered_items 会从当前版本物品注册表生成候选列表，再应用排除规则和单项价格覆盖。",
-  "include_all_registered_items": true,
-  "default_pawn_price": 1,
-  "default_redeem_price": 2,
-  "exclude_id_suffixes": [
-    "_spawn_egg"
-  ],
-  "exclude_items": [
-    "minecraft:air",
-    "minecraft:cave_air",
-    "minecraft:void_air",
-    "minecraft:bedrock",
-    "minecraft:barrier",
-    "minecraft:light",
-    "minecraft:command_block",
-    "minecraft:chain_command_block",
-    "minecraft:repeating_command_block",
-    "minecraft:command_block_minecart",
-    "minecraft:structure_block",
-    "minecraft:structure_void",
-    "minecraft:jigsaw",
-    "minecraft:debug_stick",
-    "minecraft:knowledge_book",
-    "minecraft:player_head",
-    "minecraft:spawner",
-    "minecraft:trial_spawner",
-    "minecraft:end_portal_frame",
-    "minecraft:reinforced_deepslate",
-    "minecraft:petrified_oak_slab",
-    "sabi:small_sabi",
-    "sabi:medium_sabi",
-    "sabi:big_sabi",
-    "sabi:giant_sabi"
-  ],
-  "price_overrides": {}
+  "comment": "Sabi machine grouped item price list. Prices are in Xiao Sabi. Items share a group only when they have the same material role and the same item form; color, pattern, species, and oxidation/wax state variants may share one price.",
+  "groups": [
+    { "id": "stone", "pawn_price": 4, "items": [
+      "minecraft:stone"
+    ] },
+    { "id": "granite", "pawn_price": 3, "items": [
+      "minecraft:granite"
+    ] },
+    { "id": "polished_granite", "pawn_price": 1, "items": [
+      "minecraft:polished_granite"
+    ] },
+    { "id": "diorite", "pawn_price": 1, "items": [
+      "minecraft:diorite"
+    ] },
+    { "id": "polished_diorite", "pawn_price": 1, "items": [
+      "minecraft:polished_diorite"
+    ] },
+    { "id": "andesite", "pawn_price": 1, "items": [
+      "minecraft:andesite"
+    ] },
+    { "id": "polished_andesite", "pawn_price": 1, "items": [
+      "minecraft:polished_andesite"
+    ] },
+    { "id": "deepslate", "pawn_price": 1, "items": [
+      "minecraft:deepslate"
+    ] },
+    { "id": "cobbled_deepslate", "pawn_price": 1, "items": [
+      "minecraft:cobbled_deepslate"
+    ] },
+    { "id": "polished_deepslate", "pawn_price": 1, "items": [
+      "minecraft:polished_deepslate"
+    ] },
+    { "id": "calcite", "pawn_price": 1, "items": [
+      "minecraft:calcite"
+    ] },
+    { "id": "tuff", "pawn_price": 1, "items": [
+      "minecraft:tuff"
+    ] },
+    { "id": "tuff_slab", "pawn_price": 1, "items": [
+      "minecraft:tuff_slab"
+    ] },
+    { "id": "tuff_stairs", "pawn_price": 1, "items": [
+      "minecraft:tuff_stairs"
+    ] },
+    { "id": "tuff_wall", "pawn_price": 1, "items": [
+      "minecraft:tuff_wall"
+    ] },
+    { "id": "chiseled_tuff", "pawn_price": 1, "items": [
+      "minecraft:chiseled_tuff"
+    ] },
+    { "id": "polished_tuff", "pawn_price": 1, "items": [
+      "minecraft:polished_tuff"
+    ] },
+    { "id": "polished_tuff_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_tuff_slab"
+    ] },
+    { "id": "polished_tuff_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_tuff_stairs"
+    ] },
+    { "id": "polished_tuff_wall", "pawn_price": 1, "items": [
+      "minecraft:polished_tuff_wall"
+    ] },
+    { "id": "tuff_bricks", "pawn_price": 1, "items": [
+      "minecraft:tuff_bricks"
+    ] },
+    { "id": "tuff_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:tuff_brick_slab"
+    ] },
+    { "id": "tuff_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:tuff_brick_stairs"
+    ] },
+    { "id": "tuff_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:tuff_brick_wall"
+    ] },
+    { "id": "chiseled_tuff_bricks", "pawn_price": 1, "items": [
+      "minecraft:chiseled_tuff_bricks"
+    ] },
+    { "id": "dripstone_block", "pawn_price": 1, "items": [
+      "minecraft:dripstone_block"
+    ] },
+    { "id": "grass_block", "pawn_price": 1, "items": [
+      "minecraft:grass_block"
+    ] },
+    { "id": "dirt", "pawn_price": 1, "items": [
+      "minecraft:dirt"
+    ] },
+    { "id": "coarse_dirt", "pawn_price": 1, "items": [
+      "minecraft:coarse_dirt"
+    ] },
+    { "id": "podzol", "pawn_price": 1, "items": [
+      "minecraft:podzol"
+    ] },
+    { "id": "rooted_dirt", "pawn_price": 1, "items": [
+      "minecraft:rooted_dirt"
+    ] },
+    { "id": "mud", "pawn_price": 1, "items": [
+      "minecraft:mud"
+    ] },
+    { "id": "crimson_nylium", "pawn_price": 1, "items": [
+      "minecraft:crimson_nylium"
+    ] },
+    { "id": "warped_nylium", "pawn_price": 1, "items": [
+      "minecraft:warped_nylium"
+    ] },
+    { "id": "cobblestone", "pawn_price": 1, "items": [
+      "minecraft:cobblestone"
+    ] },
+    { "id": "wooden_planks", "pawn_price": 1, "items": [
+      "minecraft:oak_planks",
+      "minecraft:spruce_planks",
+      "minecraft:birch_planks",
+      "minecraft:jungle_planks",
+      "minecraft:acacia_planks",
+      "minecraft:cherry_planks",
+      "minecraft:dark_oak_planks",
+      "minecraft:pale_oak_planks",
+      "minecraft:mangrove_planks",
+      "minecraft:bamboo_planks",
+      "minecraft:crimson_planks",
+      "minecraft:warped_planks",
+      "minecraft:bamboo_mosaic"
+    ] },
+    { "id": "wooden_slabs", "pawn_price": 1, "items": [
+      "minecraft:bamboo_mosaic_slab",
+      "minecraft:oak_slab",
+      "minecraft:spruce_slab",
+      "minecraft:birch_slab",
+      "minecraft:jungle_slab",
+      "minecraft:acacia_slab",
+      "minecraft:cherry_slab",
+      "minecraft:dark_oak_slab",
+      "minecraft:pale_oak_slab",
+      "minecraft:mangrove_slab",
+      "minecraft:bamboo_slab",
+      "minecraft:crimson_slab",
+      "minecraft:warped_slab"
+    ] },
+    { "id": "wooden_stairs", "pawn_price": 1, "items": [
+      "minecraft:bamboo_mosaic_stairs",
+      "minecraft:oak_stairs",
+      "minecraft:spruce_stairs",
+      "minecraft:birch_stairs",
+      "minecraft:jungle_stairs",
+      "minecraft:acacia_stairs",
+      "minecraft:cherry_stairs",
+      "minecraft:dark_oak_stairs",
+      "minecraft:pale_oak_stairs",
+      "minecraft:mangrove_stairs",
+      "minecraft:bamboo_stairs",
+      "minecraft:crimson_stairs",
+      "minecraft:warped_stairs"
+    ] },
+    { "id": "tree_saplings", "pawn_price": 1, "items": [
+      "minecraft:oak_sapling",
+      "minecraft:spruce_sapling",
+      "minecraft:birch_sapling",
+      "minecraft:jungle_sapling",
+      "minecraft:acacia_sapling",
+      "minecraft:cherry_sapling",
+      "minecraft:dark_oak_sapling",
+      "minecraft:pale_oak_sapling"
+    ] },
+    { "id": "mangrove_propagule", "pawn_price": 1, "items": [
+      "minecraft:mangrove_propagule"
+    ] },
+    { "id": "sand", "pawn_price": 1, "items": [
+      "minecraft:sand"
+    ] },
+    { "id": "suspicious_sand", "pawn_price": 1, "items": [
+      "minecraft:suspicious_sand"
+    ] },
+    { "id": "red_sand", "pawn_price": 1, "items": [
+      "minecraft:red_sand"
+    ] },
+    { "id": "gravel", "pawn_price": 1, "items": [
+      "minecraft:gravel"
+    ] },
+    { "id": "suspicious_gravel", "pawn_price": 1, "items": [
+      "minecraft:suspicious_gravel"
+    ] },
+    { "id": "coal_ore", "pawn_price": 1, "items": [
+      "minecraft:coal_ore"
+    ] },
+    { "id": "deepslate_coal_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_coal_ore"
+    ] },
+    { "id": "iron_ore", "pawn_price": 1, "items": [
+      "minecraft:iron_ore"
+    ] },
+    { "id": "deepslate_iron_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_iron_ore"
+    ] },
+    { "id": "copper_ore", "pawn_price": 1, "items": [
+      "minecraft:copper_ore"
+    ] },
+    { "id": "deepslate_copper_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_copper_ore"
+    ] },
+    { "id": "gold_ore", "pawn_price": 1, "items": [
+      "minecraft:gold_ore"
+    ] },
+    { "id": "deepslate_gold_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_gold_ore"
+    ] },
+    { "id": "redstone_ore", "pawn_price": 1, "items": [
+      "minecraft:redstone_ore"
+    ] },
+    { "id": "deepslate_redstone_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_redstone_ore"
+    ] },
+    { "id": "emerald_ore", "pawn_price": 1, "items": [
+      "minecraft:emerald_ore"
+    ] },
+    { "id": "deepslate_emerald_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_emerald_ore"
+    ] },
+    { "id": "lapis_ore", "pawn_price": 1, "items": [
+      "minecraft:lapis_ore"
+    ] },
+    { "id": "deepslate_lapis_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_lapis_ore"
+    ] },
+    { "id": "diamond_ore", "pawn_price": 1, "items": [
+      "minecraft:diamond_ore"
+    ] },
+    { "id": "deepslate_diamond_ore", "pawn_price": 1, "items": [
+      "minecraft:deepslate_diamond_ore"
+    ] },
+    { "id": "nether_gold_ore", "pawn_price": 1, "items": [
+      "minecraft:nether_gold_ore"
+    ] },
+    { "id": "nether_quartz_ore", "pawn_price": 1, "items": [
+      "minecraft:nether_quartz_ore"
+    ] },
+    { "id": "ancient_debris", "pawn_price": 1, "items": [
+      "minecraft:ancient_debris"
+    ] },
+    { "id": "coal_block", "pawn_price": 1, "items": [
+      "minecraft:coal_block"
+    ] },
+    { "id": "raw_iron_block", "pawn_price": 1, "items": [
+      "minecraft:raw_iron_block"
+    ] },
+    { "id": "raw_copper_block", "pawn_price": 1, "items": [
+      "minecraft:raw_copper_block"
+    ] },
+    { "id": "raw_gold_block", "pawn_price": 1, "items": [
+      "minecraft:raw_gold_block"
+    ] },
+    { "id": "heavy_core", "pawn_price": 1, "items": [
+      "minecraft:heavy_core"
+    ] },
+    { "id": "amethyst_block", "pawn_price": 1, "items": [
+      "minecraft:amethyst_block"
+    ] },
+    { "id": "iron_block", "pawn_price": 1, "items": [
+      "minecraft:iron_block"
+    ] },
+    { "id": "copper_blocks", "pawn_price": 1, "items": [
+      "minecraft:copper_block",
+      "minecraft:exposed_copper",
+      "minecraft:weathered_copper",
+      "minecraft:oxidized_copper",
+      "minecraft:waxed_copper_block",
+      "minecraft:waxed_exposed_copper",
+      "minecraft:waxed_weathered_copper",
+      "minecraft:waxed_oxidized_copper"
+    ] },
+    { "id": "gold_block", "pawn_price": 1, "items": [
+      "minecraft:gold_block"
+    ] },
+    { "id": "diamond_block", "pawn_price": 1, "items": [
+      "minecraft:diamond_block"
+    ] },
+    { "id": "netherite_block", "pawn_price": 1, "items": [
+      "minecraft:netherite_block"
+    ] },
+    { "id": "chiseled_copper_variants", "pawn_price": 1, "items": [
+      "minecraft:chiseled_copper",
+      "minecraft:exposed_chiseled_copper",
+      "minecraft:weathered_chiseled_copper",
+      "minecraft:oxidized_chiseled_copper",
+      "minecraft:waxed_chiseled_copper",
+      "minecraft:waxed_exposed_chiseled_copper",
+      "minecraft:waxed_weathered_chiseled_copper",
+      "minecraft:waxed_oxidized_chiseled_copper"
+    ] },
+    { "id": "cut_copper_variants", "pawn_price": 1, "items": [
+      "minecraft:cut_copper",
+      "minecraft:exposed_cut_copper",
+      "minecraft:weathered_cut_copper",
+      "minecraft:oxidized_cut_copper",
+      "minecraft:waxed_cut_copper",
+      "minecraft:waxed_exposed_cut_copper",
+      "minecraft:waxed_weathered_cut_copper",
+      "minecraft:waxed_oxidized_cut_copper"
+    ] },
+    { "id": "cut_copper_stairs_variants", "pawn_price": 1, "items": [
+      "minecraft:cut_copper_stairs",
+      "minecraft:exposed_cut_copper_stairs",
+      "minecraft:weathered_cut_copper_stairs",
+      "minecraft:oxidized_cut_copper_stairs",
+      "minecraft:waxed_cut_copper_stairs",
+      "minecraft:waxed_exposed_cut_copper_stairs",
+      "minecraft:waxed_weathered_cut_copper_stairs",
+      "minecraft:waxed_oxidized_cut_copper_stairs"
+    ] },
+    { "id": "cut_copper_slab_variants", "pawn_price": 1, "items": [
+      "minecraft:cut_copper_slab",
+      "minecraft:exposed_cut_copper_slab",
+      "minecraft:weathered_cut_copper_slab",
+      "minecraft:oxidized_cut_copper_slab",
+      "minecraft:waxed_cut_copper_slab",
+      "minecraft:waxed_exposed_cut_copper_slab",
+      "minecraft:waxed_weathered_cut_copper_slab",
+      "minecraft:waxed_oxidized_cut_copper_slab"
+    ] },
+    { "id": "logs_stems_blocks", "pawn_price": 1, "items": [
+      "minecraft:oak_log",
+      "minecraft:spruce_log",
+      "minecraft:birch_log",
+      "minecraft:jungle_log",
+      "minecraft:acacia_log",
+      "minecraft:cherry_log",
+      "minecraft:pale_oak_log",
+      "minecraft:dark_oak_log",
+      "minecraft:mangrove_log",
+      "minecraft:crimson_stem",
+      "minecraft:warped_stem",
+      "minecraft:bamboo_block"
+    ] },
+    { "id": "mangrove_roots", "pawn_price": 1, "items": [
+      "minecraft:mangrove_roots"
+    ] },
+    { "id": "muddy_mangrove_roots", "pawn_price": 1, "items": [
+      "minecraft:muddy_mangrove_roots"
+    ] },
+    { "id": "stripped_logs_stems_blocks", "pawn_price": 1, "items": [
+      "minecraft:stripped_oak_log",
+      "minecraft:stripped_spruce_log",
+      "minecraft:stripped_birch_log",
+      "minecraft:stripped_jungle_log",
+      "minecraft:stripped_acacia_log",
+      "minecraft:stripped_cherry_log",
+      "minecraft:stripped_dark_oak_log",
+      "minecraft:stripped_pale_oak_log",
+      "minecraft:stripped_mangrove_log",
+      "minecraft:stripped_crimson_stem",
+      "minecraft:stripped_warped_stem",
+      "minecraft:stripped_bamboo_block"
+    ] },
+    { "id": "stripped_wood_hyphae", "pawn_price": 1, "items": [
+      "minecraft:stripped_oak_wood",
+      "minecraft:stripped_spruce_wood",
+      "minecraft:stripped_birch_wood",
+      "minecraft:stripped_jungle_wood",
+      "minecraft:stripped_acacia_wood",
+      "minecraft:stripped_cherry_wood",
+      "minecraft:stripped_dark_oak_wood",
+      "minecraft:stripped_pale_oak_wood",
+      "minecraft:stripped_mangrove_wood",
+      "minecraft:stripped_crimson_hyphae",
+      "minecraft:stripped_warped_hyphae"
+    ] },
+    { "id": "wood_hyphae", "pawn_price": 1, "items": [
+      "minecraft:oak_wood",
+      "minecraft:spruce_wood",
+      "minecraft:birch_wood",
+      "minecraft:jungle_wood",
+      "minecraft:acacia_wood",
+      "minecraft:cherry_wood",
+      "minecraft:pale_oak_wood",
+      "minecraft:dark_oak_wood",
+      "minecraft:mangrove_wood",
+      "minecraft:crimson_hyphae",
+      "minecraft:warped_hyphae"
+    ] },
+    { "id": "tree_leaves", "pawn_price": 1, "items": [
+      "minecraft:oak_leaves",
+      "minecraft:spruce_leaves",
+      "minecraft:birch_leaves",
+      "minecraft:jungle_leaves",
+      "minecraft:acacia_leaves",
+      "minecraft:cherry_leaves",
+      "minecraft:dark_oak_leaves",
+      "minecraft:pale_oak_leaves",
+      "minecraft:mangrove_leaves",
+      "minecraft:azalea_leaves",
+      "minecraft:flowering_azalea_leaves"
+    ] },
+    { "id": "sponge", "pawn_price": 1, "items": [
+      "minecraft:sponge"
+    ] },
+    { "id": "wet_sponge", "pawn_price": 1, "items": [
+      "minecraft:wet_sponge"
+    ] },
+    { "id": "glass", "pawn_price": 1, "items": [
+      "minecraft:glass"
+    ] },
+    { "id": "tinted_glass", "pawn_price": 1, "items": [
+      "minecraft:tinted_glass"
+    ] },
+    { "id": "lapis_block", "pawn_price": 1, "items": [
+      "minecraft:lapis_block"
+    ] },
+    { "id": "sandstone", "pawn_price": 1, "items": [
+      "minecraft:sandstone"
+    ] },
+    { "id": "chiseled_sandstone", "pawn_price": 1, "items": [
+      "minecraft:chiseled_sandstone"
+    ] },
+    { "id": "cut_sandstone", "pawn_price": 1, "items": [
+      "minecraft:cut_sandstone"
+    ] },
+    { "id": "cobweb", "pawn_price": 1, "items": [
+      "minecraft:cobweb"
+    ] },
+    { "id": "small_grasslike_plants", "pawn_price": 1, "items": [
+      "minecraft:short_grass",
+      "minecraft:fern",
+      "minecraft:bush"
+    ] },
+    { "id": "dead_bush", "pawn_price": 1, "items": [
+      "minecraft:dead_bush"
+    ] },
+    { "id": "firefly_bush", "pawn_price": 1, "items": [
+      "minecraft:firefly_bush"
+    ] },
+    { "id": "short_dry_grass", "pawn_price": 1, "items": [
+      "minecraft:short_dry_grass"
+    ] },
+    { "id": "tall_dry_grass", "pawn_price": 1, "items": [
+      "minecraft:tall_dry_grass"
+    ] },
+    { "id": "seagrass", "pawn_price": 1, "items": [
+      "minecraft:seagrass"
+    ] },
+    { "id": "sea_pickle", "pawn_price": 1, "items": [
+      "minecraft:sea_pickle"
+    ] },
+    { "id": "azalea", "pawn_price": 1, "items": [
+      "minecraft:azalea"
+    ] },
+    { "id": "flowering_azalea", "pawn_price": 1, "items": [
+      "minecraft:flowering_azalea"
+    ] },
+    { "id": "wool_colors", "pawn_price": 1, "items": [
+      "minecraft:white_wool",
+      "minecraft:orange_wool",
+      "minecraft:magenta_wool",
+      "minecraft:light_blue_wool",
+      "minecraft:yellow_wool",
+      "minecraft:lime_wool",
+      "minecraft:pink_wool",
+      "minecraft:gray_wool",
+      "minecraft:light_gray_wool",
+      "minecraft:cyan_wool",
+      "minecraft:purple_wool",
+      "minecraft:blue_wool",
+      "minecraft:brown_wool",
+      "minecraft:green_wool",
+      "minecraft:red_wool",
+      "minecraft:black_wool"
+    ] },
+    { "id": "small_flowers", "pawn_price": 1, "items": [
+      "minecraft:dandelion",
+      "minecraft:golden_dandelion",
+      "minecraft:open_eyeblossom",
+      "minecraft:closed_eyeblossom",
+      "minecraft:poppy",
+      "minecraft:blue_orchid",
+      "minecraft:allium",
+      "minecraft:azure_bluet",
+      "minecraft:red_tulip",
+      "minecraft:orange_tulip",
+      "minecraft:white_tulip",
+      "minecraft:pink_tulip",
+      "minecraft:oxeye_daisy",
+      "minecraft:cornflower",
+      "minecraft:lily_of_the_valley",
+      "minecraft:wither_rose",
+      "minecraft:torchflower",
+      "minecraft:cactus_flower"
+    ] },
+    { "id": "tall_flowers", "pawn_price": 1, "items": [
+      "minecraft:pitcher_plant",
+      "minecraft:sunflower",
+      "minecraft:lilac",
+      "minecraft:rose_bush",
+      "minecraft:peony"
+    ] },
+    { "id": "wildflowers", "pawn_price": 1, "items": [
+      "minecraft:wildflowers"
+    ] },
+    { "id": "spore_blossom", "pawn_price": 1, "items": [
+      "minecraft:spore_blossom"
+    ] },
+    { "id": "brown_mushroom", "pawn_price": 1, "items": [
+      "minecraft:brown_mushroom"
+    ] },
+    { "id": "red_mushroom", "pawn_price": 1, "items": [
+      "minecraft:red_mushroom"
+    ] },
+    { "id": "crimson_fungus", "pawn_price": 1, "items": [
+      "minecraft:crimson_fungus"
+    ] },
+    { "id": "warped_fungus", "pawn_price": 1, "items": [
+      "minecraft:warped_fungus"
+    ] },
+    { "id": "crimson_roots", "pawn_price": 1, "items": [
+      "minecraft:crimson_roots"
+    ] },
+    { "id": "warped_roots", "pawn_price": 1, "items": [
+      "minecraft:warped_roots"
+    ] },
+    { "id": "nether_sprouts", "pawn_price": 1, "items": [
+      "minecraft:nether_sprouts"
+    ] },
+    { "id": "weeping_vines", "pawn_price": 1, "items": [
+      "minecraft:weeping_vines"
+    ] },
+    { "id": "twisting_vines", "pawn_price": 1, "items": [
+      "minecraft:twisting_vines"
+    ] },
+    { "id": "sugar_cane", "pawn_price": 1, "items": [
+      "minecraft:sugar_cane"
+    ] },
+    { "id": "kelp", "pawn_price": 1, "items": [
+      "minecraft:kelp"
+    ] },
+    { "id": "pink_petals", "pawn_price": 1, "items": [
+      "minecraft:pink_petals"
+    ] },
+    { "id": "leaf_litter", "pawn_price": 1, "items": [
+      "minecraft:leaf_litter"
+    ] },
+    { "id": "moss_carpet", "pawn_price": 1, "items": [
+      "minecraft:moss_carpet"
+    ] },
+    { "id": "moss_block", "pawn_price": 1, "items": [
+      "minecraft:moss_block"
+    ] },
+    { "id": "pale_moss_carpet", "pawn_price": 1, "items": [
+      "minecraft:pale_moss_carpet"
+    ] },
+    { "id": "pale_hanging_moss", "pawn_price": 1, "items": [
+      "minecraft:pale_hanging_moss"
+    ] },
+    { "id": "pale_moss_block", "pawn_price": 1, "items": [
+      "minecraft:pale_moss_block"
+    ] },
+    { "id": "hanging_roots", "pawn_price": 1, "items": [
+      "minecraft:hanging_roots"
+    ] },
+    { "id": "big_dripleaf", "pawn_price": 1, "items": [
+      "minecraft:big_dripleaf"
+    ] },
+    { "id": "small_dripleaf", "pawn_price": 1, "items": [
+      "minecraft:small_dripleaf"
+    ] },
+    { "id": "bamboo", "pawn_price": 1, "items": [
+      "minecraft:bamboo"
+    ] },
+    { "id": "stone_slab", "pawn_price": 1, "items": [
+      "minecraft:stone_slab"
+    ] },
+    { "id": "smooth_stone_slab", "pawn_price": 1, "items": [
+      "minecraft:smooth_stone_slab"
+    ] },
+    { "id": "sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:sandstone_slab"
+    ] },
+    { "id": "cut_sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:cut_sandstone_slab"
+    ] },
+    { "id": "cobblestone_slab", "pawn_price": 1, "items": [
+      "minecraft:cobblestone_slab"
+    ] },
+    { "id": "brick_slab", "pawn_price": 1, "items": [
+      "minecraft:brick_slab"
+    ] },
+    { "id": "stone_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:stone_brick_slab"
+    ] },
+    { "id": "mud_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:mud_brick_slab"
+    ] },
+    { "id": "nether_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:nether_brick_slab"
+    ] },
+    { "id": "quartz_slab", "pawn_price": 1, "items": [
+      "minecraft:quartz_slab"
+    ] },
+    { "id": "red_sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:red_sandstone_slab"
+    ] },
+    { "id": "cut_red_sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:cut_red_sandstone_slab"
+    ] },
+    { "id": "purpur_slab", "pawn_price": 1, "items": [
+      "minecraft:purpur_slab"
+    ] },
+    { "id": "prismarine_slab", "pawn_price": 1, "items": [
+      "minecraft:prismarine_slab"
+    ] },
+    { "id": "prismarine_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:prismarine_brick_slab"
+    ] },
+    { "id": "dark_prismarine_slab", "pawn_price": 1, "items": [
+      "minecraft:dark_prismarine_slab"
+    ] },
+    { "id": "smooth_quartz", "pawn_price": 1, "items": [
+      "minecraft:smooth_quartz"
+    ] },
+    { "id": "smooth_red_sandstone", "pawn_price": 1, "items": [
+      "minecraft:smooth_red_sandstone"
+    ] },
+    { "id": "smooth_sandstone", "pawn_price": 1, "items": [
+      "minecraft:smooth_sandstone"
+    ] },
+    { "id": "smooth_stone", "pawn_price": 1, "items": [
+      "minecraft:smooth_stone"
+    ] },
+    { "id": "bricks", "pawn_price": 1, "items": [
+      "minecraft:bricks"
+    ] },
+    { "id": "acacia_shelf", "pawn_price": 1, "items": [
+      "minecraft:acacia_shelf"
+    ] },
+    { "id": "bamboo_shelf", "pawn_price": 1, "items": [
+      "minecraft:bamboo_shelf"
+    ] },
+    { "id": "birch_shelf", "pawn_price": 1, "items": [
+      "minecraft:birch_shelf"
+    ] },
+    { "id": "cherry_shelf", "pawn_price": 1, "items": [
+      "minecraft:cherry_shelf"
+    ] },
+    { "id": "crimson_shelf", "pawn_price": 1, "items": [
+      "minecraft:crimson_shelf"
+    ] },
+    { "id": "dark_oak_shelf", "pawn_price": 1, "items": [
+      "minecraft:dark_oak_shelf"
+    ] },
+    { "id": "jungle_shelf", "pawn_price": 1, "items": [
+      "minecraft:jungle_shelf"
+    ] },
+    { "id": "mangrove_shelf", "pawn_price": 1, "items": [
+      "minecraft:mangrove_shelf"
+    ] },
+    { "id": "oak_shelf", "pawn_price": 1, "items": [
+      "minecraft:oak_shelf"
+    ] },
+    { "id": "pale_oak_shelf", "pawn_price": 1, "items": [
+      "minecraft:pale_oak_shelf"
+    ] },
+    { "id": "spruce_shelf", "pawn_price": 1, "items": [
+      "minecraft:spruce_shelf"
+    ] },
+    { "id": "warped_shelf", "pawn_price": 1, "items": [
+      "minecraft:warped_shelf"
+    ] },
+    { "id": "bookshelf", "pawn_price": 1, "items": [
+      "minecraft:bookshelf"
+    ] },
+    { "id": "chiseled_bookshelf", "pawn_price": 1, "items": [
+      "minecraft:chiseled_bookshelf"
+    ] },
+    { "id": "decorated_pot", "pawn_price": 1, "items": [
+      "minecraft:decorated_pot"
+    ] },
+    { "id": "mossy_cobblestone", "pawn_price": 1, "items": [
+      "minecraft:mossy_cobblestone"
+    ] },
+    { "id": "obsidian", "pawn_price": 1, "items": [
+      "minecraft:obsidian"
+    ] },
+    { "id": "torch", "pawn_price": 1, "items": [
+      "minecraft:torch"
+    ] },
+    { "id": "end_rod", "pawn_price": 1, "items": [
+      "minecraft:end_rod"
+    ] },
+    { "id": "chorus_flower", "pawn_price": 1, "items": [
+      "minecraft:chorus_flower"
+    ] },
+    { "id": "purpur_block", "pawn_price": 1, "items": [
+      "minecraft:purpur_block"
+    ] },
+    { "id": "purpur_pillar", "pawn_price": 1, "items": [
+      "minecraft:purpur_pillar"
+    ] },
+    { "id": "purpur_stairs", "pawn_price": 1, "items": [
+      "minecraft:purpur_stairs"
+    ] },
+    { "id": "creaking_heart", "pawn_price": 1, "items": [
+      "minecraft:creaking_heart"
+    ] },
+    { "id": "chest", "pawn_price": 1, "items": [
+      "minecraft:chest"
+    ] },
+    { "id": "crafting_table", "pawn_price": 1, "items": [
+      "minecraft:crafting_table"
+    ] },
+    { "id": "furnace", "pawn_price": 1, "items": [
+      "minecraft:furnace"
+    ] },
+    { "id": "ladder", "pawn_price": 1, "items": [
+      "minecraft:ladder"
+    ] },
+    { "id": "cobblestone_stairs", "pawn_price": 1, "items": [
+      "minecraft:cobblestone_stairs"
+    ] },
+    { "id": "snow", "pawn_price": 1, "items": [
+      "minecraft:snow"
+    ] },
+    { "id": "ice", "pawn_price": 1, "items": [
+      "minecraft:ice"
+    ] },
+    { "id": "snow_block", "pawn_price": 1, "items": [
+      "minecraft:snow_block"
+    ] },
+    { "id": "cactus", "pawn_price": 1, "items": [
+      "minecraft:cactus"
+    ] },
+    { "id": "clay", "pawn_price": 1, "items": [
+      "minecraft:clay"
+    ] },
+    { "id": "jukebox", "pawn_price": 1, "items": [
+      "minecraft:jukebox"
+    ] },
+    { "id": "wooden_fences", "pawn_price": 1, "items": [
+      "minecraft:oak_fence",
+      "minecraft:spruce_fence",
+      "minecraft:birch_fence",
+      "minecraft:jungle_fence",
+      "minecraft:acacia_fence",
+      "minecraft:cherry_fence",
+      "minecraft:dark_oak_fence",
+      "minecraft:pale_oak_fence",
+      "minecraft:mangrove_fence",
+      "minecraft:bamboo_fence",
+      "minecraft:crimson_fence",
+      "minecraft:warped_fence"
+    ] },
+    { "id": "pumpkin", "pawn_price": 1, "items": [
+      "minecraft:pumpkin"
+    ] },
+    { "id": "carved_pumpkin", "pawn_price": 1, "items": [
+      "minecraft:carved_pumpkin"
+    ] },
+    { "id": "jack_o_lantern", "pawn_price": 1, "items": [
+      "minecraft:jack_o_lantern"
+    ] },
+    { "id": "netherrack", "pawn_price": 1, "items": [
+      "minecraft:netherrack"
+    ] },
+    { "id": "soul_sand", "pawn_price": 1, "items": [
+      "minecraft:soul_sand"
+    ] },
+    { "id": "soul_soil", "pawn_price": 1, "items": [
+      "minecraft:soul_soil"
+    ] },
+    { "id": "basalt", "pawn_price": 1, "items": [
+      "minecraft:basalt"
+    ] },
+    { "id": "polished_basalt", "pawn_price": 1, "items": [
+      "minecraft:polished_basalt"
+    ] },
+    { "id": "smooth_basalt", "pawn_price": 1, "items": [
+      "minecraft:smooth_basalt"
+    ] },
+    { "id": "soul_torch", "pawn_price": 1, "items": [
+      "minecraft:soul_torch"
+    ] },
+    { "id": "copper_torch", "pawn_price": 1, "items": [
+      "minecraft:copper_torch"
+    ] },
+    { "id": "glowstone", "pawn_price": 1, "items": [
+      "minecraft:glowstone"
+    ] },
+    { "id": "stone_bricks", "pawn_price": 1, "items": [
+      "minecraft:stone_bricks"
+    ] },
+    { "id": "mossy_stone_bricks", "pawn_price": 1, "items": [
+      "minecraft:mossy_stone_bricks"
+    ] },
+    { "id": "cracked_stone_bricks", "pawn_price": 1, "items": [
+      "minecraft:cracked_stone_bricks"
+    ] },
+    { "id": "chiseled_stone_bricks", "pawn_price": 1, "items": [
+      "minecraft:chiseled_stone_bricks"
+    ] },
+    { "id": "packed_mud", "pawn_price": 1, "items": [
+      "minecraft:packed_mud"
+    ] },
+    { "id": "mud_bricks", "pawn_price": 1, "items": [
+      "minecraft:mud_bricks"
+    ] },
+    { "id": "deepslate_bricks", "pawn_price": 1, "items": [
+      "minecraft:deepslate_bricks"
+    ] },
+    { "id": "cracked_deepslate_bricks", "pawn_price": 1, "items": [
+      "minecraft:cracked_deepslate_bricks"
+    ] },
+    { "id": "deepslate_tiles", "pawn_price": 1, "items": [
+      "minecraft:deepslate_tiles"
+    ] },
+    { "id": "cracked_deepslate_tiles", "pawn_price": 1, "items": [
+      "minecraft:cracked_deepslate_tiles"
+    ] },
+    { "id": "chiseled_deepslate", "pawn_price": 1, "items": [
+      "minecraft:chiseled_deepslate"
+    ] },
+    { "id": "brown_mushroom_block", "pawn_price": 1, "items": [
+      "minecraft:brown_mushroom_block"
+    ] },
+    { "id": "red_mushroom_block", "pawn_price": 1, "items": [
+      "minecraft:red_mushroom_block"
+    ] },
+    { "id": "mushroom_stem", "pawn_price": 1, "items": [
+      "minecraft:mushroom_stem"
+    ] },
+    { "id": "iron_bars", "pawn_price": 1, "items": [
+      "minecraft:iron_bars"
+    ] },
+    { "id": "iron_chain", "pawn_price": 1, "items": [
+      "minecraft:iron_chain"
+    ] },
+    { "id": "glass_pane", "pawn_price": 1, "items": [
+      "minecraft:glass_pane"
+    ] },
+    { "id": "melon", "pawn_price": 1, "items": [
+      "minecraft:melon"
+    ] },
+    { "id": "vine", "pawn_price": 1, "items": [
+      "minecraft:vine"
+    ] },
+    { "id": "glow_lichen", "pawn_price": 1, "items": [
+      "minecraft:glow_lichen"
+    ] },
+    { "id": "resin_clump", "pawn_price": 1, "items": [
+      "minecraft:resin_clump"
+    ] },
+    { "id": "resin_block", "pawn_price": 1, "items": [
+      "minecraft:resin_block"
+    ] },
+    { "id": "resin_bricks", "pawn_price": 1, "items": [
+      "minecraft:resin_bricks"
+    ] },
+    { "id": "resin_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:resin_brick_stairs"
+    ] },
+    { "id": "resin_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:resin_brick_slab"
+    ] },
+    { "id": "resin_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:resin_brick_wall"
+    ] },
+    { "id": "chiseled_resin_bricks", "pawn_price": 1, "items": [
+      "minecraft:chiseled_resin_bricks"
+    ] },
+    { "id": "brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:brick_stairs"
+    ] },
+    { "id": "stone_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:stone_brick_stairs"
+    ] },
+    { "id": "mud_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:mud_brick_stairs"
+    ] },
+    { "id": "mycelium", "pawn_price": 1, "items": [
+      "minecraft:mycelium"
+    ] },
+    { "id": "lily_pad", "pawn_price": 1, "items": [
+      "minecraft:lily_pad"
+    ] },
+    { "id": "nether_bricks", "pawn_price": 1, "items": [
+      "minecraft:nether_bricks"
+    ] },
+    { "id": "cracked_nether_bricks", "pawn_price": 1, "items": [
+      "minecraft:cracked_nether_bricks"
+    ] },
+    { "id": "chiseled_nether_bricks", "pawn_price": 1, "items": [
+      "minecraft:chiseled_nether_bricks"
+    ] },
+    { "id": "nether_brick_fence", "pawn_price": 1, "items": [
+      "minecraft:nether_brick_fence"
+    ] },
+    { "id": "nether_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:nether_brick_stairs"
+    ] },
+    { "id": "sculk", "pawn_price": 1, "items": [
+      "minecraft:sculk"
+    ] },
+    { "id": "sculk_vein", "pawn_price": 1, "items": [
+      "minecraft:sculk_vein"
+    ] },
+    { "id": "sculk_catalyst", "pawn_price": 1, "items": [
+      "minecraft:sculk_catalyst"
+    ] },
+    { "id": "sculk_shrieker", "pawn_price": 1, "items": [
+      "minecraft:sculk_shrieker"
+    ] },
+    { "id": "enchanting_table", "pawn_price": 1, "items": [
+      "minecraft:enchanting_table"
+    ] },
+    { "id": "end_stone", "pawn_price": 1, "items": [
+      "minecraft:end_stone"
+    ] },
+    { "id": "end_stone_bricks", "pawn_price": 1, "items": [
+      "minecraft:end_stone_bricks"
+    ] },
+    { "id": "dragon_egg", "pawn_price": 1, "items": [
+      "minecraft:dragon_egg"
+    ] },
+    { "id": "sandstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:sandstone_stairs"
+    ] },
+    { "id": "ender_chest", "pawn_price": 1, "items": [
+      "minecraft:ender_chest"
+    ] },
+    { "id": "emerald_block", "pawn_price": 1, "items": [
+      "minecraft:emerald_block"
+    ] },
+    { "id": "beacon", "pawn_price": 1, "items": [
+      "minecraft:beacon"
+    ] },
+    { "id": "cobblestone_wall", "pawn_price": 1, "items": [
+      "minecraft:cobblestone_wall"
+    ] },
+    { "id": "mossy_cobblestone_wall", "pawn_price": 1, "items": [
+      "minecraft:mossy_cobblestone_wall"
+    ] },
+    { "id": "brick_wall", "pawn_price": 1, "items": [
+      "minecraft:brick_wall"
+    ] },
+    { "id": "prismarine_wall", "pawn_price": 1, "items": [
+      "minecraft:prismarine_wall"
+    ] },
+    { "id": "red_sandstone_wall", "pawn_price": 1, "items": [
+      "minecraft:red_sandstone_wall"
+    ] },
+    { "id": "mossy_stone_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:mossy_stone_brick_wall"
+    ] },
+    { "id": "granite_wall", "pawn_price": 1, "items": [
+      "minecraft:granite_wall"
+    ] },
+    { "id": "stone_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:stone_brick_wall"
+    ] },
+    { "id": "mud_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:mud_brick_wall"
+    ] },
+    { "id": "nether_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:nether_brick_wall"
+    ] },
+    { "id": "andesite_wall", "pawn_price": 1, "items": [
+      "minecraft:andesite_wall"
+    ] },
+    { "id": "red_nether_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:red_nether_brick_wall"
+    ] },
+    { "id": "sandstone_wall", "pawn_price": 1, "items": [
+      "minecraft:sandstone_wall"
+    ] },
+    { "id": "end_stone_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:end_stone_brick_wall"
+    ] },
+    { "id": "diorite_wall", "pawn_price": 1, "items": [
+      "minecraft:diorite_wall"
+    ] },
+    { "id": "blackstone_wall", "pawn_price": 1, "items": [
+      "minecraft:blackstone_wall"
+    ] },
+    { "id": "polished_blackstone_wall", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_wall"
+    ] },
+    { "id": "polished_blackstone_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_brick_wall"
+    ] },
+    { "id": "cobbled_deepslate_wall", "pawn_price": 1, "items": [
+      "minecraft:cobbled_deepslate_wall"
+    ] },
+    { "id": "polished_deepslate_wall", "pawn_price": 1, "items": [
+      "minecraft:polished_deepslate_wall"
+    ] },
+    { "id": "deepslate_brick_wall", "pawn_price": 1, "items": [
+      "minecraft:deepslate_brick_wall"
+    ] },
+    { "id": "deepslate_tile_wall", "pawn_price": 1, "items": [
+      "minecraft:deepslate_tile_wall"
+    ] },
+    { "id": "anvil", "pawn_price": 1, "items": [
+      "minecraft:anvil"
+    ] },
+    { "id": "chipped_anvil", "pawn_price": 1, "items": [
+      "minecraft:chipped_anvil"
+    ] },
+    { "id": "damaged_anvil", "pawn_price": 1, "items": [
+      "minecraft:damaged_anvil"
+    ] },
+    { "id": "chiseled_quartz_block", "pawn_price": 1, "items": [
+      "minecraft:chiseled_quartz_block"
+    ] },
+    { "id": "quartz_block", "pawn_price": 1, "items": [
+      "minecraft:quartz_block"
+    ] },
+    { "id": "quartz_bricks", "pawn_price": 1, "items": [
+      "minecraft:quartz_bricks"
+    ] },
+    { "id": "quartz_pillar", "pawn_price": 1, "items": [
+      "minecraft:quartz_pillar"
+    ] },
+    { "id": "quartz_stairs", "pawn_price": 1, "items": [
+      "minecraft:quartz_stairs"
+    ] },
+    { "id": "terracotta_colors", "pawn_price": 1, "items": [
+      "minecraft:white_terracotta",
+      "minecraft:orange_terracotta",
+      "minecraft:magenta_terracotta",
+      "minecraft:light_blue_terracotta",
+      "minecraft:yellow_terracotta",
+      "minecraft:lime_terracotta",
+      "minecraft:pink_terracotta",
+      "minecraft:gray_terracotta",
+      "minecraft:light_gray_terracotta",
+      "minecraft:cyan_terracotta",
+      "minecraft:purple_terracotta",
+      "minecraft:blue_terracotta",
+      "minecraft:brown_terracotta",
+      "minecraft:green_terracotta",
+      "minecraft:red_terracotta",
+      "minecraft:black_terracotta"
+    ] },
+    { "id": "hay_block", "pawn_price": 1, "items": [
+      "minecraft:hay_block"
+    ] },
+    { "id": "carpet_colors", "pawn_price": 1, "items": [
+      "minecraft:white_carpet",
+      "minecraft:orange_carpet",
+      "minecraft:magenta_carpet",
+      "minecraft:light_blue_carpet",
+      "minecraft:yellow_carpet",
+      "minecraft:lime_carpet",
+      "minecraft:pink_carpet",
+      "minecraft:gray_carpet",
+      "minecraft:light_gray_carpet",
+      "minecraft:cyan_carpet",
+      "minecraft:purple_carpet",
+      "minecraft:blue_carpet",
+      "minecraft:brown_carpet",
+      "minecraft:green_carpet",
+      "minecraft:red_carpet",
+      "minecraft:black_carpet"
+    ] },
+    { "id": "terracotta", "pawn_price": 1, "items": [
+      "minecraft:terracotta"
+    ] },
+    { "id": "packed_ice", "pawn_price": 1, "items": [
+      "minecraft:packed_ice"
+    ] },
+    { "id": "tall_grass", "pawn_price": 1, "items": [
+      "minecraft:tall_grass"
+    ] },
+    { "id": "large_fern", "pawn_price": 1, "items": [
+      "minecraft:large_fern"
+    ] },
+    { "id": "stained_glass_colors", "pawn_price": 1, "items": [
+      "minecraft:white_stained_glass",
+      "minecraft:orange_stained_glass",
+      "minecraft:magenta_stained_glass",
+      "minecraft:light_blue_stained_glass",
+      "minecraft:yellow_stained_glass",
+      "minecraft:lime_stained_glass",
+      "minecraft:pink_stained_glass",
+      "minecraft:gray_stained_glass",
+      "minecraft:light_gray_stained_glass",
+      "minecraft:cyan_stained_glass",
+      "minecraft:purple_stained_glass",
+      "minecraft:blue_stained_glass",
+      "minecraft:brown_stained_glass",
+      "minecraft:green_stained_glass",
+      "minecraft:red_stained_glass",
+      "minecraft:black_stained_glass"
+    ] },
+    { "id": "stained_glass_pane_colors", "pawn_price": 1, "items": [
+      "minecraft:white_stained_glass_pane",
+      "minecraft:orange_stained_glass_pane",
+      "minecraft:magenta_stained_glass_pane",
+      "minecraft:light_blue_stained_glass_pane",
+      "minecraft:yellow_stained_glass_pane",
+      "minecraft:lime_stained_glass_pane",
+      "minecraft:pink_stained_glass_pane",
+      "minecraft:gray_stained_glass_pane",
+      "minecraft:light_gray_stained_glass_pane",
+      "minecraft:cyan_stained_glass_pane",
+      "minecraft:purple_stained_glass_pane",
+      "minecraft:blue_stained_glass_pane",
+      "minecraft:brown_stained_glass_pane",
+      "minecraft:green_stained_glass_pane",
+      "minecraft:red_stained_glass_pane",
+      "minecraft:black_stained_glass_pane"
+    ] },
+    { "id": "prismarine", "pawn_price": 1, "items": [
+      "minecraft:prismarine"
+    ] },
+    { "id": "prismarine_bricks", "pawn_price": 1, "items": [
+      "minecraft:prismarine_bricks"
+    ] },
+    { "id": "dark_prismarine", "pawn_price": 1, "items": [
+      "minecraft:dark_prismarine"
+    ] },
+    { "id": "prismarine_stairs", "pawn_price": 1, "items": [
+      "minecraft:prismarine_stairs"
+    ] },
+    { "id": "prismarine_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:prismarine_brick_stairs"
+    ] },
+    { "id": "dark_prismarine_stairs", "pawn_price": 1, "items": [
+      "minecraft:dark_prismarine_stairs"
+    ] },
+    { "id": "sea_lantern", "pawn_price": 1, "items": [
+      "minecraft:sea_lantern"
+    ] },
+    { "id": "red_sandstone", "pawn_price": 1, "items": [
+      "minecraft:red_sandstone"
+    ] },
+    { "id": "chiseled_red_sandstone", "pawn_price": 1, "items": [
+      "minecraft:chiseled_red_sandstone"
+    ] },
+    { "id": "cut_red_sandstone", "pawn_price": 1, "items": [
+      "minecraft:cut_red_sandstone"
+    ] },
+    { "id": "red_sandstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:red_sandstone_stairs"
+    ] },
+    { "id": "magma_block", "pawn_price": 1, "items": [
+      "minecraft:magma_block"
+    ] },
+    { "id": "nether_wart_block", "pawn_price": 1, "items": [
+      "minecraft:nether_wart_block"
+    ] },
+    { "id": "warped_wart_block", "pawn_price": 1, "items": [
+      "minecraft:warped_wart_block"
+    ] },
+    { "id": "red_nether_bricks", "pawn_price": 1, "items": [
+      "minecraft:red_nether_bricks"
+    ] },
+    { "id": "bone_block", "pawn_price": 1, "items": [
+      "minecraft:bone_block"
+    ] },
+    { "id": "shulker_box", "pawn_price": 1, "items": [
+      "minecraft:shulker_box"
+    ] },
+    { "id": "shulker_box_colors", "pawn_price": 1, "items": [
+      "minecraft:white_shulker_box",
+      "minecraft:orange_shulker_box",
+      "minecraft:magenta_shulker_box",
+      "minecraft:light_blue_shulker_box",
+      "minecraft:yellow_shulker_box",
+      "minecraft:lime_shulker_box",
+      "minecraft:pink_shulker_box",
+      "minecraft:gray_shulker_box",
+      "minecraft:light_gray_shulker_box",
+      "minecraft:cyan_shulker_box",
+      "minecraft:purple_shulker_box",
+      "minecraft:blue_shulker_box",
+      "minecraft:brown_shulker_box",
+      "minecraft:green_shulker_box",
+      "minecraft:red_shulker_box",
+      "minecraft:black_shulker_box"
+    ] },
+    { "id": "glazed_terracotta_colors", "pawn_price": 1, "items": [
+      "minecraft:white_glazed_terracotta",
+      "minecraft:orange_glazed_terracotta",
+      "minecraft:magenta_glazed_terracotta",
+      "minecraft:light_blue_glazed_terracotta",
+      "minecraft:yellow_glazed_terracotta",
+      "minecraft:lime_glazed_terracotta",
+      "minecraft:pink_glazed_terracotta",
+      "minecraft:gray_glazed_terracotta",
+      "minecraft:light_gray_glazed_terracotta",
+      "minecraft:cyan_glazed_terracotta",
+      "minecraft:purple_glazed_terracotta",
+      "minecraft:blue_glazed_terracotta",
+      "minecraft:brown_glazed_terracotta",
+      "minecraft:green_glazed_terracotta",
+      "minecraft:red_glazed_terracotta",
+      "minecraft:black_glazed_terracotta"
+    ] },
+    { "id": "concrete_colors", "pawn_price": 1, "items": [
+      "minecraft:white_concrete",
+      "minecraft:orange_concrete",
+      "minecraft:magenta_concrete",
+      "minecraft:light_blue_concrete",
+      "minecraft:yellow_concrete",
+      "minecraft:lime_concrete",
+      "minecraft:pink_concrete",
+      "minecraft:gray_concrete",
+      "minecraft:light_gray_concrete",
+      "minecraft:cyan_concrete",
+      "minecraft:purple_concrete",
+      "minecraft:blue_concrete",
+      "minecraft:brown_concrete",
+      "minecraft:green_concrete",
+      "minecraft:red_concrete",
+      "minecraft:black_concrete"
+    ] },
+    { "id": "concrete_powder_colors", "pawn_price": 1, "items": [
+      "minecraft:white_concrete_powder",
+      "minecraft:orange_concrete_powder",
+      "minecraft:magenta_concrete_powder",
+      "minecraft:light_blue_concrete_powder",
+      "minecraft:yellow_concrete_powder",
+      "minecraft:lime_concrete_powder",
+      "minecraft:pink_concrete_powder",
+      "minecraft:gray_concrete_powder",
+      "minecraft:light_gray_concrete_powder",
+      "minecraft:cyan_concrete_powder",
+      "minecraft:purple_concrete_powder",
+      "minecraft:blue_concrete_powder",
+      "minecraft:brown_concrete_powder",
+      "minecraft:green_concrete_powder",
+      "minecraft:red_concrete_powder",
+      "minecraft:black_concrete_powder"
+    ] },
+    { "id": "turtle_egg", "pawn_price": 1, "items": [
+      "minecraft:turtle_egg"
+    ] },
+    { "id": "sniffer_egg", "pawn_price": 1, "items": [
+      "minecraft:sniffer_egg"
+    ] },
+    { "id": "dried_ghast", "pawn_price": 1, "items": [
+      "minecraft:dried_ghast"
+    ] },
+    { "id": "dead_coral_blocks", "pawn_price": 1, "items": [
+      "minecraft:dead_tube_coral_block",
+      "minecraft:dead_brain_coral_block",
+      "minecraft:dead_bubble_coral_block",
+      "minecraft:dead_fire_coral_block",
+      "minecraft:dead_horn_coral_block"
+    ] },
+    { "id": "coral_blocks", "pawn_price": 1, "items": [
+      "minecraft:tube_coral_block",
+      "minecraft:brain_coral_block",
+      "minecraft:bubble_coral_block",
+      "minecraft:fire_coral_block",
+      "minecraft:horn_coral_block"
+    ] },
+    { "id": "corals", "pawn_price": 1, "items": [
+      "minecraft:tube_coral",
+      "minecraft:brain_coral",
+      "minecraft:bubble_coral",
+      "minecraft:fire_coral",
+      "minecraft:horn_coral"
+    ] },
+    { "id": "dead_corals", "pawn_price": 1, "items": [
+      "minecraft:dead_brain_coral",
+      "minecraft:dead_bubble_coral",
+      "minecraft:dead_fire_coral",
+      "minecraft:dead_horn_coral",
+      "minecraft:dead_tube_coral"
+    ] },
+    { "id": "coral_fans", "pawn_price": 1, "items": [
+      "minecraft:tube_coral_fan",
+      "minecraft:brain_coral_fan",
+      "minecraft:bubble_coral_fan",
+      "minecraft:fire_coral_fan",
+      "minecraft:horn_coral_fan"
+    ] },
+    { "id": "dead_coral_fans", "pawn_price": 1, "items": [
+      "minecraft:dead_tube_coral_fan",
+      "minecraft:dead_brain_coral_fan",
+      "minecraft:dead_bubble_coral_fan",
+      "minecraft:dead_fire_coral_fan",
+      "minecraft:dead_horn_coral_fan"
+    ] },
+    { "id": "blue_ice", "pawn_price": 1, "items": [
+      "minecraft:blue_ice"
+    ] },
+    { "id": "conduit", "pawn_price": 1, "items": [
+      "minecraft:conduit"
+    ] },
+    { "id": "polished_granite_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_granite_stairs"
+    ] },
+    { "id": "smooth_red_sandstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:smooth_red_sandstone_stairs"
+    ] },
+    { "id": "mossy_stone_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:mossy_stone_brick_stairs"
+    ] },
+    { "id": "polished_diorite_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_diorite_stairs"
+    ] },
+    { "id": "mossy_cobblestone_stairs", "pawn_price": 1, "items": [
+      "minecraft:mossy_cobblestone_stairs"
+    ] },
+    { "id": "end_stone_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:end_stone_brick_stairs"
+    ] },
+    { "id": "stone_stairs", "pawn_price": 1, "items": [
+      "minecraft:stone_stairs"
+    ] },
+    { "id": "smooth_sandstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:smooth_sandstone_stairs"
+    ] },
+    { "id": "smooth_quartz_stairs", "pawn_price": 1, "items": [
+      "minecraft:smooth_quartz_stairs"
+    ] },
+    { "id": "granite_stairs", "pawn_price": 1, "items": [
+      "minecraft:granite_stairs"
+    ] },
+    { "id": "andesite_stairs", "pawn_price": 1, "items": [
+      "minecraft:andesite_stairs"
+    ] },
+    { "id": "red_nether_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:red_nether_brick_stairs"
+    ] },
+    { "id": "polished_andesite_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_andesite_stairs"
+    ] },
+    { "id": "diorite_stairs", "pawn_price": 1, "items": [
+      "minecraft:diorite_stairs"
+    ] },
+    { "id": "cobbled_deepslate_stairs", "pawn_price": 1, "items": [
+      "minecraft:cobbled_deepslate_stairs"
+    ] },
+    { "id": "polished_deepslate_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_deepslate_stairs"
+    ] },
+    { "id": "deepslate_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:deepslate_brick_stairs"
+    ] },
+    { "id": "deepslate_tile_stairs", "pawn_price": 1, "items": [
+      "minecraft:deepslate_tile_stairs"
+    ] },
+    { "id": "polished_granite_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_granite_slab"
+    ] },
+    { "id": "smooth_red_sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:smooth_red_sandstone_slab"
+    ] },
+    { "id": "mossy_stone_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:mossy_stone_brick_slab"
+    ] },
+    { "id": "polished_diorite_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_diorite_slab"
+    ] },
+    { "id": "mossy_cobblestone_slab", "pawn_price": 1, "items": [
+      "minecraft:mossy_cobblestone_slab"
+    ] },
+    { "id": "end_stone_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:end_stone_brick_slab"
+    ] },
+    { "id": "smooth_sandstone_slab", "pawn_price": 1, "items": [
+      "minecraft:smooth_sandstone_slab"
+    ] },
+    { "id": "smooth_quartz_slab", "pawn_price": 1, "items": [
+      "minecraft:smooth_quartz_slab"
+    ] },
+    { "id": "granite_slab", "pawn_price": 1, "items": [
+      "minecraft:granite_slab"
+    ] },
+    { "id": "andesite_slab", "pawn_price": 1, "items": [
+      "minecraft:andesite_slab"
+    ] },
+    { "id": "red_nether_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:red_nether_brick_slab"
+    ] },
+    { "id": "polished_andesite_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_andesite_slab"
+    ] },
+    { "id": "diorite_slab", "pawn_price": 1, "items": [
+      "minecraft:diorite_slab"
+    ] },
+    { "id": "cobbled_deepslate_slab", "pawn_price": 1, "items": [
+      "minecraft:cobbled_deepslate_slab"
+    ] },
+    { "id": "polished_deepslate_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_deepslate_slab"
+    ] },
+    { "id": "deepslate_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:deepslate_brick_slab"
+    ] },
+    { "id": "deepslate_tile_slab", "pawn_price": 1, "items": [
+      "minecraft:deepslate_tile_slab"
+    ] },
+    { "id": "scaffolding", "pawn_price": 1, "items": [
+      "minecraft:scaffolding"
+    ] },
+    { "id": "redstone", "pawn_price": 1, "items": [
+      "minecraft:redstone"
+    ] },
+    { "id": "redstone_torch", "pawn_price": 1, "items": [
+      "minecraft:redstone_torch"
+    ] },
+    { "id": "redstone_block", "pawn_price": 1, "items": [
+      "minecraft:redstone_block"
+    ] },
+    { "id": "repeater", "pawn_price": 1, "items": [
+      "minecraft:repeater"
+    ] },
+    { "id": "comparator", "pawn_price": 1, "items": [
+      "minecraft:comparator"
+    ] },
+    { "id": "piston", "pawn_price": 1, "items": [
+      "minecraft:piston"
+    ] },
+    { "id": "sticky_piston", "pawn_price": 1, "items": [
+      "minecraft:sticky_piston"
+    ] },
+    { "id": "slime_block", "pawn_price": 1, "items": [
+      "minecraft:slime_block"
+    ] },
+    { "id": "honey_block", "pawn_price": 1, "items": [
+      "minecraft:honey_block"
+    ] },
+    { "id": "observer", "pawn_price": 1, "items": [
+      "minecraft:observer"
+    ] },
+    { "id": "hopper", "pawn_price": 1, "items": [
+      "minecraft:hopper"
+    ] },
+    { "id": "dispenser", "pawn_price": 1, "items": [
+      "minecraft:dispenser"
+    ] },
+    { "id": "dropper", "pawn_price": 1, "items": [
+      "minecraft:dropper"
+    ] },
+    { "id": "lectern", "pawn_price": 1, "items": [
+      "minecraft:lectern"
+    ] },
+    { "id": "target", "pawn_price": 1, "items": [
+      "minecraft:target"
+    ] },
+    { "id": "lever", "pawn_price": 1, "items": [
+      "minecraft:lever"
+    ] },
+    { "id": "lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:lightning_rod"
+    ] },
+    { "id": "exposed_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:exposed_lightning_rod"
+    ] },
+    { "id": "weathered_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:weathered_lightning_rod"
+    ] },
+    { "id": "oxidized_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:oxidized_lightning_rod"
+    ] },
+    { "id": "waxed_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:waxed_lightning_rod"
+    ] },
+    { "id": "waxed_exposed_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:waxed_exposed_lightning_rod"
+    ] },
+    { "id": "waxed_weathered_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:waxed_weathered_lightning_rod"
+    ] },
+    { "id": "waxed_oxidized_lightning_rod", "pawn_price": 1, "items": [
+      "minecraft:waxed_oxidized_lightning_rod"
+    ] },
+    { "id": "daylight_detector", "pawn_price": 1, "items": [
+      "minecraft:daylight_detector"
+    ] },
+    { "id": "sculk_sensor", "pawn_price": 1, "items": [
+      "minecraft:sculk_sensor"
+    ] },
+    { "id": "calibrated_sculk_sensor", "pawn_price": 1, "items": [
+      "minecraft:calibrated_sculk_sensor"
+    ] },
+    { "id": "tripwire_hook", "pawn_price": 1, "items": [
+      "minecraft:tripwire_hook"
+    ] },
+    { "id": "trapped_chest", "pawn_price": 1, "items": [
+      "minecraft:trapped_chest"
+    ] },
+    { "id": "tnt", "pawn_price": 1, "items": [
+      "minecraft:tnt"
+    ] },
+    { "id": "redstone_lamp", "pawn_price": 1, "items": [
+      "minecraft:redstone_lamp"
+    ] },
+    { "id": "note_block", "pawn_price": 1, "items": [
+      "minecraft:note_block"
+    ] },
+    { "id": "stone_button", "pawn_price": 1, "items": [
+      "minecraft:stone_button"
+    ] },
+    { "id": "polished_blackstone_button", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_button"
+    ] },
+    { "id": "wooden_buttons", "pawn_price": 1, "items": [
+      "minecraft:oak_button",
+      "minecraft:spruce_button",
+      "minecraft:birch_button",
+      "minecraft:jungle_button",
+      "minecraft:acacia_button",
+      "minecraft:cherry_button",
+      "minecraft:dark_oak_button",
+      "minecraft:pale_oak_button",
+      "minecraft:mangrove_button",
+      "minecraft:bamboo_button",
+      "minecraft:crimson_button",
+      "minecraft:warped_button"
+    ] },
+    { "id": "stone_pressure_plate", "pawn_price": 1, "items": [
+      "minecraft:stone_pressure_plate"
+    ] },
+    { "id": "polished_blackstone_pressure_plate", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_pressure_plate"
+    ] },
+    { "id": "light_weighted_pressure_plate", "pawn_price": 1, "items": [
+      "minecraft:light_weighted_pressure_plate"
+    ] },
+    { "id": "heavy_weighted_pressure_plate", "pawn_price": 1, "items": [
+      "minecraft:heavy_weighted_pressure_plate"
+    ] },
+    { "id": "wooden_pressure_plates", "pawn_price": 1, "items": [
+      "minecraft:oak_pressure_plate",
+      "minecraft:spruce_pressure_plate",
+      "minecraft:birch_pressure_plate",
+      "minecraft:jungle_pressure_plate",
+      "minecraft:acacia_pressure_plate",
+      "minecraft:cherry_pressure_plate",
+      "minecraft:dark_oak_pressure_plate",
+      "minecraft:pale_oak_pressure_plate",
+      "minecraft:mangrove_pressure_plate",
+      "minecraft:bamboo_pressure_plate",
+      "minecraft:crimson_pressure_plate",
+      "minecraft:warped_pressure_plate"
+    ] },
+    { "id": "iron_door", "pawn_price": 1, "items": [
+      "minecraft:iron_door"
+    ] },
+    { "id": "wooden_doors", "pawn_price": 1, "items": [
+      "minecraft:oak_door",
+      "minecraft:spruce_door",
+      "minecraft:birch_door",
+      "minecraft:jungle_door",
+      "minecraft:acacia_door",
+      "minecraft:cherry_door",
+      "minecraft:dark_oak_door",
+      "minecraft:pale_oak_door",
+      "minecraft:mangrove_door",
+      "minecraft:bamboo_door",
+      "minecraft:crimson_door",
+      "minecraft:warped_door"
+    ] },
+    { "id": "copper_door", "pawn_price": 1, "items": [
+      "minecraft:copper_door"
+    ] },
+    { "id": "exposed_copper_door", "pawn_price": 1, "items": [
+      "minecraft:exposed_copper_door"
+    ] },
+    { "id": "weathered_copper_door", "pawn_price": 1, "items": [
+      "minecraft:weathered_copper_door"
+    ] },
+    { "id": "oxidized_copper_door", "pawn_price": 1, "items": [
+      "minecraft:oxidized_copper_door"
+    ] },
+    { "id": "waxed_copper_door", "pawn_price": 1, "items": [
+      "minecraft:waxed_copper_door"
+    ] },
+    { "id": "waxed_exposed_copper_door", "pawn_price": 1, "items": [
+      "minecraft:waxed_exposed_copper_door"
+    ] },
+    { "id": "waxed_weathered_copper_door", "pawn_price": 1, "items": [
+      "minecraft:waxed_weathered_copper_door"
+    ] },
+    { "id": "waxed_oxidized_copper_door", "pawn_price": 1, "items": [
+      "minecraft:waxed_oxidized_copper_door"
+    ] },
+    { "id": "iron_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:iron_trapdoor"
+    ] },
+    { "id": "wooden_trapdoors", "pawn_price": 1, "items": [
+      "minecraft:oak_trapdoor",
+      "minecraft:spruce_trapdoor",
+      "minecraft:birch_trapdoor",
+      "minecraft:jungle_trapdoor",
+      "minecraft:acacia_trapdoor",
+      "minecraft:cherry_trapdoor",
+      "minecraft:dark_oak_trapdoor",
+      "minecraft:pale_oak_trapdoor",
+      "minecraft:mangrove_trapdoor",
+      "minecraft:bamboo_trapdoor",
+      "minecraft:crimson_trapdoor",
+      "minecraft:warped_trapdoor"
+    ] },
+    { "id": "copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:copper_trapdoor"
+    ] },
+    { "id": "exposed_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:exposed_copper_trapdoor"
+    ] },
+    { "id": "weathered_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:weathered_copper_trapdoor"
+    ] },
+    { "id": "oxidized_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:oxidized_copper_trapdoor"
+    ] },
+    { "id": "waxed_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:waxed_copper_trapdoor"
+    ] },
+    { "id": "waxed_exposed_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:waxed_exposed_copper_trapdoor"
+    ] },
+    { "id": "waxed_weathered_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:waxed_weathered_copper_trapdoor"
+    ] },
+    { "id": "waxed_oxidized_copper_trapdoor", "pawn_price": 1, "items": [
+      "minecraft:waxed_oxidized_copper_trapdoor"
+    ] },
+    { "id": "wooden_fence_gates", "pawn_price": 1, "items": [
+      "minecraft:oak_fence_gate",
+      "minecraft:spruce_fence_gate",
+      "minecraft:birch_fence_gate",
+      "minecraft:jungle_fence_gate",
+      "minecraft:acacia_fence_gate",
+      "minecraft:cherry_fence_gate",
+      "minecraft:dark_oak_fence_gate",
+      "minecraft:pale_oak_fence_gate",
+      "minecraft:mangrove_fence_gate",
+      "minecraft:bamboo_fence_gate",
+      "minecraft:crimson_fence_gate",
+      "minecraft:warped_fence_gate"
+    ] },
+    { "id": "powered_rail", "pawn_price": 1, "items": [
+      "minecraft:powered_rail"
+    ] },
+    { "id": "detector_rail", "pawn_price": 1, "items": [
+      "minecraft:detector_rail"
+    ] },
+    { "id": "rail", "pawn_price": 1, "items": [
+      "minecraft:rail"
+    ] },
+    { "id": "activator_rail", "pawn_price": 1, "items": [
+      "minecraft:activator_rail"
+    ] },
+    { "id": "saddle", "pawn_price": 1, "items": [
+      "minecraft:saddle"
+    ] },
+    { "id": "white_harness", "pawn_price": 1, "items": [
+      "minecraft:white_harness"
+    ] },
+    { "id": "orange_harness", "pawn_price": 1, "items": [
+      "minecraft:orange_harness"
+    ] },
+    { "id": "magenta_harness", "pawn_price": 1, "items": [
+      "minecraft:magenta_harness"
+    ] },
+    { "id": "light_blue_harness", "pawn_price": 1, "items": [
+      "minecraft:light_blue_harness"
+    ] },
+    { "id": "yellow_harness", "pawn_price": 1, "items": [
+      "minecraft:yellow_harness"
+    ] },
+    { "id": "lime_harness", "pawn_price": 1, "items": [
+      "minecraft:lime_harness"
+    ] },
+    { "id": "pink_harness", "pawn_price": 1, "items": [
+      "minecraft:pink_harness"
+    ] },
+    { "id": "gray_harness", "pawn_price": 1, "items": [
+      "minecraft:gray_harness"
+    ] },
+    { "id": "light_gray_harness", "pawn_price": 1, "items": [
+      "minecraft:light_gray_harness"
+    ] },
+    { "id": "cyan_harness", "pawn_price": 1, "items": [
+      "minecraft:cyan_harness"
+    ] },
+    { "id": "purple_harness", "pawn_price": 1, "items": [
+      "minecraft:purple_harness"
+    ] },
+    { "id": "blue_harness", "pawn_price": 1, "items": [
+      "minecraft:blue_harness"
+    ] },
+    { "id": "brown_harness", "pawn_price": 1, "items": [
+      "minecraft:brown_harness"
+    ] },
+    { "id": "green_harness", "pawn_price": 1, "items": [
+      "minecraft:green_harness"
+    ] },
+    { "id": "red_harness", "pawn_price": 1, "items": [
+      "minecraft:red_harness"
+    ] },
+    { "id": "black_harness", "pawn_price": 1, "items": [
+      "minecraft:black_harness"
+    ] },
+    { "id": "minecart", "pawn_price": 1, "items": [
+      "minecraft:minecart"
+    ] },
+    { "id": "chest_minecart", "pawn_price": 1, "items": [
+      "minecraft:chest_minecart"
+    ] },
+    { "id": "furnace_minecart", "pawn_price": 1, "items": [
+      "minecraft:furnace_minecart"
+    ] },
+    { "id": "tnt_minecart", "pawn_price": 1, "items": [
+      "minecraft:tnt_minecart"
+    ] },
+    { "id": "hopper_minecart", "pawn_price": 1, "items": [
+      "minecraft:hopper_minecart"
+    ] },
+    { "id": "carrot_on_a_stick", "pawn_price": 1, "items": [
+      "minecraft:carrot_on_a_stick"
+    ] },
+    { "id": "warped_fungus_on_a_stick", "pawn_price": 1, "items": [
+      "minecraft:warped_fungus_on_a_stick"
+    ] },
+    { "id": "phantom_membrane", "pawn_price": 1, "items": [
+      "minecraft:phantom_membrane"
+    ] },
+    { "id": "elytra", "pawn_price": 1, "items": [
+      "minecraft:elytra"
+    ] },
+    { "id": "wooden_boats", "pawn_price": 1, "items": [
+      "minecraft:oak_boat",
+      "minecraft:spruce_boat",
+      "minecraft:birch_boat",
+      "minecraft:jungle_boat",
+      "minecraft:acacia_boat",
+      "minecraft:cherry_boat",
+      "minecraft:dark_oak_boat",
+      "minecraft:pale_oak_boat",
+      "minecraft:mangrove_boat",
+      "minecraft:bamboo_raft"
+    ] },
+    { "id": "wooden_chest_boats", "pawn_price": 1, "items": [
+      "minecraft:oak_chest_boat",
+      "minecraft:spruce_chest_boat",
+      "minecraft:birch_chest_boat",
+      "minecraft:jungle_chest_boat",
+      "minecraft:acacia_chest_boat",
+      "minecraft:cherry_chest_boat",
+      "minecraft:dark_oak_chest_boat",
+      "minecraft:pale_oak_chest_boat",
+      "minecraft:mangrove_chest_boat",
+      "minecraft:bamboo_chest_raft"
+    ] },
+    { "id": "turtle_helmet", "pawn_price": 1, "items": [
+      "minecraft:turtle_helmet"
+    ] },
+    { "id": "turtle_scute", "pawn_price": 1, "items": [
+      "minecraft:turtle_scute"
+    ] },
+    { "id": "armadillo_scute", "pawn_price": 1, "items": [
+      "minecraft:armadillo_scute"
+    ] },
+    { "id": "wolf_armor", "pawn_price": 1, "items": [
+      "minecraft:wolf_armor"
+    ] },
+    { "id": "flint_and_steel", "pawn_price": 1, "items": [
+      "minecraft:flint_and_steel"
+    ] },
+    { "id": "bowl", "pawn_price": 1, "items": [
+      "minecraft:bowl"
+    ] },
+    { "id": "apple", "pawn_price": 1, "items": [
+      "minecraft:apple"
+    ] },
+    { "id": "bow", "pawn_price": 1, "items": [
+      "minecraft:bow"
+    ] },
+    { "id": "arrow", "pawn_price": 1, "items": [
+      "minecraft:arrow"
+    ] },
+    { "id": "coal", "pawn_price": 1, "items": [
+      "minecraft:coal"
+    ] },
+    { "id": "charcoal", "pawn_price": 1, "items": [
+      "minecraft:charcoal"
+    ] },
+    { "id": "diamond", "pawn_price": 1, "items": [
+      "minecraft:diamond"
+    ] },
+    { "id": "emerald", "pawn_price": 1, "items": [
+      "minecraft:emerald"
+    ] },
+    { "id": "lapis_lazuli", "pawn_price": 1, "items": [
+      "minecraft:lapis_lazuli"
+    ] },
+    { "id": "quartz", "pawn_price": 1, "items": [
+      "minecraft:quartz"
+    ] },
+    { "id": "amethyst_shard", "pawn_price": 1, "items": [
+      "minecraft:amethyst_shard"
+    ] },
+    { "id": "raw_iron", "pawn_price": 1, "items": [
+      "minecraft:raw_iron"
+    ] },
+    { "id": "iron_ingot", "pawn_price": 1, "items": [
+      "minecraft:iron_ingot"
+    ] },
+    { "id": "raw_copper", "pawn_price": 1, "items": [
+      "minecraft:raw_copper"
+    ] },
+    { "id": "copper_ingot", "pawn_price": 1, "items": [
+      "minecraft:copper_ingot"
+    ] },
+    { "id": "raw_gold", "pawn_price": 1, "items": [
+      "minecraft:raw_gold"
+    ] },
+    { "id": "gold_ingot", "pawn_price": 1, "items": [
+      "minecraft:gold_ingot"
+    ] },
+    { "id": "netherite_ingot", "pawn_price": 1, "items": [
+      "minecraft:netherite_ingot"
+    ] },
+    { "id": "netherite_scrap", "pawn_price": 1, "items": [
+      "minecraft:netherite_scrap"
+    ] },
+    { "id": "wooden_sword", "pawn_price": 1, "items": [
+      "minecraft:wooden_sword"
+    ] },
+    { "id": "wooden_shovel", "pawn_price": 1, "items": [
+      "minecraft:wooden_shovel"
+    ] },
+    { "id": "wooden_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:wooden_pickaxe"
+    ] },
+    { "id": "wooden_axe", "pawn_price": 1, "items": [
+      "minecraft:wooden_axe"
+    ] },
+    { "id": "wooden_hoe", "pawn_price": 1, "items": [
+      "minecraft:wooden_hoe"
+    ] },
+    { "id": "copper_sword", "pawn_price": 1, "items": [
+      "minecraft:copper_sword"
+    ] },
+    { "id": "copper_shovel", "pawn_price": 1, "items": [
+      "minecraft:copper_shovel"
+    ] },
+    { "id": "copper_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:copper_pickaxe"
+    ] },
+    { "id": "copper_axe", "pawn_price": 1, "items": [
+      "minecraft:copper_axe"
+    ] },
+    { "id": "copper_hoe", "pawn_price": 1, "items": [
+      "minecraft:copper_hoe"
+    ] },
+    { "id": "stone_sword", "pawn_price": 1, "items": [
+      "minecraft:stone_sword"
+    ] },
+    { "id": "stone_shovel", "pawn_price": 1, "items": [
+      "minecraft:stone_shovel"
+    ] },
+    { "id": "stone_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:stone_pickaxe"
+    ] },
+    { "id": "stone_axe", "pawn_price": 1, "items": [
+      "minecraft:stone_axe"
+    ] },
+    { "id": "stone_hoe", "pawn_price": 1, "items": [
+      "minecraft:stone_hoe"
+    ] },
+    { "id": "golden_sword", "pawn_price": 1, "items": [
+      "minecraft:golden_sword"
+    ] },
+    { "id": "golden_shovel", "pawn_price": 1, "items": [
+      "minecraft:golden_shovel"
+    ] },
+    { "id": "golden_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:golden_pickaxe"
+    ] },
+    { "id": "golden_axe", "pawn_price": 1, "items": [
+      "minecraft:golden_axe"
+    ] },
+    { "id": "golden_hoe", "pawn_price": 1, "items": [
+      "minecraft:golden_hoe"
+    ] },
+    { "id": "iron_sword", "pawn_price": 1, "items": [
+      "minecraft:iron_sword"
+    ] },
+    { "id": "iron_shovel", "pawn_price": 1, "items": [
+      "minecraft:iron_shovel"
+    ] },
+    { "id": "iron_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:iron_pickaxe"
+    ] },
+    { "id": "iron_axe", "pawn_price": 1, "items": [
+      "minecraft:iron_axe"
+    ] },
+    { "id": "iron_hoe", "pawn_price": 1, "items": [
+      "minecraft:iron_hoe"
+    ] },
+    { "id": "diamond_sword", "pawn_price": 1, "items": [
+      "minecraft:diamond_sword"
+    ] },
+    { "id": "diamond_shovel", "pawn_price": 1, "items": [
+      "minecraft:diamond_shovel"
+    ] },
+    { "id": "diamond_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:diamond_pickaxe"
+    ] },
+    { "id": "diamond_axe", "pawn_price": 1, "items": [
+      "minecraft:diamond_axe"
+    ] },
+    { "id": "diamond_hoe", "pawn_price": 1, "items": [
+      "minecraft:diamond_hoe"
+    ] },
+    { "id": "netherite_sword", "pawn_price": 1, "items": [
+      "minecraft:netherite_sword"
+    ] },
+    { "id": "netherite_shovel", "pawn_price": 1, "items": [
+      "minecraft:netherite_shovel"
+    ] },
+    { "id": "netherite_pickaxe", "pawn_price": 1, "items": [
+      "minecraft:netherite_pickaxe"
+    ] },
+    { "id": "netherite_axe", "pawn_price": 1, "items": [
+      "minecraft:netherite_axe"
+    ] },
+    { "id": "netherite_hoe", "pawn_price": 1, "items": [
+      "minecraft:netherite_hoe"
+    ] },
+    { "id": "stick", "pawn_price": 1, "items": [
+      "minecraft:stick"
+    ] },
+    { "id": "mushroom_stew", "pawn_price": 1, "items": [
+      "minecraft:mushroom_stew"
+    ] },
+    { "id": "string", "pawn_price": 1, "items": [
+      "minecraft:string"
+    ] },
+    { "id": "feather", "pawn_price": 1, "items": [
+      "minecraft:feather"
+    ] },
+    { "id": "gunpowder", "pawn_price": 1, "items": [
+      "minecraft:gunpowder"
+    ] },
+    { "id": "crop_seeds", "pawn_price": 1, "items": [
+      "minecraft:wheat_seeds",
+      "minecraft:pumpkin_seeds",
+      "minecraft:melon_seeds",
+      "minecraft:torchflower_seeds",
+      "minecraft:beetroot_seeds"
+    ] },
+    { "id": "pitcher_pod", "pawn_price": 1, "items": [
+      "minecraft:pitcher_pod"
+    ] },
+    { "id": "wheat", "pawn_price": 1, "items": [
+      "minecraft:wheat"
+    ] },
+    { "id": "bread", "pawn_price": 1, "items": [
+      "minecraft:bread"
+    ] },
+    { "id": "leather_helmet", "pawn_price": 1, "items": [
+      "minecraft:leather_helmet"
+    ] },
+    { "id": "leather_chestplate", "pawn_price": 1, "items": [
+      "minecraft:leather_chestplate"
+    ] },
+    { "id": "leather_leggings", "pawn_price": 1, "items": [
+      "minecraft:leather_leggings"
+    ] },
+    { "id": "leather_boots", "pawn_price": 1, "items": [
+      "minecraft:leather_boots"
+    ] },
+    { "id": "copper_helmet", "pawn_price": 1, "items": [
+      "minecraft:copper_helmet"
+    ] },
+    { "id": "copper_chestplate", "pawn_price": 1, "items": [
+      "minecraft:copper_chestplate"
+    ] },
+    { "id": "copper_leggings", "pawn_price": 1, "items": [
+      "minecraft:copper_leggings"
+    ] },
+    { "id": "copper_boots", "pawn_price": 1, "items": [
+      "minecraft:copper_boots"
+    ] },
+    { "id": "chainmail_helmet", "pawn_price": 1, "items": [
+      "minecraft:chainmail_helmet"
+    ] },
+    { "id": "chainmail_chestplate", "pawn_price": 1, "items": [
+      "minecraft:chainmail_chestplate"
+    ] },
+    { "id": "chainmail_leggings", "pawn_price": 1, "items": [
+      "minecraft:chainmail_leggings"
+    ] },
+    { "id": "chainmail_boots", "pawn_price": 1, "items": [
+      "minecraft:chainmail_boots"
+    ] },
+    { "id": "iron_helmet", "pawn_price": 1, "items": [
+      "minecraft:iron_helmet"
+    ] },
+    { "id": "iron_chestplate", "pawn_price": 1, "items": [
+      "minecraft:iron_chestplate"
+    ] },
+    { "id": "iron_leggings", "pawn_price": 1, "items": [
+      "minecraft:iron_leggings"
+    ] },
+    { "id": "iron_boots", "pawn_price": 1, "items": [
+      "minecraft:iron_boots"
+    ] },
+    { "id": "diamond_helmet", "pawn_price": 1, "items": [
+      "minecraft:diamond_helmet"
+    ] },
+    { "id": "diamond_chestplate", "pawn_price": 1, "items": [
+      "minecraft:diamond_chestplate"
+    ] },
+    { "id": "diamond_leggings", "pawn_price": 1, "items": [
+      "minecraft:diamond_leggings"
+    ] },
+    { "id": "diamond_boots", "pawn_price": 1, "items": [
+      "minecraft:diamond_boots"
+    ] },
+    { "id": "golden_helmet", "pawn_price": 1, "items": [
+      "minecraft:golden_helmet"
+    ] },
+    { "id": "golden_chestplate", "pawn_price": 1, "items": [
+      "minecraft:golden_chestplate"
+    ] },
+    { "id": "golden_leggings", "pawn_price": 1, "items": [
+      "minecraft:golden_leggings"
+    ] },
+    { "id": "golden_boots", "pawn_price": 1, "items": [
+      "minecraft:golden_boots"
+    ] },
+    { "id": "netherite_helmet", "pawn_price": 1, "items": [
+      "minecraft:netherite_helmet"
+    ] },
+    { "id": "netherite_chestplate", "pawn_price": 1, "items": [
+      "minecraft:netherite_chestplate"
+    ] },
+    { "id": "netherite_leggings", "pawn_price": 1, "items": [
+      "minecraft:netherite_leggings"
+    ] },
+    { "id": "netherite_boots", "pawn_price": 1, "items": [
+      "minecraft:netherite_boots"
+    ] },
+    { "id": "flint", "pawn_price": 1, "items": [
+      "minecraft:flint"
+    ] },
+    { "id": "porkchop", "pawn_price": 1, "items": [
+      "minecraft:porkchop"
+    ] },
+    { "id": "cooked_porkchop", "pawn_price": 1, "items": [
+      "minecraft:cooked_porkchop"
+    ] },
+    { "id": "painting", "pawn_price": 1, "items": [
+      "minecraft:painting"
+    ] },
+    { "id": "golden_apple", "pawn_price": 1, "items": [
+      "minecraft:golden_apple"
+    ] },
+    { "id": "enchanted_golden_apple", "pawn_price": 1, "items": [
+      "minecraft:enchanted_golden_apple"
+    ] },
+    { "id": "wooden_signs", "pawn_price": 1, "items": [
+      "minecraft:oak_sign",
+      "minecraft:spruce_sign",
+      "minecraft:birch_sign",
+      "minecraft:jungle_sign",
+      "minecraft:acacia_sign",
+      "minecraft:cherry_sign",
+      "minecraft:dark_oak_sign",
+      "minecraft:pale_oak_sign",
+      "minecraft:mangrove_sign",
+      "minecraft:bamboo_sign",
+      "minecraft:crimson_sign",
+      "minecraft:warped_sign"
+    ] },
+    { "id": "wooden_hanging_signs", "pawn_price": 1, "items": [
+      "minecraft:oak_hanging_sign",
+      "minecraft:spruce_hanging_sign",
+      "minecraft:birch_hanging_sign",
+      "minecraft:jungle_hanging_sign",
+      "minecraft:acacia_hanging_sign",
+      "minecraft:cherry_hanging_sign",
+      "minecraft:dark_oak_hanging_sign",
+      "minecraft:pale_oak_hanging_sign",
+      "minecraft:mangrove_hanging_sign",
+      "minecraft:bamboo_hanging_sign",
+      "minecraft:crimson_hanging_sign",
+      "minecraft:warped_hanging_sign"
+    ] },
+    { "id": "bucket", "pawn_price": 1, "items": [
+      "minecraft:bucket"
+    ] },
+    { "id": "water_bucket", "pawn_price": 1, "items": [
+      "minecraft:water_bucket"
+    ] },
+    { "id": "lava_bucket", "pawn_price": 1, "items": [
+      "minecraft:lava_bucket"
+    ] },
+    { "id": "powder_snow_bucket", "pawn_price": 1, "items": [
+      "minecraft:powder_snow_bucket"
+    ] },
+    { "id": "milk_bucket", "pawn_price": 1, "items": [
+      "minecraft:milk_bucket"
+    ] },
+    { "id": "snowball", "pawn_price": 1, "items": [
+      "minecraft:snowball"
+    ] },
+    { "id": "leather", "pawn_price": 1, "items": [
+      "minecraft:leather"
+    ] },
+    { "id": "pufferfish_bucket", "pawn_price": 1, "items": [
+      "minecraft:pufferfish_bucket"
+    ] },
+    { "id": "salmon_bucket", "pawn_price": 1, "items": [
+      "minecraft:salmon_bucket"
+    ] },
+    { "id": "cod_bucket", "pawn_price": 1, "items": [
+      "minecraft:cod_bucket"
+    ] },
+    { "id": "tropical_fish_bucket", "pawn_price": 1, "items": [
+      "minecraft:tropical_fish_bucket"
+    ] },
+    { "id": "axolotl_bucket", "pawn_price": 1, "items": [
+      "minecraft:axolotl_bucket"
+    ] },
+    { "id": "tadpole_bucket", "pawn_price": 1, "items": [
+      "minecraft:tadpole_bucket"
+    ] },
+    { "id": "brick", "pawn_price": 1, "items": [
+      "minecraft:brick"
+    ] },
+    { "id": "clay_ball", "pawn_price": 1, "items": [
+      "minecraft:clay_ball"
+    ] },
+    { "id": "dried_kelp_block", "pawn_price": 1, "items": [
+      "minecraft:dried_kelp_block"
+    ] },
+    { "id": "paper", "pawn_price": 1, "items": [
+      "minecraft:paper"
+    ] },
+    { "id": "book", "pawn_price": 1, "items": [
+      "minecraft:book"
+    ] },
+    { "id": "slime_ball", "pawn_price": 1, "items": [
+      "minecraft:slime_ball"
+    ] },
+    { "id": "egg", "pawn_price": 1, "items": [
+      "minecraft:egg"
+    ] },
+    { "id": "blue_egg", "pawn_price": 1, "items": [
+      "minecraft:blue_egg"
+    ] },
+    { "id": "brown_egg", "pawn_price": 1, "items": [
+      "minecraft:brown_egg"
+    ] },
+    { "id": "compass", "pawn_price": 1, "items": [
+      "minecraft:compass"
+    ] },
+    { "id": "recovery_compass", "pawn_price": 1, "items": [
+      "minecraft:recovery_compass"
+    ] },
+    { "id": "bundle", "pawn_price": 1, "items": [
+      "minecraft:bundle"
+    ] },
+    { "id": "white_bundle", "pawn_price": 1, "items": [
+      "minecraft:white_bundle"
+    ] },
+    { "id": "orange_bundle", "pawn_price": 1, "items": [
+      "minecraft:orange_bundle"
+    ] },
+    { "id": "magenta_bundle", "pawn_price": 1, "items": [
+      "minecraft:magenta_bundle"
+    ] },
+    { "id": "light_blue_bundle", "pawn_price": 1, "items": [
+      "minecraft:light_blue_bundle"
+    ] },
+    { "id": "yellow_bundle", "pawn_price": 1, "items": [
+      "minecraft:yellow_bundle"
+    ] },
+    { "id": "lime_bundle", "pawn_price": 1, "items": [
+      "minecraft:lime_bundle"
+    ] },
+    { "id": "pink_bundle", "pawn_price": 1, "items": [
+      "minecraft:pink_bundle"
+    ] },
+    { "id": "gray_bundle", "pawn_price": 1, "items": [
+      "minecraft:gray_bundle"
+    ] },
+    { "id": "light_gray_bundle", "pawn_price": 1, "items": [
+      "minecraft:light_gray_bundle"
+    ] },
+    { "id": "cyan_bundle", "pawn_price": 1, "items": [
+      "minecraft:cyan_bundle"
+    ] },
+    { "id": "purple_bundle", "pawn_price": 1, "items": [
+      "minecraft:purple_bundle"
+    ] },
+    { "id": "blue_bundle", "pawn_price": 1, "items": [
+      "minecraft:blue_bundle"
+    ] },
+    { "id": "brown_bundle", "pawn_price": 1, "items": [
+      "minecraft:brown_bundle"
+    ] },
+    { "id": "green_bundle", "pawn_price": 1, "items": [
+      "minecraft:green_bundle"
+    ] },
+    { "id": "red_bundle", "pawn_price": 1, "items": [
+      "minecraft:red_bundle"
+    ] },
+    { "id": "black_bundle", "pawn_price": 1, "items": [
+      "minecraft:black_bundle"
+    ] },
+    { "id": "fishing_rod", "pawn_price": 1, "items": [
+      "minecraft:fishing_rod"
+    ] },
+    { "id": "clock", "pawn_price": 1, "items": [
+      "minecraft:clock"
+    ] },
+    { "id": "spyglass", "pawn_price": 1, "items": [
+      "minecraft:spyglass"
+    ] },
+    { "id": "glowstone_dust", "pawn_price": 1, "items": [
+      "minecraft:glowstone_dust"
+    ] },
+    { "id": "cod", "pawn_price": 1, "items": [
+      "minecraft:cod"
+    ] },
+    { "id": "salmon", "pawn_price": 1, "items": [
+      "minecraft:salmon"
+    ] },
+    { "id": "tropical_fish", "pawn_price": 1, "items": [
+      "minecraft:tropical_fish"
+    ] },
+    { "id": "pufferfish", "pawn_price": 1, "items": [
+      "minecraft:pufferfish"
+    ] },
+    { "id": "cooked_cod", "pawn_price": 1, "items": [
+      "minecraft:cooked_cod"
+    ] },
+    { "id": "cooked_salmon", "pawn_price": 1, "items": [
+      "minecraft:cooked_salmon"
+    ] },
+    { "id": "ink_sac", "pawn_price": 1, "items": [
+      "minecraft:ink_sac"
+    ] },
+    { "id": "glow_ink_sac", "pawn_price": 1, "items": [
+      "minecraft:glow_ink_sac"
+    ] },
+    { "id": "cocoa_beans", "pawn_price": 1, "items": [
+      "minecraft:cocoa_beans"
+    ] },
+    { "id": "white_dye", "pawn_price": 1, "items": [
+      "minecraft:white_dye"
+    ] },
+    { "id": "orange_dye", "pawn_price": 1, "items": [
+      "minecraft:orange_dye"
+    ] },
+    { "id": "magenta_dye", "pawn_price": 1, "items": [
+      "minecraft:magenta_dye"
+    ] },
+    { "id": "light_blue_dye", "pawn_price": 1, "items": [
+      "minecraft:light_blue_dye"
+    ] },
+    { "id": "yellow_dye", "pawn_price": 1, "items": [
+      "minecraft:yellow_dye"
+    ] },
+    { "id": "lime_dye", "pawn_price": 1, "items": [
+      "minecraft:lime_dye"
+    ] },
+    { "id": "pink_dye", "pawn_price": 1, "items": [
+      "minecraft:pink_dye"
+    ] },
+    { "id": "gray_dye", "pawn_price": 1, "items": [
+      "minecraft:gray_dye"
+    ] },
+    { "id": "light_gray_dye", "pawn_price": 1, "items": [
+      "minecraft:light_gray_dye"
+    ] },
+    { "id": "cyan_dye", "pawn_price": 1, "items": [
+      "minecraft:cyan_dye"
+    ] },
+    { "id": "purple_dye", "pawn_price": 1, "items": [
+      "minecraft:purple_dye"
+    ] },
+    { "id": "blue_dye", "pawn_price": 1, "items": [
+      "minecraft:blue_dye"
+    ] },
+    { "id": "brown_dye", "pawn_price": 1, "items": [
+      "minecraft:brown_dye"
+    ] },
+    { "id": "green_dye", "pawn_price": 1, "items": [
+      "minecraft:green_dye"
+    ] },
+    { "id": "red_dye", "pawn_price": 1, "items": [
+      "minecraft:red_dye"
+    ] },
+    { "id": "black_dye", "pawn_price": 1, "items": [
+      "minecraft:black_dye"
+    ] },
+    { "id": "bone_meal", "pawn_price": 1, "items": [
+      "minecraft:bone_meal"
+    ] },
+    { "id": "bone", "pawn_price": 1, "items": [
+      "minecraft:bone"
+    ] },
+    { "id": "sugar", "pawn_price": 1, "items": [
+      "minecraft:sugar"
+    ] },
+    { "id": "cake", "pawn_price": 1, "items": [
+      "minecraft:cake"
+    ] },
+    { "id": "bed_colors", "pawn_price": 1, "items": [
+      "minecraft:white_bed",
+      "minecraft:orange_bed",
+      "minecraft:magenta_bed",
+      "minecraft:light_blue_bed",
+      "minecraft:yellow_bed",
+      "minecraft:lime_bed",
+      "minecraft:pink_bed",
+      "minecraft:gray_bed",
+      "minecraft:light_gray_bed",
+      "minecraft:cyan_bed",
+      "minecraft:purple_bed",
+      "minecraft:blue_bed",
+      "minecraft:brown_bed",
+      "minecraft:green_bed",
+      "minecraft:red_bed",
+      "minecraft:black_bed"
+    ] },
+    { "id": "cookie", "pawn_price": 1, "items": [
+      "minecraft:cookie"
+    ] },
+    { "id": "crafter", "pawn_price": 1, "items": [
+      "minecraft:crafter"
+    ] },
+    { "id": "filled_map", "pawn_price": 1, "items": [
+      "minecraft:filled_map"
+    ] },
+    { "id": "shears", "pawn_price": 1, "items": [
+      "minecraft:shears"
+    ] },
+    { "id": "melon_slice", "pawn_price": 1, "items": [
+      "minecraft:melon_slice"
+    ] },
+    { "id": "dried_kelp", "pawn_price": 1, "items": [
+      "minecraft:dried_kelp"
+    ] },
+    { "id": "beef", "pawn_price": 1, "items": [
+      "minecraft:beef"
+    ] },
+    { "id": "cooked_beef", "pawn_price": 1, "items": [
+      "minecraft:cooked_beef"
+    ] },
+    { "id": "chicken", "pawn_price": 1, "items": [
+      "minecraft:chicken"
+    ] },
+    { "id": "cooked_chicken", "pawn_price": 1, "items": [
+      "minecraft:cooked_chicken"
+    ] },
+    { "id": "rotten_flesh", "pawn_price": 1, "items": [
+      "minecraft:rotten_flesh"
+    ] },
+    { "id": "ender_pearl", "pawn_price": 1, "items": [
+      "minecraft:ender_pearl"
+    ] },
+    { "id": "blaze_rod", "pawn_price": 1, "items": [
+      "minecraft:blaze_rod"
+    ] },
+    { "id": "ghast_tear", "pawn_price": 1, "items": [
+      "minecraft:ghast_tear"
+    ] },
+    { "id": "gold_nugget", "pawn_price": 1, "items": [
+      "minecraft:gold_nugget"
+    ] },
+    { "id": "nether_wart", "pawn_price": 1, "items": [
+      "minecraft:nether_wart"
+    ] },
+    { "id": "glass_bottle", "pawn_price": 1, "items": [
+      "minecraft:glass_bottle"
+    ] },
+    { "id": "potion", "pawn_price": 1, "items": [
+      "minecraft:potion"
+    ] },
+    { "id": "spider_eye", "pawn_price": 1, "items": [
+      "minecraft:spider_eye"
+    ] },
+    { "id": "fermented_spider_eye", "pawn_price": 1, "items": [
+      "minecraft:fermented_spider_eye"
+    ] },
+    { "id": "blaze_powder", "pawn_price": 1, "items": [
+      "minecraft:blaze_powder"
+    ] },
+    { "id": "magma_cream", "pawn_price": 1, "items": [
+      "minecraft:magma_cream"
+    ] },
+    { "id": "brewing_stand", "pawn_price": 1, "items": [
+      "minecraft:brewing_stand"
+    ] },
+    { "id": "cauldron", "pawn_price": 1, "items": [
+      "minecraft:cauldron"
+    ] },
+    { "id": "ender_eye", "pawn_price": 1, "items": [
+      "minecraft:ender_eye"
+    ] },
+    { "id": "glistering_melon_slice", "pawn_price": 1, "items": [
+      "minecraft:glistering_melon_slice"
+    ] },
+    { "id": "experience_bottle", "pawn_price": 1, "items": [
+      "minecraft:experience_bottle"
+    ] },
+    { "id": "fire_charge", "pawn_price": 1, "items": [
+      "minecraft:fire_charge"
+    ] },
+    { "id": "wind_charge", "pawn_price": 1, "items": [
+      "minecraft:wind_charge"
+    ] },
+    { "id": "writable_book", "pawn_price": 1, "items": [
+      "minecraft:writable_book"
+    ] },
+    { "id": "written_book", "pawn_price": 1, "items": [
+      "minecraft:written_book"
+    ] },
+    { "id": "breeze_rod", "pawn_price": 1, "items": [
+      "minecraft:breeze_rod"
+    ] },
+    { "id": "mace", "pawn_price": 1, "items": [
+      "minecraft:mace"
+    ] },
+    { "id": "item_frame", "pawn_price": 1, "items": [
+      "minecraft:item_frame"
+    ] },
+    { "id": "glow_item_frame", "pawn_price": 1, "items": [
+      "minecraft:glow_item_frame"
+    ] },
+    { "id": "flower_pot", "pawn_price": 1, "items": [
+      "minecraft:flower_pot"
+    ] },
+    { "id": "carrot", "pawn_price": 1, "items": [
+      "minecraft:carrot"
+    ] },
+    { "id": "potato", "pawn_price": 1, "items": [
+      "minecraft:potato"
+    ] },
+    { "id": "baked_potato", "pawn_price": 1, "items": [
+      "minecraft:baked_potato"
+    ] },
+    { "id": "poisonous_potato", "pawn_price": 1, "items": [
+      "minecraft:poisonous_potato"
+    ] },
+    { "id": "map", "pawn_price": 1, "items": [
+      "minecraft:map"
+    ] },
+    { "id": "golden_carrot", "pawn_price": 1, "items": [
+      "minecraft:golden_carrot"
+    ] },
+    { "id": "skeleton_skull", "pawn_price": 1, "items": [
+      "minecraft:skeleton_skull"
+    ] },
+    { "id": "wither_skeleton_skull", "pawn_price": 1, "items": [
+      "minecraft:wither_skeleton_skull"
+    ] },
+    { "id": "zombie_head", "pawn_price": 1, "items": [
+      "minecraft:zombie_head"
+    ] },
+    { "id": "creeper_head", "pawn_price": 1, "items": [
+      "minecraft:creeper_head"
+    ] },
+    { "id": "dragon_head", "pawn_price": 1, "items": [
+      "minecraft:dragon_head"
+    ] },
+    { "id": "piglin_head", "pawn_price": 1, "items": [
+      "minecraft:piglin_head"
+    ] },
+    { "id": "nether_star", "pawn_price": 1, "items": [
+      "minecraft:nether_star"
+    ] },
+    { "id": "pumpkin_pie", "pawn_price": 1, "items": [
+      "minecraft:pumpkin_pie"
+    ] },
+    { "id": "firework_rocket", "pawn_price": 1, "items": [
+      "minecraft:firework_rocket"
+    ] },
+    { "id": "firework_star", "pawn_price": 1, "items": [
+      "minecraft:firework_star"
+    ] },
+    { "id": "enchanted_book", "pawn_price": 1, "items": [
+      "minecraft:enchanted_book"
+    ] },
+    { "id": "nether_brick", "pawn_price": 1, "items": [
+      "minecraft:nether_brick"
+    ] },
+    { "id": "resin_brick", "pawn_price": 1, "items": [
+      "minecraft:resin_brick"
+    ] },
+    { "id": "prismarine_shard", "pawn_price": 1, "items": [
+      "minecraft:prismarine_shard"
+    ] },
+    { "id": "prismarine_crystals", "pawn_price": 1, "items": [
+      "minecraft:prismarine_crystals"
+    ] },
+    { "id": "rabbit", "pawn_price": 1, "items": [
+      "minecraft:rabbit"
+    ] },
+    { "id": "cooked_rabbit", "pawn_price": 1, "items": [
+      "minecraft:cooked_rabbit"
+    ] },
+    { "id": "rabbit_stew", "pawn_price": 1, "items": [
+      "minecraft:rabbit_stew"
+    ] },
+    { "id": "rabbit_foot", "pawn_price": 1, "items": [
+      "minecraft:rabbit_foot"
+    ] },
+    { "id": "rabbit_hide", "pawn_price": 1, "items": [
+      "minecraft:rabbit_hide"
+    ] },
+    { "id": "armor_stand", "pawn_price": 1, "items": [
+      "minecraft:armor_stand"
+    ] },
+    { "id": "copper_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:copper_horse_armor"
+    ] },
+    { "id": "iron_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:iron_horse_armor"
+    ] },
+    { "id": "golden_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:golden_horse_armor"
+    ] },
+    { "id": "diamond_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:diamond_horse_armor"
+    ] },
+    { "id": "netherite_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:netherite_horse_armor"
+    ] },
+    { "id": "leather_horse_armor", "pawn_price": 1, "items": [
+      "minecraft:leather_horse_armor"
+    ] },
+    { "id": "lead", "pawn_price": 1, "items": [
+      "minecraft:lead"
+    ] },
+    { "id": "name_tag", "pawn_price": 1, "items": [
+      "minecraft:name_tag"
+    ] },
+    { "id": "mutton", "pawn_price": 1, "items": [
+      "minecraft:mutton"
+    ] },
+    { "id": "cooked_mutton", "pawn_price": 1, "items": [
+      "minecraft:cooked_mutton"
+    ] },
+    { "id": "banner_colors", "pawn_price": 1, "items": [
+      "minecraft:white_banner",
+      "minecraft:orange_banner",
+      "minecraft:magenta_banner",
+      "minecraft:light_blue_banner",
+      "minecraft:yellow_banner",
+      "minecraft:lime_banner",
+      "minecraft:pink_banner",
+      "minecraft:gray_banner",
+      "minecraft:light_gray_banner",
+      "minecraft:cyan_banner",
+      "minecraft:purple_banner",
+      "minecraft:blue_banner",
+      "minecraft:brown_banner",
+      "minecraft:green_banner",
+      "minecraft:red_banner",
+      "minecraft:black_banner"
+    ] },
+    { "id": "end_crystal", "pawn_price": 1, "items": [
+      "minecraft:end_crystal"
+    ] },
+    { "id": "chorus_fruit", "pawn_price": 1, "items": [
+      "minecraft:chorus_fruit"
+    ] },
+    { "id": "popped_chorus_fruit", "pawn_price": 1, "items": [
+      "minecraft:popped_chorus_fruit"
+    ] },
+    { "id": "beetroot", "pawn_price": 1, "items": [
+      "minecraft:beetroot"
+    ] },
+    { "id": "beetroot_soup", "pawn_price": 1, "items": [
+      "minecraft:beetroot_soup"
+    ] },
+    { "id": "dragon_breath", "pawn_price": 1, "items": [
+      "minecraft:dragon_breath"
+    ] },
+    { "id": "splash_potion", "pawn_price": 1, "items": [
+      "minecraft:splash_potion"
+    ] },
+    { "id": "spectral_arrow", "pawn_price": 1, "items": [
+      "minecraft:spectral_arrow"
+    ] },
+    { "id": "tipped_arrow", "pawn_price": 1, "items": [
+      "minecraft:tipped_arrow"
+    ] },
+    { "id": "lingering_potion", "pawn_price": 1, "items": [
+      "minecraft:lingering_potion"
+    ] },
+    { "id": "shield", "pawn_price": 1, "items": [
+      "minecraft:shield"
+    ] },
+    { "id": "wooden_spear", "pawn_price": 1, "items": [
+      "minecraft:wooden_spear"
+    ] },
+    { "id": "stone_spear", "pawn_price": 1, "items": [
+      "minecraft:stone_spear"
+    ] },
+    { "id": "copper_spear", "pawn_price": 1, "items": [
+      "minecraft:copper_spear"
+    ] },
+    { "id": "iron_spear", "pawn_price": 1, "items": [
+      "minecraft:iron_spear"
+    ] },
+    { "id": "golden_spear", "pawn_price": 1, "items": [
+      "minecraft:golden_spear"
+    ] },
+    { "id": "diamond_spear", "pawn_price": 1, "items": [
+      "minecraft:diamond_spear"
+    ] },
+    { "id": "netherite_spear", "pawn_price": 1, "items": [
+      "minecraft:netherite_spear"
+    ] },
+    { "id": "totem_of_undying", "pawn_price": 1, "items": [
+      "minecraft:totem_of_undying"
+    ] },
+    { "id": "shulker_shell", "pawn_price": 1, "items": [
+      "minecraft:shulker_shell"
+    ] },
+    { "id": "iron_nugget", "pawn_price": 1, "items": [
+      "minecraft:iron_nugget"
+    ] },
+    { "id": "copper_nugget", "pawn_price": 1, "items": [
+      "minecraft:copper_nugget"
+    ] },
+    { "id": "music_discs", "pawn_price": 1, "items": [
+      "minecraft:music_disc_13",
+      "minecraft:music_disc_cat",
+      "minecraft:music_disc_blocks",
+      "minecraft:music_disc_chirp",
+      "minecraft:music_disc_creator",
+      "minecraft:music_disc_creator_music_box",
+      "minecraft:music_disc_far",
+      "minecraft:music_disc_lava_chicken",
+      "minecraft:music_disc_mall",
+      "minecraft:music_disc_mellohi",
+      "minecraft:music_disc_stal",
+      "minecraft:music_disc_strad",
+      "minecraft:music_disc_ward",
+      "minecraft:music_disc_11",
+      "minecraft:music_disc_wait",
+      "minecraft:music_disc_otherside",
+      "minecraft:music_disc_relic",
+      "minecraft:music_disc_5",
+      "minecraft:music_disc_pigstep",
+      "minecraft:music_disc_precipice",
+      "minecraft:music_disc_tears"
+    ] },
+    { "id": "disc_fragment_5", "pawn_price": 1, "items": [
+      "minecraft:disc_fragment_5"
+    ] },
+    { "id": "trident", "pawn_price": 1, "items": [
+      "minecraft:trident"
+    ] },
+    { "id": "nautilus_shell", "pawn_price": 1, "items": [
+      "minecraft:nautilus_shell"
+    ] },
+    { "id": "iron_nautilus_armor", "pawn_price": 1, "items": [
+      "minecraft:iron_nautilus_armor"
+    ] },
+    { "id": "golden_nautilus_armor", "pawn_price": 1, "items": [
+      "minecraft:golden_nautilus_armor"
+    ] },
+    { "id": "diamond_nautilus_armor", "pawn_price": 1, "items": [
+      "minecraft:diamond_nautilus_armor"
+    ] },
+    { "id": "netherite_nautilus_armor", "pawn_price": 1, "items": [
+      "minecraft:netherite_nautilus_armor"
+    ] },
+    { "id": "copper_nautilus_armor", "pawn_price": 1, "items": [
+      "minecraft:copper_nautilus_armor"
+    ] },
+    { "id": "heart_of_the_sea", "pawn_price": 1, "items": [
+      "minecraft:heart_of_the_sea"
+    ] },
+    { "id": "crossbow", "pawn_price": 1, "items": [
+      "minecraft:crossbow"
+    ] },
+    { "id": "suspicious_stew", "pawn_price": 1, "items": [
+      "minecraft:suspicious_stew"
+    ] },
+    { "id": "loom", "pawn_price": 1, "items": [
+      "minecraft:loom"
+    ] },
+    { "id": "banner_patterns", "pawn_price": 1, "items": [
+      "minecraft:flower_banner_pattern",
+      "minecraft:creeper_banner_pattern",
+      "minecraft:skull_banner_pattern",
+      "minecraft:mojang_banner_pattern",
+      "minecraft:globe_banner_pattern",
+      "minecraft:piglin_banner_pattern",
+      "minecraft:flow_banner_pattern",
+      "minecraft:guster_banner_pattern",
+      "minecraft:field_masoned_banner_pattern",
+      "minecraft:bordure_indented_banner_pattern"
+    ] },
+    { "id": "goat_horn", "pawn_price": 1, "items": [
+      "minecraft:goat_horn"
+    ] },
+    { "id": "composter", "pawn_price": 1, "items": [
+      "minecraft:composter"
+    ] },
+    { "id": "barrel", "pawn_price": 1, "items": [
+      "minecraft:barrel"
+    ] },
+    { "id": "smoker", "pawn_price": 1, "items": [
+      "minecraft:smoker"
+    ] },
+    { "id": "blast_furnace", "pawn_price": 1, "items": [
+      "minecraft:blast_furnace"
+    ] },
+    { "id": "cartography_table", "pawn_price": 1, "items": [
+      "minecraft:cartography_table"
+    ] },
+    { "id": "fletching_table", "pawn_price": 1, "items": [
+      "minecraft:fletching_table"
+    ] },
+    { "id": "grindstone", "pawn_price": 1, "items": [
+      "minecraft:grindstone"
+    ] },
+    { "id": "smithing_table", "pawn_price": 1, "items": [
+      "minecraft:smithing_table"
+    ] },
+    { "id": "stonecutter", "pawn_price": 1, "items": [
+      "minecraft:stonecutter"
+    ] },
+    { "id": "bell", "pawn_price": 1, "items": [
+      "minecraft:bell"
+    ] },
+    { "id": "lantern", "pawn_price": 1, "items": [
+      "minecraft:lantern"
+    ] },
+    { "id": "soul_lantern", "pawn_price": 1, "items": [
+      "minecraft:soul_lantern"
+    ] },
+    { "id": "sweet_berries", "pawn_price": 1, "items": [
+      "minecraft:sweet_berries"
+    ] },
+    { "id": "glow_berries", "pawn_price": 1, "items": [
+      "minecraft:glow_berries"
+    ] },
+    { "id": "campfire", "pawn_price": 1, "items": [
+      "minecraft:campfire"
+    ] },
+    { "id": "soul_campfire", "pawn_price": 1, "items": [
+      "minecraft:soul_campfire"
+    ] },
+    { "id": "shroomlight", "pawn_price": 1, "items": [
+      "minecraft:shroomlight"
+    ] },
+    { "id": "honeycomb", "pawn_price": 1, "items": [
+      "minecraft:honeycomb"
+    ] },
+    { "id": "bee_nest", "pawn_price": 1, "items": [
+      "minecraft:bee_nest"
+    ] },
+    { "id": "beehive", "pawn_price": 1, "items": [
+      "minecraft:beehive"
+    ] },
+    { "id": "honey_bottle", "pawn_price": 1, "items": [
+      "minecraft:honey_bottle"
+    ] },
+    { "id": "honeycomb_block", "pawn_price": 1, "items": [
+      "minecraft:honeycomb_block"
+    ] },
+    { "id": "lodestone", "pawn_price": 1, "items": [
+      "minecraft:lodestone"
+    ] },
+    { "id": "crying_obsidian", "pawn_price": 1, "items": [
+      "minecraft:crying_obsidian"
+    ] },
+    { "id": "blackstone", "pawn_price": 1, "items": [
+      "minecraft:blackstone"
+    ] },
+    { "id": "blackstone_slab", "pawn_price": 1, "items": [
+      "minecraft:blackstone_slab"
+    ] },
+    { "id": "blackstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:blackstone_stairs"
+    ] },
+    { "id": "gilded_blackstone", "pawn_price": 1, "items": [
+      "minecraft:gilded_blackstone"
+    ] },
+    { "id": "polished_blackstone", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone"
+    ] },
+    { "id": "polished_blackstone_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_slab"
+    ] },
+    { "id": "polished_blackstone_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_stairs"
+    ] },
+    { "id": "chiseled_polished_blackstone", "pawn_price": 1, "items": [
+      "minecraft:chiseled_polished_blackstone"
+    ] },
+    { "id": "polished_blackstone_bricks", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_bricks"
+    ] },
+    { "id": "polished_blackstone_brick_slab", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_brick_slab"
+    ] },
+    { "id": "polished_blackstone_brick_stairs", "pawn_price": 1, "items": [
+      "minecraft:polished_blackstone_brick_stairs"
+    ] },
+    { "id": "cracked_polished_blackstone_bricks", "pawn_price": 1, "items": [
+      "minecraft:cracked_polished_blackstone_bricks"
+    ] },
+    { "id": "respawn_anchor", "pawn_price": 1, "items": [
+      "minecraft:respawn_anchor"
+    ] },
+    { "id": "candle", "pawn_price": 1, "items": [
+      "minecraft:candle"
+    ] },
+    { "id": "candle_colors", "pawn_price": 1, "items": [
+      "minecraft:white_candle",
+      "minecraft:orange_candle",
+      "minecraft:magenta_candle",
+      "minecraft:light_blue_candle",
+      "minecraft:yellow_candle",
+      "minecraft:lime_candle",
+      "minecraft:pink_candle",
+      "minecraft:gray_candle",
+      "minecraft:light_gray_candle",
+      "minecraft:cyan_candle",
+      "minecraft:purple_candle",
+      "minecraft:blue_candle",
+      "minecraft:brown_candle",
+      "minecraft:green_candle",
+      "minecraft:red_candle",
+      "minecraft:black_candle"
+    ] },
+    { "id": "small_amethyst_bud", "pawn_price": 1, "items": [
+      "minecraft:small_amethyst_bud"
+    ] },
+    { "id": "medium_amethyst_bud", "pawn_price": 1, "items": [
+      "minecraft:medium_amethyst_bud"
+    ] },
+    { "id": "large_amethyst_bud", "pawn_price": 1, "items": [
+      "minecraft:large_amethyst_bud"
+    ] },
+    { "id": "amethyst_cluster", "pawn_price": 1, "items": [
+      "minecraft:amethyst_cluster"
+    ] },
+    { "id": "pointed_dripstone", "pawn_price": 1, "items": [
+      "minecraft:pointed_dripstone"
+    ] },
+    { "id": "froglights", "pawn_price": 1, "items": [
+      "minecraft:ochre_froglight",
+      "minecraft:verdant_froglight",
+      "minecraft:pearlescent_froglight"
+    ] },
+    { "id": "echo_shard", "pawn_price": 1, "items": [
+      "minecraft:echo_shard"
+    ] },
+    { "id": "brush", "pawn_price": 1, "items": [
+      "minecraft:brush"
+    ] },
+    { "id": "netherite_upgrade_smithing_template", "pawn_price": 1, "items": [
+      "minecraft:netherite_upgrade_smithing_template"
+    ] },
+    { "id": "armor_trim_smithing_templates", "pawn_price": 1, "items": [
+      "minecraft:sentry_armor_trim_smithing_template",
+      "minecraft:dune_armor_trim_smithing_template",
+      "minecraft:coast_armor_trim_smithing_template",
+      "minecraft:wild_armor_trim_smithing_template",
+      "minecraft:ward_armor_trim_smithing_template",
+      "minecraft:eye_armor_trim_smithing_template",
+      "minecraft:vex_armor_trim_smithing_template",
+      "minecraft:tide_armor_trim_smithing_template",
+      "minecraft:snout_armor_trim_smithing_template",
+      "minecraft:rib_armor_trim_smithing_template",
+      "minecraft:spire_armor_trim_smithing_template",
+      "minecraft:wayfinder_armor_trim_smithing_template",
+      "minecraft:shaper_armor_trim_smithing_template",
+      "minecraft:silence_armor_trim_smithing_template",
+      "minecraft:raiser_armor_trim_smithing_template",
+      "minecraft:host_armor_trim_smithing_template",
+      "minecraft:flow_armor_trim_smithing_template",
+      "minecraft:bolt_armor_trim_smithing_template"
+    ] },
+    { "id": "pottery_sherds", "pawn_price": 1, "items": [
+      "minecraft:angler_pottery_sherd",
+      "minecraft:archer_pottery_sherd",
+      "minecraft:arms_up_pottery_sherd",
+      "minecraft:blade_pottery_sherd",
+      "minecraft:brewer_pottery_sherd",
+      "minecraft:burn_pottery_sherd",
+      "minecraft:danger_pottery_sherd",
+      "minecraft:explorer_pottery_sherd",
+      "minecraft:flow_pottery_sherd",
+      "minecraft:friend_pottery_sherd",
+      "minecraft:guster_pottery_sherd",
+      "minecraft:heart_pottery_sherd",
+      "minecraft:heartbreak_pottery_sherd",
+      "minecraft:howl_pottery_sherd",
+      "minecraft:miner_pottery_sherd",
+      "minecraft:mourner_pottery_sherd",
+      "minecraft:plenty_pottery_sherd",
+      "minecraft:prize_pottery_sherd",
+      "minecraft:scrape_pottery_sherd",
+      "minecraft:sheaf_pottery_sherd",
+      "minecraft:shelter_pottery_sherd",
+      "minecraft:skull_pottery_sherd",
+      "minecraft:snort_pottery_sherd"
+    ] },
+    { "id": "copper_grate_variants", "pawn_price": 1, "items": [
+      "minecraft:copper_grate",
+      "minecraft:exposed_copper_grate",
+      "minecraft:weathered_copper_grate",
+      "minecraft:oxidized_copper_grate",
+      "minecraft:waxed_copper_grate",
+      "minecraft:waxed_exposed_copper_grate",
+      "minecraft:waxed_weathered_copper_grate",
+      "minecraft:waxed_oxidized_copper_grate"
+    ] },
+    { "id": "copper_bulb_variants", "pawn_price": 1, "items": [
+      "minecraft:copper_bulb",
+      "minecraft:exposed_copper_bulb",
+      "minecraft:weathered_copper_bulb",
+      "minecraft:oxidized_copper_bulb",
+      "minecraft:waxed_copper_bulb",
+      "minecraft:waxed_exposed_copper_bulb",
+      "minecraft:waxed_weathered_copper_bulb",
+      "minecraft:waxed_oxidized_copper_bulb"
+    ] },
+    { "id": "copper_chest_variants", "pawn_price": 1, "items": [
+      "minecraft:copper_chest",
+      "minecraft:exposed_copper_chest",
+      "minecraft:weathered_copper_chest",
+      "minecraft:oxidized_copper_chest",
+      "minecraft:waxed_copper_chest",
+      "minecraft:waxed_exposed_copper_chest",
+      "minecraft:waxed_weathered_copper_chest",
+      "minecraft:waxed_oxidized_copper_chest"
+    ] },
+    { "id": "copper_golem_statue_variants", "pawn_price": 1, "items": [
+      "minecraft:copper_golem_statue",
+      "minecraft:exposed_copper_golem_statue",
+      "minecraft:weathered_copper_golem_statue",
+      "minecraft:oxidized_copper_golem_statue",
+      "minecraft:waxed_copper_golem_statue",
+      "minecraft:waxed_exposed_copper_golem_statue",
+      "minecraft:waxed_weathered_copper_golem_statue",
+      "minecraft:waxed_oxidized_copper_golem_statue"
+    ] },
+    { "id": "trial_key", "pawn_price": 1, "items": [
+      "minecraft:trial_key"
+    ] },
+    { "id": "ominous_trial_key", "pawn_price": 1, "items": [
+      "minecraft:ominous_trial_key"
+    ] },
+    { "id": "ominous_bottle", "pawn_price": 1, "items": [
+      "minecraft:ominous_bottle"
+    ] },
+    { "id": "sabi_advanced_redstone_core", "pawn_price": 1, "items": [
+      "sabi:advanced_redstone_core"
+    ] },
+    { "id": "sabi_sabi_machine", "pawn_price": 1, "items": [
+      "sabi:sabi_machine"
+    ] }
+  ]
 }

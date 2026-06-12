@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.sabi.SabiNetwork;
 import top.sabi.SabiPawnMachineMenu;
@@ -569,7 +570,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
     private record Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder, Component name) {
         Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder) {
-            this(itemId, item, storedCount, pawnPrice, redeemPrice, originalOrder, new ItemStack(item).getHoverName());
+            this(itemId, item, storedCount, pawnPrice, redeemPrice, originalOrder, displayName(item));
+        }
+
+        private static Component displayName(Item item) {
+            if (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.TIPPED_ARROW) {
+                return Component.translatable(item.getDescriptionId());
+            }
+            return new ItemStack(item).getHoverName();
         }
     }
 }
