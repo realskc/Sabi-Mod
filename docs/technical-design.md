@@ -355,7 +355,7 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 
 ## 撒币机价格配置
 
-配置文件：
+白名单与显示顺序配置文件：
 
 ```text
 src/main/resources/data/sabi/sabi_machine/items.json
@@ -367,7 +367,47 @@ src/main/resources/data/sabi/sabi_machine/items.json
 sabi:sabi_machine/items.json
 ```
 
-当前格式：
+当前它仍然是撒币机的完整白名单和 UI 原始顺序来源，不包含价格字段。实际交易价格只来自基础价/派生价文件；白名单中无法求出价格的物品不会进入撒币机可典当列表。
+
+基础价配置文件：
+
+```text
+src/main/resources/data/sabi/sabi_machine/base_prices.json
+```
+
+资源 ID：
+
+```text
+sabi:sabi_machine/base_prices.json
+```
+
+派生价公式配置文件：
+
+```text
+src/main/resources/data/sabi/sabi_machine/derived_prices.json
+```
+
+资源 ID：
+
+```text
+sabi:sabi_machine/derived_prices.json
+```
+
+辅助生成器：
+
+```text
+tools/generate_sabi_price_rules.py
+```
+
+当前 `base_prices.json` / `derived_prices.json` 是由生成器从 `items.json` 和本地 vanilla / mod recipe 数据生成的。生成器同时写出：
+
+```text
+src/main/resources/data/sabi/sabi_machine/price_rules_report.md
+```
+
+用于记录统计、强制基础价规则、未能安全求解而保留为基础价的物品，以及被跳过的 recipe type。
+
+`items.json` 当前格式：
 
 ```json
 {
@@ -375,7 +415,6 @@ sabi:sabi_machine/items.json
   "groups": [
     {
       "id": "wooden_planks",
-      "pawn_price": 1,
       "items": [
         "minecraft:oak_planks",
         "minecraft:spruce_planks"
@@ -387,9 +426,25 @@ sabi:sabi_machine/items.json
 
 语义：
 
-- `groups` 顺序就是 UI 的原始顺序
-- 每个 group 只写一次 `pawn_price`
-- group 内所有物品共用同一个典当价
+- `items.json` 的 `groups` 顺序就是 UI 的原始顺序
+- `items.json` 仍决定哪些物品允许被撒币机典当
+- `base_prices.json` 里的 `groups` 是需要人工定价的基础物品；修改价格时优先改这里；当前共有 `183` 个基础价 group
+- `base_prices.json` 的 `symbols` 是虚拟基础价，目前有 `sabi:generic_dye`
+- `derived_prices.json` 里的 `groups` 是可计算物品；每个 group 写 `items` 和一个或多个 `recipes`
+- 白名单中的物品如果无法从 `base_prices.json` 或 `derived_prices.json` 求出价格，会被跳过
+- 派生价求值时，如果一个物品有多条可解公式，取当前基础价下最便宜的一条
+- 公式项支持 `item` 单项和 `any_of` 候选项；`any_of` 会取候选项中的最便宜价格
+- 工作台、切石机不额外收费
+- 烧炼、烟熏、营火、疾速熔炉配方额外加入 `0.125 * minecraft:coal`
+- `fortune_iii_loot` 公式表示按时运 III 挖掘的期望掉落物计价；只给没有普通合成公式、且方块本身主要意义就是掉落小物的白名单方块生成，例如矿石、蘑菇方块和紫水晶簇
+- 染色类派生公式不使用具体染料价格，而使用 `sabi:generic_dye`
+- 具体染料本身按原版合成或烧炼配方推导，例如绿色染料会包含仙人掌和 `0.125 * minecraft:coal`
+- 手写等价公式用于表达非普通合成配方但价格应等量代换的情况，例如水桶/牛奶桶等于桶、泥巴等于泥土、雕刻南瓜等于南瓜、成书等于书与笔、鱼桶等于桶加对应鱼、喷溅/滞留药水包含药水、材料和本步酿造摊销的烈焰粉
+- 磨损铁砧按完整铁砧折价：开裂铁砧为 `2/3 * anvil`，损坏铁砧为 `1/3 * anvil`
+- 铜质氧化态物品如果未氧化本体可计算，则按未氧化本体等价计算；当前覆盖铜块、避雷针、铜门、铜活板门和铜箱子
+- 煤、木炭、岩浆桶、烈焰棒等燃料本体保留为基础价，不按燃烧时间互相等量代换
+- 钻石、绿宝石、青金石、石英、红石等矿物掉落物保留为基础价；矿石方块反过来由它们的时运 III 期望掉落计算
+- 公式计算结果向下取整
 - `redeem_price` 不在配置文件里
 - 赎回价由代码计算：`ceil(pawn_price * 1.2)`，实现是 `(pawn * 6 + 4) / 5`
 - `pawn_price < 0` 会被夹到 0
@@ -400,6 +455,7 @@ sabi:sabi_machine/items.json
 - 木板、木台阶、木楼梯是不同形态，应分不同 group
 - 竹马赛克、竹马赛克台阶、竹马赛克楼梯已分别并入木板、木台阶、木楼梯 group
 - 音乐唱片、陶片、盔甲纹饰模板等当前被合并定价，这是用户明确接受的
+- 基础价 group 也会按人工价格口径合并同类自然物或同状态变体，例如基础石材、圆石等价物、草状植物、小花、蘑菇、杜鹃花丛、紫水晶芽、苔藓块、灵魂沙/灵魂土、下界绯红/诡异两两对应物等
 
 当前物品集合口径：
 
@@ -408,11 +464,13 @@ sabi:sabi_machine/items.json
 - 可疑的沙子、可疑的沙砾保留，因为 wiki 标注为“仅基岩版”不可得，当前项目是 Java 版
 - 撒币货币不允许被撒币机典当，因此不在配置中
 - 当前统计：`798 groups / 1363 items`
+- 当前价格规则统计：`183` 个基础价 group，`401` 个基础价物品，`962` 个派生价物品，`1422` 条派生配方项，其中 `21` 条是时运 III 掉落公式
 
 配置加载：
 
 - `SabiPawnMachineConfig.load(MinecraftServer)` 每次从 server resource manager 读取
-- 读取失败返回空配置，不会崩溃
+- `items.json` 读取失败返回空配置，不会崩溃
+- `base_prices.json` 或 `derived_prices.json` 读取失败时会忽略对应新价格文件；无法求出的物品会被跳过
 - 重复 item ID 只接受第一次出现
 - ID 解析失败、物品不存在、`new ItemStack(item).isEmpty()` 的项会跳过
 
@@ -491,7 +549,7 @@ tools/edit_sabi_prices.py
 - 交互式逐 group 设置 `pawn_price`
 - 显示 group 中物品的中文名称
 - 显示示意贴图
-- 保存时重写 `items.json`
+- 保存时重写 `base_prices.json`
 - 自动展示按代码规则计算出的赎回价
 
 启动：
@@ -528,8 +586,8 @@ python tools\edit_sabi_prices.py
 ## 建议给后续 Agent 的工作流
 
 1. 修改代码前先跑 `git status --short`，确认是否有用户未提交改动。
-2. 价格和可典当物品优先改 `src/main/resources/data/sabi/sabi_machine/items.json`。
-3. 改价格时优先用 `tools/edit_sabi_prices.py`，但注意当前脚本文案乱码。
+2. 改可典当物品和 UI 原始顺序时优先改 `src/main/resources/data/sabi/sabi_machine/items.json`。
+3. 改基础价格时优先改 `base_prices.json`，可以用 `tools/edit_sabi_prices.py` 辅助编辑；改等量代换规则后运行 `tools/generate_sabi_price_rules.py` 重新生成。
 4. 改撒币机行为时同时检查：
    - `SabiPawnMachineMenu`
    - `SabiPawnMachineBlockEntity`

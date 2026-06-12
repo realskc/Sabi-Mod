@@ -120,7 +120,8 @@ O X O
 
 - 典当获得实体小撒币，不直接进入账户。
 - 赎回消耗实体小撒币。
-- 每种物品的典当价来自 `items.json` 的 `pawn_price`。
+- 每种物品的典当价优先来自 `base_prices.json` 或 `derived_prices.json`。
+- `items.json` 只提供白名单和显示顺序。
 - 赎回价不写在配置里，由代码自动计算为 `ceil(pawn_price * 1.2)`。
 
 库存规则：
@@ -140,22 +141,39 @@ O X O
 
 ## 撒币机物品列表配置
 
-配置文件：
+白名单与显示顺序配置文件：
 
 ```text
 src/main/resources/data/sabi/sabi_machine/items.json
 ```
 
-当前配置是完整白名单，不是自动注册表减黑名单。
+当前 `items.json` 是完整白名单，不是自动注册表减黑名单。它也决定 UI 原始顺序，不包含价格字段。
 
-配置格式：
+基础价配置文件：
+
+```text
+src/main/resources/data/sabi/sabi_machine/base_prices.json
+```
+
+这里放无法或不应通过等量代换计算的物品，供人工手动定价。
+
+派生价配置文件：
+
+```text
+src/main/resources/data/sabi/sabi_machine/derived_prices.json
+```
+
+这里放可计算物品的配方公式。工作台和切石机免费；烧炼按每个输出额外 `1/8` 煤计价；染色类物品使用 `sabi:generic_dye` 通用染料价格；具体染料本身按合成或烧炼配方计价；矿石、蘑菇方块、紫水晶簇等无普通合成公式且本身主要意义是掉落小物的方块可以按时运 III 期望掉落物计价。
+
+生成器还会写入少量手工等价公式，用来表达原版没有固定 recipe 但价格应等量代换的物品。例如水桶/牛奶桶等于桶、鱼桶等于桶加对应鱼、雕刻南瓜等于南瓜、成书等于书与笔、喷溅/滞留药水包含本步酿造材料和烈焰粉摊销、氧化铜制品等于未氧化本体。
+
+`items.json` 配置格式：
 
 ```json
 {
   "groups": [
     {
       "id": "example_group",
-      "pawn_price": 1,
       "items": [
         "minecraft:example_item"
       ]
@@ -164,9 +182,9 @@ src/main/resources/data/sabi/sabi_machine/items.json
 }
 ```
 
-分组规则：
+白名单分组规则：
 
-- 同 group 的物品共用一个典当价。
+- 同 group 的物品在 UI 中保持相邻，并表达内容层分类；价格来自 `base_prices.json` 或 `derived_prices.json`。
 - 只有材质本质相同、形态也相同，只是颜色、纹饰、品种、木种、氧化状态等不同，才应放在同一 group。
 - 不同形态不要放同一 group。例如木板、台阶、楼梯应分开。
 
@@ -181,6 +199,7 @@ src/main/resources/data/sabi/sabi_machine/items.json
 
 - `798` 个 group
 - `1363` 个 item
+- 价格规则：`183` 个基础价 group，`401` 个基础价 item，`962` 个派生价 item，`1422` 条派生公式项，其中 `21` 条来自时运 III 掉落期望
 
 ## 未来计划
 

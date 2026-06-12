@@ -9,6 +9,10 @@
 
 - `technical-design.md` 的“撒币机价格配置”
 - `src/main/resources/data/sabi/sabi_machine/items.json`
+- `src/main/resources/data/sabi/sabi_machine/base_prices.json`
+- `src/main/resources/data/sabi/sabi_machine/derived_prices.json`
+- `src/main/resources/data/sabi/sabi_machine/price_rules_report.md`
+- `tools/generate_sabi_price_rules.py`
 - `tools/edit_sabi_prices.py`
 
 如果要改 UI 或交易逻辑，优先阅读：

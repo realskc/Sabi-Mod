@@ -10,7 +10,7 @@ from tkinter import messagebox, ttk
 
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parents[1]
-CONFIG_PATH = REPO_ROOT / "src" / "main" / "resources" / "data" / "sabi" / "sabi_machine" / "items.json"
+CONFIG_PATH = REPO_ROOT / "src" / "main" / "resources" / "data" / "sabi" / "sabi_machine" / "base_prices.json"
 VANILLA_ASSETS_ROOT = REPO_ROOT / "build" / "neoForm" / "neoFormJoined26.1.2-1" / "steps" / "transformSource" / "transformed" / "assets"
 MOD_ASSETS_ROOT = REPO_ROOT / "src" / "main" / "resources" / "assets"
 
@@ -23,9 +23,33 @@ def load_json(path):
 def write_config(path, data):
     lines = [
         "{",
-        '  "comment": "Sabi machine grouped item price list. Prices are in Xiao Sabi. Items share a group only when they have the same material role and the same item form; color, pattern, species, and oxidation/wax state variants may share one price.",',
-        '  "groups": [',
+        '  "comment": "Manual Sabi machine base prices. Prices are in Xiao Sabi. Items listed here are not calculated from recipes, or were intentionally kept as base prices.",',
     ]
+    symbols = data.get("symbols", [])
+    if symbols:
+        lines.append('  "symbols": [')
+        for symbol_index, symbol in enumerate(symbols):
+            symbol_comma = "," if symbol_index < len(symbols) - 1 else ""
+            comment = symbol.get("comment")
+            if comment:
+                lines.append(
+                    '    {{ "id": "{id}", "pawn_price": {pawn}, "comment": "{comment}" }}{comma}'.format(
+                        id=json_escape(symbol.get("id", "")),
+                        pawn=max(0, int(symbol.get("pawn_price", 0))),
+                        comment=json_escape(comment),
+                        comma=symbol_comma,
+                    )
+                )
+            else:
+                lines.append(
+                    '    {{ "id": "{id}", "pawn_price": {pawn} }}{comma}'.format(
+                        id=json_escape(symbol.get("id", "")),
+                        pawn=max(0, int(symbol.get("pawn_price", 0))),
+                        comma=symbol_comma,
+                    )
+                )
+        lines.append("  ],")
+    lines.append('  "groups": [')
     groups = data.get("groups", [])
     for group_index, group in enumerate(groups):
         group_comma = "," if group_index < len(groups) - 1 else ""
@@ -301,7 +325,7 @@ class PriceEditor(tk.Tk):
 
     def _show_group(self, index):
         if not self.groups:
-            messagebox.showerror("错误", "items.json 中没有 groups。")
+            messagebox.showerror("错误", f"{CONFIG_PATH.name} 中没有 groups。")
             return
         self.index = max(0, min(index, len(self.groups) - 1))
         group = self.groups[self.index]
