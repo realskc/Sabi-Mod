@@ -466,8 +466,6 @@
     { "id": "small_flowers", "items": [
       "minecraft:dandelion",
       "minecraft:golden_dandelion",
-      "minecraft:open_eyeblossom",
-      "minecraft:closed_eyeblossom",
       "minecraft:poppy",
       "minecraft:blue_orchid",
       "minecraft:allium",
@@ -478,13 +476,23 @@
       "minecraft:pink_tulip",
       "minecraft:oxeye_daisy",
       "minecraft:cornflower",
-      "minecraft:lily_of_the_valley",
-      "minecraft:wither_rose",
+      "minecraft:lily_of_the_valley"
+    ] },
+    { "id": "eyeblossoms", "items": [
+      "minecraft:open_eyeblossom",
+      "minecraft:closed_eyeblossom"
+    ] },
+    { "id": "ancient_flowers", "items": [
       "minecraft:torchflower",
+      "minecraft:pitcher_plant"
+    ] },
+    { "id": "wither_rose", "items": [
+      "minecraft:wither_rose"
+    ] },
+    { "id": "cactus_flower", "items": [
       "minecraft:cactus_flower"
     ] },
     { "id": "tall_flowers", "items": [
-      "minecraft:pitcher_plant",
       "minecraft:sunflower",
       "minecraft:lilac",
       "minecraft:rose_bush",
@@ -1936,14 +1944,20 @@
     { "id": "gunpowder", "items": [
       "minecraft:gunpowder"
     ] },
-    { "id": "crop_seeds", "items": [
-      "minecraft:wheat_seeds",
-      "minecraft:pumpkin_seeds",
-      "minecraft:melon_seeds",
-      "minecraft:torchflower_seeds",
+    { "id": "wheat_seeds", "items": [
+      "minecraft:wheat_seeds"
+    ] },
+    { "id": "pumpkin_seeds", "items": [
+      "minecraft:pumpkin_seeds"
+    ] },
+    { "id": "melon_seeds", "items": [
+      "minecraft:melon_seeds"
+    ] },
+    { "id": "beetroot_seeds", "items": [
       "minecraft:beetroot_seeds"
     ] },
-    { "id": "pitcher_pod", "items": [
+    { "id": "ancient_flower_seeds", "items": [
+      "minecraft:torchflower_seeds",
       "minecraft:pitcher_pod"
     ] },
     { "id": "wheat", "items": [

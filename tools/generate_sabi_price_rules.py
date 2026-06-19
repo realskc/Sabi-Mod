@@ -19,6 +19,11 @@ VANILLA_BLOCK_LOOT_DIR = VANILLA_DATA_ROOT / "minecraft" / "loot_table" / "block
 MOD_RECIPE_DIR = REPO_ROOT / "src" / "main" / "resources" / "data" / "sabi" / "recipe"
 
 GENERIC_DYE = "sabi:generic_dye"
+LAVA = "sabi:lava"
+POWDER_SNOW = "sabi:powder_snow"
+AXOLOTL = "sabi:axolotl"
+TADPOLE = "sabi:tadpole"
+HONEY = "sabi:honey"
 COAL_FUEL_COUNT = 0.125
 BREWING_REAGENT_COUNT = 1 / 3
 BREWING_BLAZE_POWDER_COUNT = 1 / 60
@@ -27,6 +32,13 @@ COLOR_DYE_RE = re.compile(r"^minecraft:.+_dye$")
 FORTUNE_LOOT_BLOCK_RE = re.compile(
     r"^minecraft:(.+_ore|brown_mushroom_block|red_mushroom_block|amethyst_cluster)$"
 )
+REPLACE_RECIPE_ITEMS = {
+    "minecraft:clock",
+    "minecraft:copper_golem_statue",
+    "minecraft:honey_bottle",
+    "minecraft:honey_block",
+    "minecraft:honeycomb",
+}
 FORCED_BASE_ITEMS = {
     "minecraft:andesite",
     "minecraft:basalt",
@@ -41,7 +53,7 @@ FORCED_BASE_ITEMS = {
     "minecraft:emerald",
     "minecraft:granite",
     "minecraft:lapis_lazuli",
-    "minecraft:lava_bucket",
+    "minecraft:leather",
     "minecraft:nether_wart_block",
     "minecraft:blaze_rod",
     "minecraft:quartz",
@@ -71,6 +83,12 @@ FISH_ITEMS = {
     "minecraft:salmon",
     "minecraft:tropical_fish",
     "minecraft:pufferfish",
+}
+RAW_MEAT_ITEMS = {
+    "minecraft:porkchop",
+    "minecraft:mutton",
+    "minecraft:beef",
+    "minecraft:chicken",
 }
 GRASSLIKE_PLANT_ITEMS = {
     "minecraft:short_grass",
@@ -109,8 +127,6 @@ AZALEA_BUSH_ITEMS = {
 }
 SMALL_FLOWER_ITEMS = {
     "minecraft:dandelion",
-    "minecraft:open_eyeblossom",
-    "minecraft:closed_eyeblossom",
     "minecraft:poppy",
     "minecraft:blue_orchid",
     "minecraft:allium",
@@ -122,11 +138,22 @@ SMALL_FLOWER_ITEMS = {
     "minecraft:oxeye_daisy",
     "minecraft:cornflower",
     "minecraft:lily_of_the_valley",
-    "minecraft:wither_rose",
-    "minecraft:torchflower",
-    "minecraft:cactus_flower",
     "minecraft:wildflowers",
     "minecraft:pink_petals",
+}
+EYEBLOSSOM_ITEMS = {
+    "minecraft:open_eyeblossom",
+    "minecraft:closed_eyeblossom",
+}
+ANCIENT_FLOWER_ITEMS = {
+    "minecraft:torchflower",
+    "minecraft:pitcher_plant",
+}
+WITHER_ROSE_ITEMS = {
+    "minecraft:wither_rose",
+}
+CACTUS_FLOWER_ITEMS = {
+    "minecraft:cactus_flower",
 }
 MUSHROOM_ITEMS = {
     "minecraft:brown_mushroom",
@@ -148,16 +175,18 @@ SOUL_BLOCK_ITEMS = {
     "minecraft:soul_sand",
     "minecraft:soul_soil",
 }
-AMETHYST_BUD_ITEMS = {
-    "minecraft:small_amethyst_bud",
-    "minecraft:medium_amethyst_bud",
-    "minecraft:large_amethyst_bud",
+MOB_HEAD_ITEMS = {
+    "minecraft:skeleton_skull",
+    "minecraft:zombie_head",
+    "minecraft:creeper_head",
+    "minecraft:piglin_head",
 }
 BASE_GROUP_OVERRIDES = {
     **{item: "basic_stones" for item in BASIC_STONE_ITEMS},
     **{item: "cobblestone_equivalents" for item in COBBLESTONE_EQUIVALENT_ITEMS},
     **{item: "eggs" for item in EGG_ITEMS},
     **{item: "fish" for item in FISH_ITEMS},
+    **{item: "raw_meats" for item in RAW_MEAT_ITEMS},
     **{item: "grasslike_plants" for item in GRASSLIKE_PLANT_ITEMS},
     **{item: "nether_fungi" for item in NETHER_FUNGI_ITEMS},
     **{item: "nether_nylium" for item in NETHER_NYLIUM_ITEMS},
@@ -165,12 +194,16 @@ BASE_GROUP_OVERRIDES = {
     **{item: "nether_wart_blocks" for item in NETHER_WART_BLOCK_ITEMS},
     **{item: "azalea_bushes" for item in AZALEA_BUSH_ITEMS},
     **{item: "small_flowers" for item in SMALL_FLOWER_ITEMS},
+    **{item: "eyeblossoms" for item in EYEBLOSSOM_ITEMS},
+    **{item: "ancient_flowers" for item in ANCIENT_FLOWER_ITEMS},
+    **{item: "wither_rose" for item in WITHER_ROSE_ITEMS},
+    **{item: "cactus_flower" for item in CACTUS_FLOWER_ITEMS},
     **{item: "mushrooms" for item in MUSHROOM_ITEMS},
     **{item: "hanging_rootlike_plants" for item in HANGING_ROOTLIKE_ITEMS},
     **{item: "moss_blocks" for item in MOSS_BLOCK_ITEMS},
     **{item: "dripleaves" for item in DRIPLEAF_ITEMS},
     **{item: "soul_blocks" for item in SOUL_BLOCK_ITEMS},
-    **{item: "amethyst_buds" for item in AMETHYST_BUD_ITEMS},
+    **{item: "mob_heads" for item in MOB_HEAD_ITEMS},
 }
 OXIDIZED_COPPER_EQUIVALENTS = {
     "minecraft:exposed_copper": "minecraft:copper_block",
@@ -188,6 +221,9 @@ OXIDIZED_COPPER_EQUIVALENTS = {
     "minecraft:exposed_copper_chest": "minecraft:copper_chest",
     "minecraft:weathered_copper_chest": "minecraft:copper_chest",
     "minecraft:oxidized_copper_chest": "minecraft:copper_chest",
+    "minecraft:exposed_copper_golem_statue": "minecraft:copper_golem_statue",
+    "minecraft:weathered_copper_golem_statue": "minecraft:copper_golem_statue",
+    "minecraft:oxidized_copper_golem_statue": "minecraft:copper_golem_statue",
 }
 DISCARDED_RECIPE_IDS = {
     # This stonecutting recipe creates the cycle cobblestone <-> stone. For
@@ -217,6 +253,8 @@ DISCARDED_RECIPE_IDS = {
     # The reverse honey recipe consumes empty bottles and is not the natural
     # source of honey bottles for pricing.
     "minecraft:honey_bottle",
+    "minecraft:honey_block",
+    "minecraft:honeycomb",
 }
 SUPPORTED_RECIPE_TYPES = {
     "minecraft:crafting_shaped",
@@ -759,6 +797,12 @@ def manual_formula(output_id, recipe_id, ingredients, result_count=1):
         "result_count": result_count,
         "ingredients": ingredients,
     }
+def should_replace_recipe_item(item_id):
+    return (
+        item_id in REPLACE_RECIPE_ITEMS
+        or item_id == "minecraft:netherite_upgrade_smithing_template"
+        or item_id.endswith("_armor_trim_smithing_template")
+    )
 
 
 def extra_formulas_for_item(item_id):
@@ -785,6 +829,209 @@ def extra_formulas_for_item(item_id):
             item_id,
             f"sabi:{item_id.removeprefix('minecraft:')}_equals_empty_bundle",
             [{"item": "minecraft:bundle", "count": 1}],
+        ))
+
+    if item_id == "minecraft:enchanted_book":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:enchanted_book_from_book_and_lapis_lazuli",
+            [
+                {"item": "minecraft:book", "count": 1},
+                {"item": "minecraft:lapis_lazuli", "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:filled_map":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:filled_map_equals_map",
+            [{"item": "minecraft:map", "count": 1}],
+        ))
+
+    if item_id == "minecraft:potion":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:potion_equals_water_bottle",
+            [{"item": "minecraft:glass_bottle", "count": 1}],
+        ))
+
+    if item_id == "minecraft:tipped_arrow":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:tipped_arrow_from_arrows_and_lingering_potion",
+            [
+                {"item": "minecraft:arrow", "count": 8},
+                {"item": "minecraft:lingering_potion", "count": 1},
+            ],
+            result_count=8,
+        ))
+    if item_id == "minecraft:nether_star":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:nether_star_from_wither",
+            [
+                {"item": "minecraft:wither_skeleton_skull", "count": 3},
+                {"item": "minecraft:soul_sand", "count": 4},
+            ],
+        ))
+
+    if item_id == "minecraft:firework_star":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:firework_star_from_gunpowder_and_generic_dye",
+            [
+                {"item": "minecraft:gunpowder", "count": 1},
+                {"item": GENERIC_DYE, "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:globe_banner_pattern":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:globe_banner_pattern_from_emeralds",
+            [{"item": "minecraft:emerald", "count": 8}],
+        ))
+
+    if item_id == "minecraft:netherite_upgrade_smithing_template" or item_id.endswith("_armor_trim_smithing_template"):
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_from_diamonds",
+            [{"item": "minecraft:diamond", "count": 7}],
+        ))
+    if item_id == "minecraft:clock":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:clock_from_emeralds",
+            [{"item": "minecraft:emerald", "count": 36}],
+        ))
+
+    if item_id == "minecraft:copper_golem_statue":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:copper_golem_statue_from_copper_block_and_pumpkin",
+            [
+                {"item": "minecraft:copper_block", "count": 1},
+                {"item": "minecraft:pumpkin", "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:honey_bottle":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:honey_bottle_from_glass_bottle_and_honey",
+            [
+                {"item": "minecraft:glass_bottle", "count": 1},
+                {"item": HONEY, "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:lava_bucket":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:lava_bucket_from_bucket_and_lava",
+            [
+                {"item": "minecraft:bucket", "count": 1},
+                {"item": LAVA, "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:honeycomb":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:honeycomb_from_honey",
+            [{"item": HONEY, "count": 1}],
+            result_count=3,
+        ))
+
+    if item_id == "minecraft:honey_block":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:honey_block_from_honey",
+            [{"item": HONEY, "count": 4}],
+        ))
+
+    amethyst_bud_cluster_counts = {
+        "minecraft:small_amethyst_bud": 1,
+        "minecraft:medium_amethyst_bud": 2,
+        "minecraft:large_amethyst_bud": 3,
+    }
+    if item_id in amethyst_bud_cluster_counts:
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_from_amethyst_cluster",
+            [{"item": "minecraft:amethyst_cluster", "count": amethyst_bud_cluster_counts[item_id]}],
+            result_count=4,
+        ))
+    if item_id == "minecraft:powder_snow_bucket":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:powder_snow_bucket_from_bucket_and_powder_snow",
+            [
+                {"item": "minecraft:bucket", "count": 1},
+                {"item": POWDER_SNOW, "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:axolotl_bucket":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:axolotl_bucket_from_bucket_and_axolotl",
+            [
+                {"item": "minecraft:bucket", "count": 1},
+                {"item": AXOLOTL, "count": 1},
+            ],
+        ))
+
+    if item_id == "minecraft:tadpole_bucket":
+        formulas.append(manual_formula(
+            item_id,
+            "sabi:tadpole_bucket_from_bucket_and_tadpole",
+            [
+                {"item": "minecraft:bucket", "count": 1},
+                {"item": TADPOLE, "count": 1},
+            ],
+        ))
+
+    if item_id.startswith("minecraft:") and item_id.endswith("_concrete"):
+        powder_id = f"{item_id}_powder"
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_equals_{powder_id.removeprefix('minecraft:')}",
+            [{"item": powder_id, "count": 1}],
+        ))
+
+    if item_id.startswith("minecraft:dead_") and item_id.endswith("_coral"):
+        live_id = f"minecraft:{item_id.removeprefix('minecraft:dead_')}"
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_equals_{live_id.removeprefix('minecraft:')}",
+            [{"item": live_id, "count": 1}],
+        ))
+
+    if item_id.startswith("minecraft:dead_") and item_id.endswith("_coral_block"):
+        live_id = f"minecraft:{item_id.removeprefix('minecraft:dead_')}"
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_equals_{live_id.removeprefix('minecraft:')}",
+            [{"item": live_id, "count": 1}],
+        ))
+
+    if item_id.startswith("minecraft:dead_") and item_id.endswith("_coral_fan"):
+        live_id = f"minecraft:{item_id.removeprefix('minecraft:dead_')}"
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_equals_{live_id.removeprefix('minecraft:')}",
+            [{"item": live_id, "count": 1}],
+        ))
+
+    if item_id.startswith("minecraft:") and item_id.endswith("_shulker_box") and item_id != "minecraft:shulker_box":
+        formulas.append(manual_formula(
+            item_id,
+            f"sabi:{item_id.removeprefix('minecraft:')}_from_shulker_box_and_generic_dye",
+            [
+                {"item": "minecraft:shulker_box", "count": 1},
+                {"item": GENERIC_DYE, "count": 1},
+            ],
         ))
 
     return formulas
@@ -824,6 +1071,8 @@ def main():
     for item in allowed_items:
         extra_formulas = extra_formulas_for_item(item)
         if extra_formulas:
+            if should_replace_recipe_item(item):
+                formulas_by_item[item].clear()
             formulas_by_item[item].extend(extra_formulas)
 
     loot_formula_count = 0
@@ -841,6 +1090,11 @@ def main():
     }
     resolved = set(forced_base)
     resolved.add(GENERIC_DYE)
+    resolved.add(LAVA)
+    resolved.add(POWDER_SNOW)
+    resolved.add(AXOLOTL)
+    resolved.add(TADPOLE)
+    resolved.add(HONEY)
 
     progress = True
     while progress:
@@ -916,6 +1170,31 @@ def main():
                 "id": GENERIC_DYE,
                 "pawn_price": existing_symbol_prices.get(GENERIC_DYE, 1),
                 "comment": "Virtual price used by dyed item formulas instead of a concrete dye item."
+            },
+            {
+                "id": LAVA,
+                "pawn_price": existing_symbol_prices.get(LAVA, 1),
+                "comment": "Virtual price used by lava bucket formulas instead of a concrete lava item."
+            },
+            {
+                "id": POWDER_SNOW,
+                "pawn_price": existing_symbol_prices.get(POWDER_SNOW, 1),
+                "comment": "Virtual price used by powder snow bucket formulas instead of a concrete powder snow item."
+            },
+            {
+                "id": AXOLOTL,
+                "pawn_price": existing_symbol_prices.get(AXOLOTL, 1),
+                "comment": "Virtual price used by axolotl bucket formulas instead of a concrete axolotl item."
+            },
+            {
+                "id": TADPOLE,
+                "pawn_price": existing_symbol_prices.get(TADPOLE, 1),
+                "comment": "Virtual price used by tadpole bucket formulas instead of a concrete tadpole item."
+            },
+            {
+                "id": HONEY,
+                "pawn_price": existing_symbol_prices.get(HONEY, 144),
+                "comment": "Virtual price used by honey item formulas instead of a concrete honey item."
             }
         ],
         "groups": base_groups,
@@ -929,48 +1208,39 @@ def main():
     write_json(DERIVED_PRICES_PATH, derived_config)
 
     unresolved_with_formulas = [item for item in base_items if item in formulas_by_item and item not in forced_base]
+    symbol_count = len(base_config.get("symbols", []))
     report_lines = [
         "# Sabi Machine Price Rule Report",
         "",
+        "This file is a short snapshot of how the Sabi machine price tables are organized. It is not used by the mod at runtime.",
+        "",
+        "## Current Counts",
+        "",
         f"- Allowed items: {len(allowed_items)}",
         f"- Base price items: {len(base_items)}",
+        f"- Virtual symbols: {symbol_count}",
         f"- Derived price items: {len(derived_items)}",
         f"- Derived recipe entries: {sum(len(group['recipes']) for group in derived_groups)}",
         f"- Fortune III loot formulas: {loot_formula_count}",
         "",
-        "## Forced Base Rules",
+        "## How Prices Are Split",
         "",
-        "- Concrete dye items are derived from their recipes when possible; dyed products use `sabi:generic_dye`.",
-        "- Fuel items such as `minecraft:coal`, `minecraft:charcoal`, `minecraft:lava_bucket`, and `minecraft:blaze_rod` are base-priced instead of being equated by burn time.",
-        "- Mineral drops such as `minecraft:diamond`, `minecraft:emerald`, `minecraft:lapis_lazuli`, `minecraft:quartz`, and `minecraft:redstone` are base-priced; their ore blocks are derived from Fortune III loot expectations.",
-        "- Recipe types without fixed ingredient counts are base-priced.",
-        "- Fortune III loot formulas are only generated for allowlisted blocks without a normal recipe formula.",
+        "- `base_prices.json` holds manually priced items and virtual symbols such as `sabi:generic_dye`, `sabi:lava`, and `sabi:honey`.",
+        "- `derived_prices.json` holds calculated prices from recipes, manual equivalences, loot expectations, and symbol-based formulas.",
+        "- If multiple formulas exist for an item, the resolver uses the cheapest resolvable formula.",
         "",
-        "## Unresolved Recipe Cycles Or Ambiguous Items Kept As Base",
+        "## Important Manual Rules",
         "",
+        "- Dyed items use `sabi:generic_dye`; several bucket contents and honey are virtual symbols.",
+        "- Several equivalences intentionally override vanilla recipes, such as concrete from concrete powder, dead coral from live coral, filled maps from maps, clocks and templates from gems, copper golem statues from copper blocks plus pumpkins, and honey items from `sabi:honey`.",
+        "- Ore-like drops use Fortune III loot formulas only for selected allowlisted blocks.",
+        "- Some raw resources and fuels remain manually base-priced instead of being derived from reverse or burn-time recipes.",
     ]
     if unresolved_with_formulas:
-        report_lines.extend(f"- `{item}`" for item in unresolved_with_formulas)
-    else:
-        report_lines.append("- None")
-
-    report_lines.extend([
-        "",
-        "## Discarded Formula Sources",
-        "",
-        "- Recipes whose ingredients include their own output are ignored as copy/duplication recipes.",
-        "- The following explicit reverse or unpacking recipes are ignored:",
-    ])
-    report_lines.extend(f"- `{recipe_id}`" for recipe_id in sorted(DISCARDED_RECIPE_IDS))
-
-    report_lines.extend([
-        "",
-        "## Skipped Recipe Types",
-        "",
-    ])
-    for recipe_type, count in sorted(skipped_recipe_types.items()):
-        report_lines.append(f"- `{recipe_type}`: {count}")
-
+        report_lines.extend(["", "## Base-Priced Despite Available Formulas", ""])
+        report_lines.extend(f"- `{item}`" for item in unresolved_with_formulas[:20])
+        if len(unresolved_with_formulas) > 20:
+            report_lines.append(f"- ... and {len(unresolved_with_formulas) - 20} more")
     REPORT_PATH.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
     print(f"Wrote {BASE_PRICES_PATH}")
     print(f"Wrote {DERIVED_PRICES_PATH}")

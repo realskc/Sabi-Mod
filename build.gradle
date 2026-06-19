@@ -94,6 +94,13 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+tasks.register('resolveSabiPrices', JavaExec) {
+    group = 'sabi'
+    description = 'Resolves Sabi machine pawn prices for external tools.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'top.sabi.tools.SabiPriceResolverCli'
+}
+
 def pclModsDirectory = providers.gradleProperty('pcl_mods_dir')
         .map { file(it) }
 

@@ -11682,6 +11682,44 @@
       ]
     },
     {
+      "id": "minecraft_shulker_box_colors",
+      "items": [
+        "minecraft:white_shulker_box",
+        "minecraft:orange_shulker_box",
+        "minecraft:magenta_shulker_box",
+        "minecraft:light_blue_shulker_box",
+        "minecraft:yellow_shulker_box",
+        "minecraft:lime_shulker_box",
+        "minecraft:pink_shulker_box",
+        "minecraft:gray_shulker_box",
+        "minecraft:light_gray_shulker_box",
+        "minecraft:cyan_shulker_box",
+        "minecraft:purple_shulker_box",
+        "minecraft:blue_shulker_box",
+        "minecraft:brown_shulker_box",
+        "minecraft:green_shulker_box",
+        "minecraft:red_shulker_box",
+        "minecraft:black_shulker_box"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:colored_shulker_box_from_shulker_box_and_generic_dye",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:shulker_box",
+              "count": 1
+            },
+            {
+              "item": "sabi:generic_dye",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_white_glazed_terracotta",
       "items": [
         "minecraft:white_glazed_terracotta"
@@ -12044,6 +12082,595 @@
             {
               "item": "minecraft:coal",
               "count": 0.125
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_white_concrete",
+      "items": [
+        "minecraft:white_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:white_concrete_equals_white_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:white_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_orange_concrete",
+      "items": [
+        "minecraft:orange_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:orange_concrete_equals_orange_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:orange_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_magenta_concrete",
+      "items": [
+        "minecraft:magenta_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:magenta_concrete_equals_magenta_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:magenta_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_light_blue_concrete",
+      "items": [
+        "minecraft:light_blue_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:light_blue_concrete_equals_light_blue_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:light_blue_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_yellow_concrete",
+      "items": [
+        "minecraft:yellow_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:yellow_concrete_equals_yellow_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:yellow_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_lime_concrete",
+      "items": [
+        "minecraft:lime_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:lime_concrete_equals_lime_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:lime_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_pink_concrete",
+      "items": [
+        "minecraft:pink_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:pink_concrete_equals_pink_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:pink_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_gray_concrete",
+      "items": [
+        "minecraft:gray_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:gray_concrete_equals_gray_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:gray_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_light_gray_concrete",
+      "items": [
+        "minecraft:light_gray_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:light_gray_concrete_equals_light_gray_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:light_gray_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_cyan_concrete",
+      "items": [
+        "minecraft:cyan_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:cyan_concrete_equals_cyan_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:cyan_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_purple_concrete",
+      "items": [
+        "minecraft:purple_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:purple_concrete_equals_purple_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:purple_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_blue_concrete",
+      "items": [
+        "minecraft:blue_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:blue_concrete_equals_blue_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:blue_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_brown_concrete",
+      "items": [
+        "minecraft:brown_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:brown_concrete_equals_brown_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:brown_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_green_concrete",
+      "items": [
+        "minecraft:green_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:green_concrete_equals_green_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:green_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_red_concrete",
+      "items": [
+        "minecraft:red_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:red_concrete_equals_red_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:red_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_black_concrete",
+      "items": [
+        "minecraft:black_concrete"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:black_concrete_equals_black_concrete_powder",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:black_concrete_powder",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_tube_coral_block",
+      "items": [
+        "minecraft:dead_tube_coral_block"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_tube_coral_block_equals_tube_coral_block",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:tube_coral_block",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_brain_coral_block",
+      "items": [
+        "minecraft:dead_brain_coral_block"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_brain_coral_block_equals_brain_coral_block",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:brain_coral_block",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_bubble_coral_block",
+      "items": [
+        "minecraft:dead_bubble_coral_block"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_bubble_coral_block_equals_bubble_coral_block",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bubble_coral_block",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_fire_coral_block",
+      "items": [
+        "minecraft:dead_fire_coral_block"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_fire_coral_block_equals_fire_coral_block",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:fire_coral_block",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_horn_coral_block",
+      "items": [
+        "minecraft:dead_horn_coral_block"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_horn_coral_block_equals_horn_coral_block",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:horn_coral_block",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_tube_coral",
+      "items": [
+        "minecraft:dead_tube_coral"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_tube_coral_equals_tube_coral",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:tube_coral",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_brain_coral",
+      "items": [
+        "minecraft:dead_brain_coral"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_brain_coral_equals_brain_coral",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:brain_coral",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_bubble_coral",
+      "items": [
+        "minecraft:dead_bubble_coral"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_bubble_coral_equals_bubble_coral",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bubble_coral",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_fire_coral",
+      "items": [
+        "minecraft:dead_fire_coral"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_fire_coral_equals_fire_coral",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:fire_coral",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_horn_coral",
+      "items": [
+        "minecraft:dead_horn_coral"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_horn_coral_equals_horn_coral",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:horn_coral",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_tube_coral_fan",
+      "items": [
+        "minecraft:dead_tube_coral_fan"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_tube_coral_fan_equals_tube_coral_fan",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:tube_coral_fan",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_brain_coral_fan",
+      "items": [
+        "minecraft:dead_brain_coral_fan"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_brain_coral_fan_equals_brain_coral_fan",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:brain_coral_fan",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_bubble_coral_fan",
+      "items": [
+        "minecraft:dead_bubble_coral_fan"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_bubble_coral_fan_equals_bubble_coral_fan",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bubble_coral_fan",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_fire_coral_fan",
+      "items": [
+        "minecraft:dead_fire_coral_fan"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_fire_coral_fan_equals_fire_coral_fan",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:fire_coral_fan",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dead_horn_coral_fan",
+      "items": [
+        "minecraft:dead_horn_coral_fan"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dead_horn_coral_fan_equals_horn_coral_fan",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:horn_coral_fan",
+              "count": 1
             }
           ]
         }
@@ -14532,12 +15159,12 @@
       ],
       "recipes": [
         {
-          "recipe_id": "minecraft:honey_block",
-          "type": "crafting_shaped",
+          "recipe_id": "sabi:honey_block_from_honey",
+          "type": "manual_equivalence",
           "result_count": 1,
           "ingredients": [
             {
-              "item": "minecraft:honey_bottle",
+              "item": "sabi:honey",
               "count": 4
             }
           ]
@@ -18557,6 +19184,29 @@
       ]
     },
     {
+      "id": "minecraft_tipped_arrow",
+      "items": [
+        "minecraft:tipped_arrow"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:tipped_arrow_from_arrows_and_lingering_potion",
+          "type": "crafting_shaped",
+          "result_count": 8,
+          "ingredients": [
+            {
+              "item": "minecraft:arrow",
+              "count": 8
+            },
+            {
+              "item": "minecraft:lingering_potion",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_iron_ingot",
       "items": [
         "minecraft:iron_ingot"
@@ -21233,6 +21883,52 @@
       ]
     },
     {
+      "id": "minecraft_lava_bucket",
+      "items": [
+        "minecraft:lava_bucket"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:lava_bucket_from_bucket_and_lava",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bucket",
+              "count": 1
+            },
+            {
+              "item": "sabi:lava",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_powder_snow_bucket",
+      "items": [
+        "minecraft:powder_snow_bucket"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:powder_snow_bucket_from_bucket_and_powder_snow",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bucket",
+              "count": 1
+            },
+            {
+              "item": "sabi:powder_snow",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_water_bucket",
       "items": [
         "minecraft:water_bucket"
@@ -21271,19 +21967,46 @@
       ]
     },
     {
-      "id": "minecraft_leather",
+      "id": "minecraft_axolotl_bucket",
       "items": [
-        "minecraft:leather"
+        "minecraft:axolotl_bucket"
       ],
       "recipes": [
         {
-          "recipe_id": "minecraft:leather",
-          "type": "crafting_shaped",
+          "recipe_id": "sabi:axolotl_bucket_from_bucket_and_axolotl",
+          "type": "manual_equivalence",
           "result_count": 1,
           "ingredients": [
             {
-              "item": "minecraft:rabbit_hide",
-              "count": 4
+              "item": "minecraft:bucket",
+              "count": 1
+            },
+            {
+              "item": "sabi:axolotl",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_tadpole_bucket",
+      "items": [
+        "minecraft:tadpole_bucket"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:tadpole_bucket_from_bucket_and_tadpole",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:bucket",
+              "count": 1
+            },
+            {
+              "item": "sabi:tadpole",
+              "count": 1
             }
           ]
         }
@@ -21467,6 +22190,29 @@
             },
             {
               "item": "minecraft:leather",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_enchanted_book",
+      "items": [
+        "minecraft:enchanted_book"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:enchanted_book_from_book_and_lapis_lazuli",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:book",
+              "count": 1
+            },
+            {
+              "item": "minecraft:lapis_lazuli",
               "count": 1
             }
           ]
@@ -21876,17 +22622,13 @@
       ],
       "recipes": [
         {
-          "recipe_id": "minecraft:clock",
-          "type": "crafting_shaped",
+          "recipe_id": "sabi:clock_from_emeralds",
+          "type": "manual_equivalence",
           "result_count": 1,
           "ingredients": [
             {
-              "item": "minecraft:gold_ingot",
-              "count": 4
-            },
-            {
-              "item": "minecraft:redstone",
-              "count": 1
+              "item": "minecraft:emerald",
+              "count": 36
             }
           ]
         }
@@ -24210,6 +24952,25 @@
       ]
     },
     {
+      "id": "minecraft_potion",
+      "items": [
+        "minecraft:potion"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:potion_equals_water_bottle",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:glass_bottle",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_fermented_spider_eye",
       "items": [
         "minecraft:fermented_spider_eye"
@@ -24630,6 +25391,48 @@
       ]
     },
     {
+      "id": "minecraft_filled_map",
+      "items": [
+        "minecraft:filled_map"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:filled_map_equals_map",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:map",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_nether_star",
+      "items": [
+        "minecraft:nether_star"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:nether_star_from_wither",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:wither_skeleton_skull",
+              "count": 3
+            },
+            {
+              "item": "minecraft:soul_sand",
+              "count": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_golden_carrot",
       "items": [
         "minecraft:golden_carrot"
@@ -24700,6 +25503,29 @@
             },
             {
               "item": "minecraft:paper",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_firework_star",
+      "items": [
+        "minecraft:firework_star"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:firework_star_from_gunpowder_and_generic_dye",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:gunpowder",
+              "count": 1
+            },
+            {
+              "item": "sabi:generic_dye",
               "count": 1
             }
           ]
@@ -26632,6 +27458,25 @@
       ]
     },
     {
+      "id": "minecraft_globe_banner_pattern",
+      "items": [
+        "minecraft:globe_banner_pattern"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:globe_banner_pattern_from_emeralds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:emerald",
+              "count": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_composter",
       "items": [
         "minecraft:composter"
@@ -27205,6 +28050,48 @@
             {
               "item": "minecraft:honeycomb",
               "count": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_honeycomb",
+      "items": [
+        "minecraft:honeycomb"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:honeycomb_from_honey",
+          "type": "manual_equivalence",
+          "result_count": 3,
+          "ingredients": [
+            {
+              "item": "sabi:honey",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_honey_bottle",
+      "items": [
+        "minecraft:honey_bottle"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:honey_bottle_from_glass_bottle_and_honey",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:glass_bottle",
+              "count": 1
+            },
+            {
+              "item": "sabi:honey",
+              "count": 1
             }
           ]
         }
@@ -28048,6 +28935,63 @@
       ]
     },
     {
+      "id": "minecraft_small_amethyst_bud",
+      "items": [
+        "minecraft:small_amethyst_bud"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:small_amethyst_bud_from_amethyst_cluster",
+          "type": "manual_equivalence",
+          "result_count": 4,
+          "ingredients": [
+            {
+              "item": "minecraft:amethyst_cluster",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_medium_amethyst_bud",
+      "items": [
+        "minecraft:medium_amethyst_bud"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:medium_amethyst_bud_from_amethyst_cluster",
+          "type": "manual_equivalence",
+          "result_count": 4,
+          "ingredients": [
+            {
+              "item": "minecraft:amethyst_cluster",
+              "count": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_large_amethyst_bud",
+      "items": [
+        "minecraft:large_amethyst_bud"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:large_amethyst_bud_from_amethyst_cluster",
+          "type": "manual_equivalence",
+          "result_count": 4,
+          "ingredients": [
+            {
+              "item": "minecraft:amethyst_cluster",
+              "count": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_amethyst_cluster",
       "items": [
         "minecraft:amethyst_cluster"
@@ -28842,6 +29786,86 @@
       ]
     },
     {
+      "id": "minecraft_copper_golem_statue",
+      "items": [
+        "minecraft:copper_golem_statue"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:copper_golem_statue_from_copper_block_and_pumpkin",
+          "type": "manual",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:copper_block",
+              "count": 1
+            },
+            {
+              "item": "minecraft:pumpkin",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_exposed_copper_golem_statue",
+      "items": [
+        "minecraft:exposed_copper_golem_statue"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:exposed_copper_golem_statue_equals_copper_golem_statue",
+          "type": "manual",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:copper_golem_statue",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_weathered_copper_golem_statue",
+      "items": [
+        "minecraft:weathered_copper_golem_statue"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:weathered_copper_golem_statue_equals_copper_golem_statue",
+          "type": "manual",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:copper_golem_statue",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_oxidized_copper_golem_statue",
+      "items": [
+        "minecraft:oxidized_copper_golem_statue"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:oxidized_copper_golem_statue_equals_copper_golem_statue",
+          "type": "manual",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:copper_golem_statue",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "minecraft_waxed_copper_golem_statue",
       "items": [
         "minecraft:waxed_copper_golem_statue"
@@ -28963,6 +29987,367 @@
             {
               "item": "minecraft:netherite_ingot",
               "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_netherite_upgrade_smithing_template",
+      "items": [
+        "minecraft:netherite_upgrade_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:netherite_upgrade_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_sentry_armor_trim_smithing_template",
+      "items": [
+        "minecraft:sentry_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:sentry_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_dune_armor_trim_smithing_template",
+      "items": [
+        "minecraft:dune_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:dune_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_coast_armor_trim_smithing_template",
+      "items": [
+        "minecraft:coast_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:coast_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_wild_armor_trim_smithing_template",
+      "items": [
+        "minecraft:wild_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:wild_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_ward_armor_trim_smithing_template",
+      "items": [
+        "minecraft:ward_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:ward_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_eye_armor_trim_smithing_template",
+      "items": [
+        "minecraft:eye_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:eye_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_vex_armor_trim_smithing_template",
+      "items": [
+        "minecraft:vex_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:vex_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_tide_armor_trim_smithing_template",
+      "items": [
+        "minecraft:tide_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:tide_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_snout_armor_trim_smithing_template",
+      "items": [
+        "minecraft:snout_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:snout_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_rib_armor_trim_smithing_template",
+      "items": [
+        "minecraft:rib_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:rib_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_spire_armor_trim_smithing_template",
+      "items": [
+        "minecraft:spire_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:spire_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_wayfinder_armor_trim_smithing_template",
+      "items": [
+        "minecraft:wayfinder_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:wayfinder_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_shaper_armor_trim_smithing_template",
+      "items": [
+        "minecraft:shaper_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:shaper_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_silence_armor_trim_smithing_template",
+      "items": [
+        "minecraft:silence_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:silence_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_raiser_armor_trim_smithing_template",
+      "items": [
+        "minecraft:raiser_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:raiser_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_host_armor_trim_smithing_template",
+      "items": [
+        "minecraft:host_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:host_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_flow_armor_trim_smithing_template",
+      "items": [
+        "minecraft:flow_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:flow_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft_bolt_armor_trim_smithing_template",
+      "items": [
+        "minecraft:bolt_armor_trim_smithing_template"
+      ],
+      "recipes": [
+        {
+          "recipe_id": "sabi:bolt_armor_trim_smithing_template_from_diamonds",
+          "type": "manual_equivalence",
+          "result_count": 1,
+          "ingredients": [
+            {
+              "item": "minecraft:diamond",
+              "count": 7
             }
           ]
         }
