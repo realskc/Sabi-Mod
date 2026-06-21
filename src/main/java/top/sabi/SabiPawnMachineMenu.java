@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class SabiPawnMachineMenu extends AbstractContainerMenu {
     public static final int QUICK_PAWN_INPUT_SLOT = 0;
@@ -28,7 +27,6 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     private final SimpleContainer quickPawnInput = new SimpleContainer(1);
     private final SimpleContainer detailPawnInput = new SimpleContainer(1);
     private final ContainerLevelAccess access;
-    private final SabiPawnMachineBlockEntity machine;
     private final BlockPos pos;
     private Item selectedItem;
     private boolean quickPawnInputActive;
@@ -39,18 +37,13 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         this(containerId, playerInventory, extraData.readBlockPos());
     }
 
-    private SabiPawnMachineMenu(int containerId, Inventory playerInventory, BlockPos pos) {
-        this(containerId, playerInventory, clientMachine(playerInventory, pos), pos);
-    }
-
-    public SabiPawnMachineMenu(int containerId, Inventory playerInventory, SabiPawnMachineBlockEntity machine, BlockPos pos) {
+    public SabiPawnMachineMenu(int containerId, Inventory playerInventory, BlockPos pos) {
         super(Sabi.PAWN_MACHINE_MENU.get(), containerId);
-        this.machine = machine;
         this.pos = pos;
         this.access = ContainerLevelAccess.create(playerInventory.player.level(), pos);
 
         this.addSlot(new PawnInputSlot(this.quickPawnInput, 0, 154, 28, false));
-        this.addSlot(new PawnInputSlot(this.detailPawnInput, 0, 132, 70, true));
+        this.addSlot(new PawnInputSlot(this.detailPawnInput, 0, 139, 65, true));
         this.addStandardInventorySlots(playerInventory, 29, 154);
     }
 
@@ -150,7 +143,7 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     }
 
     private void processPawnInput(Player player, SimpleContainer input, boolean requireSelectedItem) {
-        if (this.processingPawnInput || !(player instanceof ServerPlayer serverPlayer) || this.machine == null) {
+        if (this.processingPawnInput || !(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
 
@@ -166,17 +159,13 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             player.getInventory().placeItemBackInInventory(pawned);
             serverPlayer.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.item_not_allowed"), true);
         } else {
-            this.machine.store(pawned);
-            SabiNetwork.giveSmallCurrency(player, (long)config.price(pawned.getItem()).pawn() * pawned.getCount());
-            SabiNetwork.refreshPawnMachine(serverPlayer, this.pos, this.machine);
+            SabiPawnMachineStorage.get(serverPlayer.level().getServer()).store(pawned);
+            SabiAccount.add(player, (long)config.price(pawned.getItem()).pawn() * pawned.getCount());
+            SabiAccount.sync(player);
+            SabiNetwork.refreshOpenPawnMachines(serverPlayer.level().getServer());
         }
         this.processingPawnInput = false;
         this.broadcastChanges();
-    }
-
-    private static SabiPawnMachineBlockEntity clientMachine(Inventory inventory, BlockPos pos) {
-        BlockEntity blockEntity = inventory.player.level().getBlockEntity(pos);
-        return blockEntity instanceof SabiPawnMachineBlockEntity machine ? machine : null;
     }
 
     private class PawnInputSlot extends Slot {

@@ -63,6 +63,21 @@ public final class SabiAccount {
         return true;
     }
 
+    public static boolean spend(Player player, long amount) {
+        if (amount < 0) {
+            return false;
+        }
+        if (amount == 0) {
+            return true;
+        }
+        AccountData data = player.getData(ACCOUNT.get());
+        if (data.balance() < amount) {
+            return false;
+        }
+        data.setBalance(data.balance() - amount);
+        return true;
+    }
+
     public static long depositAllCurrency(Player player) {
         long total = 0;
         for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {

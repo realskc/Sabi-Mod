@@ -9,15 +9,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jspecify.annotations.Nullable;
 
-public class SabiPawnMachineBlock extends BaseEntityBlock {
+public class SabiPawnMachineBlock extends Block {
     public static final MapCodec<SabiPawnMachineBlock> CODEC = simpleCodec(SabiPawnMachineBlock::new);
 
     public SabiPawnMachineBlock(BlockBehaviour.Properties properties) {
@@ -25,7 +22,7 @@ public class SabiPawnMachineBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected MapCodec<? extends Block> codec() {
         return CODEC;
     }
 
@@ -42,21 +39,8 @@ public class SabiPawnMachineBlock extends BaseEntityBlock {
     }
 
     private static void openPawnMachine(Level level, BlockPos pos, Player player) {
-        if (level instanceof ServerLevel && player instanceof ServerPlayer serverPlayer && level.getBlockEntity(pos) instanceof SabiPawnMachineBlockEntity machine) {
-            SabiNetwork.openPawnMachine(serverPlayer, pos, machine);
+        if (level instanceof ServerLevel && player instanceof ServerPlayer serverPlayer && level.getBlockState(pos).is(Sabi.PAWN_MACHINE.get())) {
+            SabiNetwork.openPawnMachine(serverPlayer, pos);
         }
-    }
-
-    @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos worldPosition, BlockState blockState) {
-        return new SabiPawnMachineBlockEntity(worldPosition, blockState);
-    }
-
-    @Override
-    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack destroyedWith) {
-        if (!level.isClientSide() && blockEntity instanceof SabiPawnMachineBlockEntity machine) {
-            machine.dropStoredItems(level, pos);
-        }
-        super.playerDestroy(level, player, pos, state, blockEntity, destroyedWith);
     }
 }

@@ -19,6 +19,6 @@
 
 - `technical-design.md` 的“撒币机”“撒币机 UI”“网络协议”
 - `src/main/java/top/sabi/SabiPawnMachineMenu.java`
-- `src/main/java/top/sabi/SabiPawnMachineBlockEntity.java`
+- `src/main/java/top/sabi/SabiPawnMachineStorage.java`
 - `src/main/java/top/sabi/SabiNetwork.java`
 - `src/main/java/top/sabi/client/SabiPawnMachineScreen.java`

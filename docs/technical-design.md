@@ -19,7 +19,7 @@ Sabi 是一个基于 NeoForge 的 Minecraft Java 版 Mod。
 - 四档实体货币：小撒币、中撒币、大撒币、巨撒币
 - 个人撒币账户：绑定到玩家，不依赖钱包物品
 - 玩家背包界面里的账户入口
-- 撒币机方块：可典当配置允许的物品，之后用小撒币实体赎回
+- 撒币机方块：可典当配置允许的物品，把收益存入账户，之后用账户余额赎回或购买
 - 撒币机完整物品价格配置：按 group 维护，可人工调价
 - 交互式价格编辑脚本：`tools/edit_sabi_prices.py`
 
@@ -27,7 +27,6 @@ Sabi 是一个基于 NeoForge 的 Minecraft Java 版 Mod。
 
 - 德州扑克玩法
 - 撒币机价格按物品组件、耐久、附魔等细分
-- 撒币机直接使用个人账户支付或收款
 - 撒币机库存浏览中按 NBT/组件区分同一物品的不同栈
 
 ## 构建与运行
@@ -54,7 +53,6 @@ pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.1.2-NeoForge_26.1.
 
 - `DeferredRegister.Blocks BLOCKS`
 - `DeferredRegister.Items ITEMS`
-- `DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES`
 - `DeferredRegister<MenuType<?>> MENUS`
 - `DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS`
 - 玩家附件由 `SabiAccount.register(modEventBus)` 内部注册
@@ -90,7 +88,7 @@ pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.1.2-NeoForge_26.1.
 
 - 相邻汇率是 `64`
 - 堆叠上限是 `64`
-- 实体货币只负责展示、交易、掉落和撒币机赎回支付
+- 实体货币只负责展示、交易和掉落
 - 大额长期余额放在个人账户里
 - 撒币本身不可被撒币机典当
 
@@ -176,7 +174,7 @@ AttachmentType.serializable(AccountData::new)
 相关文件：
 
 - `SabiPawnMachineBlock.java`
-- `SabiPawnMachineBlockEntity.java`
+- `SabiPawnMachineStorage.java`
 - `SabiPawnMachineMenu.java`
 - `client/SabiPawnMachineScreen.java`
 - `SabiPawnMachineConfig.java`
@@ -187,7 +185,6 @@ AttachmentType.serializable(AccountData::new)
 
 - 方块：`sabi:sabi_machine`
 - 物品：`sabi:sabi_machine`
-- Block entity type：`sabi:sabi_machine`
 - Menu type：`sabi:sabi_machine`
 
 方块属性：
@@ -235,7 +232,9 @@ R N R
 
 ## 撒币机库存模型
 
-`SabiPawnMachineBlockEntity` 使用：
+`SabiPawnMachineStorage` 是全服务器共享库存，继承 `SavedData`，通过 `server.getDataStorage()` 保存。任意一台撒币机、任意玩家看到的都是同一份库存。
+
+内部使用：
 
 ```java
 Map<Item, Deque<ItemStack>> storedItemsByItem
@@ -248,8 +247,9 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 1. 玩家把物品放入撒币机 UI 的典当槽
 2. 点击确认
 3. 服务端检查物品是否在配置允许列表中
-4. `machine.store(pawned)`
-5. 发放 `pawn_price * count` 个实体小撒币
+4. `SabiPawnMachineStorage.get(server).store(pawned)`
+5. 把 `pawn_price * count` 存入玩家个人撒币账户，并同步余额
+6. 刷新所有当前打开撒币机 UI 的玩家
 
 `store(ItemStack stack)` 的行为：
 
@@ -272,23 +272,32 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 2. 服务端确认玩家距离撒币机不超过 8 格左右，实际判断是 `distanceToSqr <= 64`
 3. 检查物品仍在配置允许列表
 4. 检查 `amount <= new ItemStack(item).getMaxStackSize()`
-5. 检查机器库存足够
-6. 检查玩家背包中的实体小撒币足够
-7. 扣除实体小撒币
+5. 检查全局库存足够
+6. 检查玩家个人撒币账户余额足够
+7. 扣除账户余额
 8. 从对应 deque 栈顶弹出 ItemStack，并发到玩家背包；背包满则掉落
+9. 刷新所有当前打开撒币机 UI 的玩家
 
-赎回只接受实体小撒币，不扣个人账户余额，也不接受中/大/巨撒币。玩家需要先通过合成或账户提现得到小撒币。
+赎回扣玩家个人撒币账户余额，不消耗实体小撒币。
+
+购买：
+
+- 如果某物品当前全局库存为 `0`，详情页第二行从赎回切换为购买
+- 购买价是 `pawn_price * 4 * amount`
+- 购买扣玩家个人撒币账户余额，不消耗实体小撒币
+- 服务端处理 `PawnMachineBuyPayload` 时会重新确认该物品库存仍为 `0`，防止客户端 UI 过期时误走购买路径
+- 购买成功后凭空生成对应 ItemStack 并发给玩家；背包满则掉落
 
 打破撒币机：
 
-- `playerDestroy` 调用 `dropStoredItems`
-- 内部按每个 ItemStack 的真实最大堆叠上限拆分掉落
+- 不会掉出全局库存，因为库存不再属于某一台机器
 
 持久化：
 
+- 全局库存保存为 SavedData：`sabi:sabi_machine_storage`
 - 保存字段：`stored_items`
-- 每个子项通过 `ItemStack.CODEC` 存一个 `stack`
-- 读取时重新调用 `store(stack)`，因此读取后仍会应用“只和栈顶合并”的压缩逻辑
+- 每个子项通过 `ItemStack.CODEC` 保存
+- 因为新版 `ItemStack.CODEC` 的 count 上限是 `99`，保存时会把内部大栈拆成不超过 `99` 的小栈；读取时再按 `store(stack)` 规则压缩
 
 ## 撒币机 UI
 
@@ -296,7 +305,7 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 
 界面尺寸：
 
-- `IMAGE_WIDTH = 220`
+- `IMAGE_WIDTH = 244`
 - `IMAGE_HEIGHT = 238`
 
 页面模式：
@@ -339,7 +348,7 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 
 详情页：
 
-- 展示物品图标、名称、机内数量、典当收益、赎回花费
+- 展示物品图标、名称、全局库存数量、典当收益、赎回花费
 - 典当行有一个典当槽，玩家必须放入当前选中的同一种物品
 - 赎回行有数量输入框
 - 典当确认或赎回确认后直接完成并关闭界面
@@ -349,7 +358,7 @@ Map<Item, Deque<ItemStack>> storedItemsByItem
 
 - 主列表页可直接把任意允许物品放入快速典当槽
 - 点击“典当”进入确认页
-- 显示将获得的小撒币数
+- 显示将存入账户的小撒币数
 - 确认后执行典当并回主列表
 - 取消回主列表
 
@@ -571,13 +580,14 @@ python tools\edit_sabi_prices.py
 
 ## 已知设计约束与坑点
 
-- 撒币机赎回只使用实体小撒币，不使用账户余额
+- 撒币机赎回和购买都使用账户余额
 - 撒币不可被撒币机典当
-- 典当任意物品时，实际进入机器的是完整 ItemStack，不是只记录数量
+- 撒币机库存是服务器全局库存，不属于某一台撒币机
+- 典当任意物品时，实际进入全局库存的是完整 ItemStack，不是只记录数量
 - 同一种物品按 `Item` 分桶，不按组件分桶；组件差异保存在 deque 里的不同 ItemStack 中
 - UI 列表上的“库存数量”是同一 `Item` 的总数，不区分组件
 - 赎回从栈顶取，因此如果同一种物品有多个不同组件栈，玩家不能在 UI 中指定取哪一个
-- `ItemStack#grow` 允许内部保存超过正常堆叠上限的 count，但发给玩家或掉落时必须拆回合法大小
+- `ItemStack#grow` 允许内部保存超过正常堆叠上限的 count，但发给玩家或写入 SavedData 时必须拆回合法大小
 - 配置文件是完整白名单，不是注册表减黑名单
 - 如果 `items.json` 解析失败，撒币机可典当列表会变空
 - 中文 Minecraft Wiki 页面曾用于审计 Java 版不可获得物品；页面最后编辑时间在当时为 2026-05-24
@@ -590,7 +600,7 @@ python tools\edit_sabi_prices.py
 3. 改基础价格时优先改 `base_prices.json`，可以用 `tools/edit_sabi_prices.py` 辅助编辑；改等量代换规则后运行 `tools/generate_sabi_price_rules.py` 重新生成。
 4. 改撒币机行为时同时检查：
    - `SabiPawnMachineMenu`
-   - `SabiPawnMachineBlockEntity`
+   - `SabiPawnMachineStorage`
    - `SabiNetwork`
    - `SabiPawnMachineScreen`
 5. 改账户行为时同时检查：

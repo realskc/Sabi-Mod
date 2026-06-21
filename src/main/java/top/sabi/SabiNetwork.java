@@ -10,12 +10,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class SabiNetwork {
-    private static final int MAX_PAWN_MACHINE_REDEEM_AMOUNT = 99999;
+    private static final int MAX_PAWN_MACHINE_TRADE_AMOUNT = 99999;
 
     private SabiNetwork() {
     }
@@ -39,6 +39,7 @@ public final class SabiNetwork {
         registrar.playToServer(AccountActionPayload.TYPE, AccountActionPayload.STREAM_CODEC, SabiNetwork::handleAccountAction);
         registrar.playToServer(PawnMachineSelectPayload.TYPE, PawnMachineSelectPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineSelect);
         registrar.playToServer(PawnMachineRedeemPayload.TYPE, PawnMachineRedeemPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineRedeem);
+        registrar.playToServer(PawnMachineBuyPayload.TYPE, PawnMachineBuyPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineBuy);
     }
 
     private static void handleBalanceSync(BalanceSyncPayload payload, IPayloadContext context) {
@@ -52,7 +53,7 @@ public final class SabiNetwork {
     private static void handleAccountAction(AccountActionPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            if (!(player instanceof ServerPlayer)) {
+            if (!(player instanceof ServerPlayer serverPlayer)) {
                 return;
             }
 
@@ -60,6 +61,8 @@ public final class SabiNetwork {
                 case DEPOSIT_ALL -> SabiAccount.depositAllCurrency(player);
                 case WITHDRAW -> SabiAccount.withdraw(player, payload.amount());
             }
+            serverPlayer.inventoryMenu.sendAllDataToRemote();
+            serverPlayer.containerMenu.sendAllDataToRemote();
             SabiAccount.sync(player);
         });
     }
@@ -90,83 +93,135 @@ public final class SabiNetwork {
                 return;
             }
 
-            BlockEntity blockEntity = serverPlayer.level().getBlockEntity(payload.pos());
-            if (!(blockEntity instanceof SabiPawnMachineBlockEntity machine) || !isNear(serverPlayer, payload.pos())) {
+            if (!isPawnMachine(serverPlayer, payload.pos()) || !isNear(serverPlayer, payload.pos())) {
                 return;
             }
 
             SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(serverPlayer.level().getServer());
             if (!config.isAllowed(item)) {
-                refreshPawnMachine(serverPlayer, payload.pos(), machine);
+                refreshPawnMachine(serverPlayer, payload.pos());
                 return;
             }
 
             SabiPawnMachineConfig.Price price = config.price(item);
-            int amount = Math.max(1, Math.min(MAX_PAWN_MACHINE_REDEEM_AMOUNT, payload.amount()));
-            redeem(serverPlayer, machine, item, price.redeem(), amount);
-
-            refreshPawnMachine(serverPlayer, payload.pos(), machine);
+            int amount = Math.max(1, Math.min(MAX_PAWN_MACHINE_TRADE_AMOUNT, payload.amount()));
+            if (redeem(serverPlayer, SabiPawnMachineStorage.get(serverPlayer.level().getServer()), item, price.redeem(), amount)) {
+                SabiAccount.sync(serverPlayer);
+                refreshOpenPawnMachines(serverPlayer.level().getServer());
+            } else {
+                SabiAccount.sync(serverPlayer);
+                refreshPawnMachine(serverPlayer, payload.pos());
+            }
         });
     }
 
-    public static void openPawnMachine(ServerPlayer player, BlockPos pos, SabiPawnMachineBlockEntity machine) {
+    private static void handlePawnMachineBuy(PawnMachineBuyPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (!(player instanceof ServerPlayer serverPlayer)) {
+                return;
+            }
+
+            Item item = BuiltInRegistries.ITEM.getValue(payload.itemId());
+            if (item == null) {
+                return;
+            }
+
+            if (!isPawnMachine(serverPlayer, payload.pos()) || !isNear(serverPlayer, payload.pos())) {
+                return;
+            }
+
+            SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(serverPlayer.level().getServer());
+            if (!config.isAllowed(item)) {
+                refreshPawnMachine(serverPlayer, payload.pos());
+                return;
+            }
+
+            SabiPawnMachineStorage storage = SabiPawnMachineStorage.get(serverPlayer.level().getServer());
+            SabiPawnMachineConfig.Price price = config.price(item);
+            int amount = Math.max(1, Math.min(MAX_PAWN_MACHINE_TRADE_AMOUNT, payload.amount()));
+            buy(serverPlayer, storage, item, price.pawn(), amount);
+            SabiAccount.sync(serverPlayer);
+            refreshPawnMachine(serverPlayer, payload.pos());
+        });
+    }
+
+    public static void openPawnMachine(ServerPlayer player, BlockPos pos) {
         player.openMenu(
                 new SimpleMenuProvider(
-                        (containerId, inventory, menuPlayer) -> new SabiPawnMachineMenu(containerId, inventory, machine, pos),
+                        (containerId, inventory, menuPlayer) -> new SabiPawnMachineMenu(containerId, inventory, pos),
                         Component.translatable("screen.sabi.sabi_machine")
                 ),
                 buffer -> buffer.writeBlockPos(pos)
         );
-        refreshPawnMachine(player, pos, machine);
+        refreshPawnMachine(player, pos);
     }
 
-    public static void refreshPawnMachine(ServerPlayer player, BlockPos pos, SabiPawnMachineBlockEntity machine) {
+    public static void refreshPawnMachine(ServerPlayer player, BlockPos pos) {
         SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(player.level().getServer());
+        SabiPawnMachineStorage storage = SabiPawnMachineStorage.get(player.level().getServer());
         List<PawnMachineItemEntry> entries = new ArrayList<>();
         for (Item item : config.allowedItems()) {
-            Identifier id = SabiPawnMachineBlockEntity.itemId(item);
+            Identifier id = BuiltInRegistries.ITEM.getKey(item);
             if (id != null) {
                 SabiPawnMachineConfig.Price price = config.price(item);
-                entries.add(new PawnMachineItemEntry(id, machine.storedCount(item), price.pawn(), price.redeem()));
+                entries.add(new PawnMachineItemEntry(id, storage.storedCount(item), price.pawn(), price.redeem()));
             }
         }
         PacketDistributor.sendToPlayer(player, new PawnMachinePayload(pos, entries));
     }
 
-    private static boolean redeem(ServerPlayer player, SabiPawnMachineBlockEntity machine, Item item, int redeemPrice, int amount) {
+    public static void refreshOpenPawnMachines(MinecraftServer server) {
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (player.containerMenu instanceof SabiPawnMachineMenu menu) {
+                refreshPawnMachine(player, menu.pos());
+            }
+        }
+    }
+
+    private static boolean redeem(ServerPlayer player, SabiPawnMachineStorage storage, Item item, int redeemPrice, int amount) {
         int maxStackSize = new ItemStack(item).getMaxStackSize();
         if (amount > maxStackSize) {
             player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.amount_too_large", maxStackSize), true);
             return false;
         }
-        if (machine.storedCount(item) < amount) {
+        if (storage.storedCount(item) < amount) {
             player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.stock_insufficient"), true);
             return false;
         }
 
         long cost = (long)redeemPrice * amount;
-        if (inventoryCount(player, Sabi.SMALL_SABI.get()) < cost) {
-            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.currency_insufficient"), true);
+        if (!SabiAccount.spend(player, cost)) {
+            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.account_insufficient"), true);
             return false;
         }
 
-        takeSmallCurrency(player, cost);
-        giveStacks(player, machine.take(item, amount));
+        giveStacks(player, storage.take(item, amount));
         return true;
     }
 
-    static int inventoryCount(Player player, Item item) {
-        int count = 0;
-        for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
-            ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.is(item)) {
-                count += stack.getCount();
-            }
+    private static boolean buy(ServerPlayer player, SabiPawnMachineStorage storage, Item item, int pawnPrice, int amount) {
+        int maxStackSize = new ItemStack(item).getMaxStackSize();
+        if (amount > maxStackSize) {
+            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.amount_too_large", maxStackSize), true);
+            return false;
         }
-        return count;
+        if (storage.storedCount(item) > 0) {
+            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.stock_available"), true);
+            return false;
+        }
+
+        long cost = (long)Math.max(0, pawnPrice) * 4L * amount;
+        if (!SabiAccount.spend(player, cost)) {
+            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.account_insufficient"), true);
+            return false;
+        }
+
+        giveStacks(player, List.of(new ItemStack(item, amount)));
+        return true;
     }
 
-    static void giveStacks(Player player, List<ItemStack> stacks) {
+    private static void giveStacks(Player player, List<ItemStack> stacks) {
         for (ItemStack stack : stacks) {
             if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
@@ -174,52 +229,12 @@ public final class SabiNetwork {
         }
     }
 
-    static void giveSmallCurrency(Player player, long amount) {
-        long remaining = Math.max(0L, amount);
-        while (remaining > 0) {
-            int stackSize = (int)Math.min(Sabi.CURRENCY_STACK_SIZE, remaining);
-            ItemStack stack = new ItemStack(Sabi.SMALL_SABI.get(), stackSize);
-            if (!player.getInventory().add(stack)) {
-                player.drop(stack, false);
-            }
-            remaining -= stackSize;
-        }
-    }
-
-    private static boolean takeSmallCurrency(Player player, long amount) {
-        long required = Math.max(0L, amount);
-        if (required == 0) {
-            return true;
-        }
-
-        long available = 0;
-        for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
-            ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.is(Sabi.SMALL_SABI.get())) {
-                available += stack.getCount();
-                if (available >= required) {
-                    break;
-                }
-            }
-        }
-        if (available < required) {
-            return false;
-        }
-
-        long remaining = required;
-        for (int slot = 0; slot < player.getInventory().getContainerSize() && remaining > 0; slot++) {
-            ItemStack stack = player.getInventory().getItem(slot);
-            if (stack.is(Sabi.SMALL_SABI.get())) {
-                int toRemove = (int)Math.min(remaining, stack.getCount());
-                player.getInventory().removeItem(slot, toRemove);
-                remaining -= toRemove;
-            }
-        }
-        return true;
-    }
-
     private static boolean isNear(Player player, BlockPos pos) {
         return player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+    }
+
+    private static boolean isPawnMachine(ServerPlayer player, BlockPos pos) {
+        return player.level().getBlockState(pos).is(Sabi.PAWN_MACHINE.get());
     }
 
     public record BalanceSyncPayload(long balance) implements CustomPacketPayload {
@@ -324,6 +339,24 @@ public final class SabiNetwork {
                 ByteBufCodecs.VAR_INT,
                 PawnMachineRedeemPayload::amount,
                 PawnMachineRedeemPayload::new
+        );
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    public record PawnMachineBuyPayload(BlockPos pos, Identifier itemId, int amount) implements CustomPacketPayload {
+        public static final Type<PawnMachineBuyPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Sabi.MOD_ID, "sabi_machine_buy"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PawnMachineBuyPayload> STREAM_CODEC = StreamCodec.composite(
+                BlockPos.STREAM_CODEC,
+                PawnMachineBuyPayload::pos,
+                Identifier.STREAM_CODEC,
+                PawnMachineBuyPayload::itemId,
+                ByteBufCodecs.VAR_INT,
+                PawnMachineBuyPayload::amount,
+                PawnMachineBuyPayload::new
         );
 
         @Override

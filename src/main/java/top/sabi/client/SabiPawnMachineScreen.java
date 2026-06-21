@@ -22,9 +22,11 @@ import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.sabi.SabiNetwork;
 import top.sabi.SabiPawnMachineMenu;
+import top.sabi.SabiAccount;
+import top.sabi.SabiClientState;
 
 public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachineMenu> {
-    private static final int IMAGE_WIDTH = 220;
+    private static final int IMAGE_WIDTH = 244;
     private static final int IMAGE_HEIGHT = 238;
     private static final int GRID_COLUMNS = 9;
     private static final int GRID_VISIBLE_ROWS = 4;
@@ -100,9 +102,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 .bounds(this.leftPos + 176, this.topPos + 28, 42, 20)
                 .build());
 
-        this.redeemAmountBox = new EditBox(this.font, this.leftPos + 132, this.topPos + 96, 34, 20, Component.translatable("screen.sabi.sabi_machine.amount"));
+        this.redeemAmountBox = new EditBox(this.font, this.leftPos + 139, this.topPos + 86, 34, 20, Component.translatable("screen.sabi.sabi_machine.amount"));
         this.redeemAmountBox.setMaxLength(3);
-        this.redeemAmountBox.setValue("1");
+        this.redeemAmountBox.setValue("");
         this.redeemAmountBox.setResponder(value -> {
             this.normalizeAmountBox();
             this.updateWidgetStates();
@@ -110,17 +112,17 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         this.addRenderableWidget(this.redeemAmountBox);
 
         this.pawnConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> sendPawnConfirm())
-                .bounds(this.leftPos + 172, this.topPos + 68, 42, 20)
+                .bounds(this.leftPos + 179, this.topPos + 63, 42, 20)
                 .build());
-        this.redeemButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> sendRedeemAction())
-                .bounds(this.leftPos + 172, this.topPos + 96, 42, 20)
+        this.redeemButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> sendSecondLineAction())
+                .bounds(this.leftPos + 179, this.topPos + 86, 42, 20)
                 .build());
         this.backButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.back"), button -> {
                     this.pageMode = PageMode.GRID;
                     this.menu.setPawnInputActive(false);
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 78, this.topPos + 128, 64, 20)
+                .bounds(this.leftPos + 90, this.topPos + 126, 64, 20)
                 .build());
 
         this.quickPawnConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
@@ -281,8 +283,34 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         graphics.item(new ItemStack(row.item), contentX + 14, contentY + 12);
         graphics.text(this.font, row.name, contentX + 38, contentY + 10, 0xFFFFFFFF, false);
         graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.stored_count", row.storedCount), contentX + 38, contentY + 24, 0xFFE7FFE9, false);
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", row.pawnPrice), contentX + 14, contentY + 48, 0xFFFFE7A3, false);
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.redeem_price", row.redeemPrice), contentX + 14, contentY + 74, 0xFFFFE7A3, false);
+        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", row.pawnPrice), contentX + 14, contentY + 43, 0xFFFFE7A3, false);
+        if (row.hasStoredItems()) {
+            graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.redeem_price", row.redeemPrice), contentX + 14, contentY + 64, 0xFFFFE7A3, false);
+        } else {
+            graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.buy_price", row.buyUnitPrice()), contentX + 14, contentY + 64, 0xFFFFE7A3, false);
+        }
+        this.renderSecondLineBalance(graphics, row, contentX + 14, contentY + 85);
+    }
+
+    private void renderSecondLineBalance(GuiGraphicsExtractor graphics, Row row, int x, int y) {
+        long account = SabiClientState.balance();
+        int amount = this.parseAmount();
+        if (amount <= 0) {
+            graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.account", account), x, y, 0xFFB8FFD1, false);
+            return;
+        }
+
+        long cost = row.hasStoredItems() ? (long)row.redeemPrice * amount : row.buyCost(amount);
+        Component label = Component.translatable("screen.sabi.sabi_machine.cost_account");
+        int labelColor = 0xFFB8FFD1;
+        int costColor = cost > account ? 0xFFFF6060 : 0xFFFFE7A3;
+        String costText = SabiAccount.format(cost);
+        String accountText = "/" + SabiAccount.format(account);
+        int labelWidth = this.font.width(label);
+        int costWidth = this.font.width(costText);
+        graphics.text(this.font, label, x, y, labelColor, false);
+        graphics.text(this.font, costText, x + labelWidth, y, costColor, false);
+        graphics.text(this.font, accountText, x + labelWidth + costWidth, y, 0xFFB8FFD1, false);
     }
 
     private void renderSearchIcon(GuiGraphicsExtractor graphics, int x, int y) {
@@ -351,10 +379,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private void sendRedeemAction() {
+    private void sendSecondLineAction() {
         Row selected = this.selectedRow();
         if (selected != null) {
-            ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineRedeemPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
+            if (selected.hasStoredItems()) {
+                ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineRedeemPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
+            } else {
+                ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineBuyPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
+            }
             this.onClose();
         }
     }
@@ -417,11 +449,11 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         if (this.redeemButton != null) {
             int amount = this.parseAmount();
             this.redeemButton.visible = detailPage;
-            this.redeemButton.active = selected != null
-                    && amount > 0
-                    && amount <= new ItemStack(selected.item).getMaxStackSize()
-                    && selected.storedCount >= amount
-                    && inventoryCount(top.sabi.Sabi.SMALL_SABI.get()) >= (long)selected.redeemPrice * amount;
+            this.redeemButton.setMessage(Component.translatable(selected != null && !selected.hasStoredItems() ? "button.sabi.buy" : "button.sabi.redeem"));
+            this.redeemButton.active = selected != null && amount > 0 && amount <= new ItemStack(selected.item).getMaxStackSize()
+                    && (selected.hasStoredItems()
+                            ? selected.storedCount >= amount && SabiClientState.balance() >= (long)selected.redeemPrice * amount
+                            : SabiClientState.balance() >= selected.buyCost(amount));
         }
         if (this.quickPawnConfirmButton != null) {
             this.quickPawnConfirmButton.visible = pawnConfirmPage;
@@ -467,20 +499,6 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         return null;
     }
 
-    private int inventoryCount(Item item) {
-        if (this.minecraft.player == null) {
-            return 0;
-        }
-        int count = 0;
-        for (int slot = 0; slot < this.minecraft.player.getInventory().getContainerSize(); slot++) {
-            ItemStack stack = this.minecraft.player.getInventory().getItem(slot);
-            if (stack.is(item)) {
-                count += stack.getCount();
-            }
-        }
-        return count;
-    }
-
     private int gridIndexAt(double mouseX, double mouseY) {
         int gridX = this.gridX();
         int gridY = this.gridY();
@@ -516,12 +534,12 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
     private int parseAmount() {
         if (this.redeemAmountBox == null || this.redeemAmountBox.getValue().isBlank()) {
-            return 1;
+            return 0;
         }
         try {
-            return Math.max(1, Integer.parseInt(this.redeemAmountBox.getValue()));
+            return Math.max(0, Integer.parseInt(this.redeemAmountBox.getValue()));
         } catch (NumberFormatException ignored) {
-            return 1;
+            return 0;
         }
     }
 
@@ -540,12 +558,16 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             }
         }
         int amount = 1;
-        if (!digits.isEmpty()) {
-            try {
-                amount = Integer.parseInt(digits.toString());
-            } catch (NumberFormatException ignored) {
-                amount = 1;
+        if (digits.isEmpty()) {
+            if (!value.isEmpty()) {
+                this.redeemAmountBox.setValue("");
             }
+            return;
+        }
+        try {
+            amount = Integer.parseInt(digits.toString());
+        } catch (NumberFormatException ignored) {
+            amount = 1;
         }
         amount = Math.max(1, Math.min(max, amount));
         String normalized = String.valueOf(amount);
@@ -578,6 +600,18 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 return Component.translatable(item.getDescriptionId());
             }
             return new ItemStack(item).getHoverName();
+        }
+
+        private boolean hasStoredItems() {
+            return this.storedCount > 0;
+        }
+
+        private long buyUnitPrice() {
+            return Math.max(0L, this.pawnPrice) * 4L;
+        }
+
+        private long buyCost(int amount) {
+            return this.buyUnitPrice() * amount;
         }
     }
 }
