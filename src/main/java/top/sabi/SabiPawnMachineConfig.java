@@ -64,12 +64,7 @@ public final class SabiPawnMachineConfig {
         }
 
         public Price(int pawn) {
-            this(pawn, redeemPrice(pawn));
-        }
-
-        private static int redeemPrice(int pawn) {
-            int nonNegativePawn = Math.max(0, pawn);
-            return (int)Math.min(Integer.MAX_VALUE, (nonNegativePawn * 6L + 4L) / 5L);
+            this(pawn, SabiPriceRules.redeemPrice(pawn));
         }
     }
 

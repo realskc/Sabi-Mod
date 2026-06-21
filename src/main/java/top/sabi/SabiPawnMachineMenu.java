@@ -36,7 +36,6 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     private Item selectedItem;
     private boolean quickPawnInputActive;
     private boolean detailPawnInputActive;
-    private boolean processingPawnInput;
     private boolean pendingInputSaveNeeded;
 
     public SabiPawnMachineMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf extraData) {
@@ -60,17 +59,9 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         return this.pos;
     }
 
-    public void setPawnInputActive(boolean pawnInputActive) {
-        this.setPawnInputMode(false, pawnInputActive);
-    }
-
     public void setPawnInputMode(boolean quickPawnInputActive, boolean detailPawnInputActive) {
         this.quickPawnInputActive = quickPawnInputActive;
         this.detailPawnInputActive = detailPawnInputActive;
-    }
-
-    public boolean isPawnInputActive() {
-        return this.quickPawnInputActive || this.detailPawnInputActive;
     }
 
     public void selectItem(Item item) {
@@ -163,7 +154,7 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     }
 
     private void processPawnInput(Player player, SimpleContainer input, boolean requireSelectedItem) {
-        if (this.processingPawnInput || !(player instanceof ServerPlayer serverPlayer)) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
 
@@ -172,11 +163,9 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             return;
         }
 
-        this.processingPawnInput = true;
         SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(serverPlayer.level().getServer());
         if (!requireSelectedItem && isShulkerBox(stack) && hasStoredItems(stack)) {
             this.processShulkerBoxContents(serverPlayer, input, stack, config);
-            this.processingPawnInput = false;
             this.broadcastChanges();
             return;
         }
@@ -191,7 +180,6 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             SabiAccount.sync(player);
             SabiNetwork.refreshOpenPawnMachines(serverPlayer.level().getServer());
         }
-        this.processingPawnInput = false;
         this.broadcastChanges();
     }
 

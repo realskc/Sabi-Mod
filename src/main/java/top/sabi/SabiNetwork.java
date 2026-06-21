@@ -23,8 +23,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class SabiNetwork {
-    private static final int MAX_PAWN_MACHINE_TRADE_AMOUNT = 99999;
-
     private SabiNetwork() {
     }
 
@@ -104,7 +102,7 @@ public final class SabiNetwork {
             }
 
             SabiPawnMachineConfig.Price price = config.price(item);
-            int amount = Math.max(1, Math.min(MAX_PAWN_MACHINE_TRADE_AMOUNT, payload.amount()));
+            int amount = Math.max(1, payload.amount());
             if (redeem(serverPlayer, SabiPawnMachineStorage.get(serverPlayer.level().getServer()), item, price.redeem(), amount)) {
                 SabiAccount.sync(serverPlayer);
                 refreshOpenPawnMachines(serverPlayer.level().getServer());
@@ -139,7 +137,7 @@ public final class SabiNetwork {
 
             SabiPawnMachineStorage storage = SabiPawnMachineStorage.get(serverPlayer.level().getServer());
             SabiPawnMachineConfig.Price price = config.price(item);
-            int amount = Math.max(1, Math.min(MAX_PAWN_MACHINE_TRADE_AMOUNT, payload.amount()));
+            int amount = Math.max(1, payload.amount());
             buy(serverPlayer, storage, item, price.pawn(), amount);
             SabiAccount.sync(serverPlayer);
             refreshPawnMachine(serverPlayer, payload.pos());

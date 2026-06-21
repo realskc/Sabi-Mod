@@ -122,7 +122,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 .build());
         this.backButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.back"), button -> {
                     this.pageMode = PageMode.GRID;
-                    this.menu.setPawnInputActive(false);
+                    this.menu.setPawnInputMode(false, false);
                     this.updateWidgetStates();
                 })
                 .bounds(this.leftPos + 90, this.topPos + 126, 64, 20)
@@ -482,14 +482,25 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         boolean emptyShulkerConfirmPage = this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM;
         this.menu.setPawnInputMode(gridPage, detailPage);
 
+        this.updateGridWidgetStates(gridPage);
+        this.updateDetailWidgetStates(detailPage, selected);
+        this.updateConfirmWidgetStates(pawnConfirmPage, emptyShulkerConfirmPage);
+    }
+
+    private void updateGridWidgetStates(boolean gridPage) {
         if (this.searchBox != null) {
             this.searchBox.visible = gridPage;
         }
         if (this.quickPawnButton != null) {
-            Slot quickPawnSlot = this.menu.getSlot(SabiPawnMachineMenu.QUICK_PAWN_INPUT_SLOT);
             this.quickPawnButton.visible = gridPage;
-            this.quickPawnButton.active = quickPawnSlot.hasItem();
+            this.quickPawnButton.active = !this.quickPawnStack().isEmpty();
         }
+        if (this.doneButton != null) {
+            this.doneButton.visible = gridPage;
+        }
+    }
+
+    private void updateDetailWidgetStates(boolean detailPage, Row selected) {
         if (this.redeemAmountBox != null) {
             this.redeemAmountBox.visible = detailPage;
         }
@@ -510,6 +521,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                             ? selected.storedCount >= amount && SabiClientState.balance() >= (long)selected.redeemPrice * amount
                             : SabiClientState.balance() >= selected.buyCost(amount));
         }
+    }
+
+    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean emptyShulkerConfirmPage) {
         if (this.quickPawnConfirmButton != null) {
             this.quickPawnConfirmButton.visible = pawnConfirmPage;
             this.quickPawnConfirmButton.active = this.rowForItem(this.quickPawnStack().getItem()) != null;
@@ -523,9 +537,6 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
         if (this.emptyShulkerCancelButton != null) {
             this.emptyShulkerCancelButton.visible = emptyShulkerConfirmPage;
-        }
-        if (this.doneButton != null) {
-            this.doneButton.visible = gridPage;
         }
     }
 

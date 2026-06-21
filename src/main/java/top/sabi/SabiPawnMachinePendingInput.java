@@ -41,14 +41,6 @@ public final class SabiPawnMachinePendingInput {
         player.getData(PENDING_INPUT.get()).setDetail(stack);
     }
 
-    public static void clearQuick(Player player) {
-        player.getData(PENDING_INPUT.get()).setQuick(ItemStack.EMPTY);
-    }
-
-    public static void clearDetail(Player player) {
-        player.getData(PENDING_INPUT.get()).setDetail(ItemStack.EMPTY);
-    }
-
     private static void restorePendingInputs(Player player) {
         PendingInputData data = player.getData(PENDING_INPUT.get());
         List<ItemStack> stacks = data.removeAll();
