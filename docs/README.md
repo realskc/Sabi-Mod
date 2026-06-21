@@ -1,24 +1,27 @@
-# Sabi Mod 文档索引
+# Sabi Mod 文档入口
 
-给后续 Agent 的阅读顺序：
+本文档夹分成两层：
 
-1. `technical-design.md`：项目架构、核心系统、网络协议、撒币机实现、配置规则、构建方式和已知坑点。
-2. `items.md`：当前新增物品、方块、配方和内容层规则。
+- 顶层文档：给玩家、内容设计、功能调整时快速阅读，避免塞入具体实现细节。
+- `design/`：给后续开发者或 Agent 阅读，记录技术细节、设计原因、文件位置和维护注意事项。
 
-如果要改撒币机可典当物品或价格，优先阅读：
+## 推荐阅读顺序
 
-- `technical-design.md` 的“撒币机价格配置”
-- `src/main/resources/data/sabi/sabi_machine/items.json`
-- `src/main/resources/data/sabi/sabi_machine/base_prices.json`
-- `src/main/resources/data/sabi/sabi_machine/derived_prices.json`
-- `src/main/resources/data/sabi/sabi_machine/price_rules_report.md`
-- `tools/generate_sabi_price_rules.py`
-- `tools/edit_sabi_prices.py`
+如果只是想了解这个 mod：
 
-如果要改 UI 或交易逻辑，优先阅读：
+1. `overview.md`：项目定位、当前已实现内容和未实现内容。
+2. `features.md`：按功能域记录当前所有玩家可见功能改动。
 
-- `technical-design.md` 的“撒币机”“撒币机 UI”“网络协议”
-- `src/main/java/top/sabi/SabiPawnMachineMenu.java`
-- `src/main/java/top/sabi/SabiPawnMachineStorage.java`
-- `src/main/java/top/sabi/SabiNetwork.java`
-- `src/main/java/top/sabi/client/SabiPawnMachineScreen.java`
+如果要改功能或查实现：
+
+1. `design/README.md`：技术文档索引。
+2. 按要改的系统阅读对应设计文档。
+3. 修改后运行验证命令，见 `design/build-and-workflow.md`。
+
+## 文档组织规则
+
+- 顶层文档只写“有什么功能”和“用户能看到什么行为”。
+- 物品 ID、配方、兑换比例、硬度、爆炸抗性等具体数据放到 `design/item.md`。
+- 具体类名、payload、SavedData、附件、序列化、边界条件和设计原因放到 `design/`。
+- 单篇文档只解释一个主题；如果内容变长，就继续拆分。
+- 中文文档统一使用 UTF-8。

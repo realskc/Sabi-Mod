@@ -98,6 +98,7 @@ public class Sabi {
         RECIPE_SERIALIZERS.register(modEventBus);
         SabiCurrencyExchange.register();
         SabiAccount.register(modEventBus);
+        SabiPawnMachinePendingInput.register(modEventBus);
         SabiNetwork.register(modEventBus);
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             top.sabi.client.SabiClient.register(modEventBus);

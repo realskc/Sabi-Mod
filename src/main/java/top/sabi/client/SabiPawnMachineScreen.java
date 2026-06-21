@@ -11,14 +11,18 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.sabi.SabiNetwork;
 import top.sabi.SabiPawnMachineMenu;
@@ -45,6 +49,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     private Button backButton;
     private Button quickPawnConfirmButton;
     private Button pawnCancelButton;
+    private Button emptyShulkerConfirmButton;
+    private Button emptyShulkerCancelButton;
     private Button doneButton;
     private PageMode pageMode = PageMode.GRID;
     private int scroll;
@@ -95,10 +101,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         });
         this.addRenderableWidget(this.searchBox);
 
-        this.quickPawnButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.pawn"), button -> {
-                    this.pageMode = PageMode.PAWN_CONFIRM;
-                    this.updateWidgetStates();
-                })
+        this.quickPawnButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.pawn"), button -> this.handleQuickPawnButton())
                 .bounds(this.leftPos + 176, this.topPos + 28, 42, 20)
                 .build());
 
@@ -139,6 +142,20 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 .bounds(this.leftPos + 128, this.topPos + 112, 64, 20)
                 .build());
 
+        this.emptyShulkerConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
+                    this.sendQuickPawnConfirm();
+                    this.pageMode = PageMode.GRID;
+                    this.updateWidgetStates();
+                })
+                .bounds(this.leftPos + 54, this.topPos + 97, 64, 20)
+                .build());
+        this.emptyShulkerCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
+                    this.pageMode = PageMode.GRID;
+                    this.updateWidgetStates();
+                })
+                .bounds(this.leftPos + 128, this.topPos + 97, 64, 20)
+                .build());
+
         this.doneButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
                 .bounds(this.leftPos + IMAGE_WIDTH - 60, this.topPos + 128, 48, 20)
                 .build());
@@ -158,6 +175,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.renderDetailPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.PAWN_CONFIRM) {
             this.renderPawnConfirmPage(graphics, panelX, panelY);
+        } else if (this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM) {
+            this.renderEmptyShulkerConfirmPage(graphics, panelX, panelY);
         } else {
             this.renderSearchIcon(graphics, panelX + 14, panelY + 33);
             this.renderGridPage(graphics, mouseX, mouseY, panelX, panelY);
@@ -263,6 +282,25 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         } else {
             graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", (long)row.pawnPrice * stack.getCount()), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
         }
+    }
+
+    private void renderEmptyShulkerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
+        int contentX = panelX + 22;
+        int contentY = panelY + 27;
+        int contentWidth = IMAGE_WIDTH - 44;
+        int contentHeight = 97;
+
+        graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
+        graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
+        graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.confirm_empty_shulker"), this.width / 2, contentY + 10, 0xFFFFFFFF);
+
+        ItemStack stack = this.quickPawnStack();
+        if (!stack.isEmpty()) {
+            graphics.item(stack, contentX + 18, contentY + 34);
+            graphics.text(this.font, stack.getHoverName(), contentX + 42, contentY + 32, 0xFFE7FFE9, false);
+        }
+        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning_1"), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
+        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning_2"), contentX + 42, contentY + 58, 0xFFFFE7A3, false);
     }
 
     private void renderDetailPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
@@ -379,6 +417,22 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
+    private void handleQuickPawnButton() {
+        ItemStack stack = this.quickPawnStack();
+        if (isShulkerBox(stack)) {
+            if (hasShulkerBoxContents(stack)) {
+                this.sendQuickPawnConfirm();
+            } else {
+                this.pageMode = PageMode.EMPTY_SHULKER_CONFIRM;
+                this.updateWidgetStates();
+            }
+            return;
+        }
+
+        this.pageMode = PageMode.PAWN_CONFIRM;
+        this.updateWidgetStates();
+    }
+
     private void sendSecondLineAction() {
         Row selected = this.selectedRow();
         if (selected != null) {
@@ -425,6 +479,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         boolean detailPage = this.pageMode == PageMode.DETAIL;
         boolean gridPage = this.pageMode == PageMode.GRID;
         boolean pawnConfirmPage = this.pageMode == PageMode.PAWN_CONFIRM;
+        boolean emptyShulkerConfirmPage = this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM;
         this.menu.setPawnInputMode(gridPage, detailPage);
 
         if (this.searchBox != null) {
@@ -461,6 +516,13 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
         if (this.pawnCancelButton != null) {
             this.pawnCancelButton.visible = pawnConfirmPage;
+        }
+        if (this.emptyShulkerConfirmButton != null) {
+            this.emptyShulkerConfirmButton.visible = emptyShulkerConfirmPage;
+            this.emptyShulkerConfirmButton.active = isEmptyShulkerBox(this.quickPawnStack());
+        }
+        if (this.emptyShulkerCancelButton != null) {
+            this.emptyShulkerCancelButton.visible = emptyShulkerConfirmPage;
         }
         if (this.doneButton != null) {
             this.doneButton.visible = gridPage;
@@ -584,10 +646,23 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         return this.topPos + 54;
     }
 
+    private static boolean isShulkerBox(ItemStack stack) {
+        return stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock;
+    }
+
+    private static boolean isEmptyShulkerBox(ItemStack stack) {
+        return isShulkerBox(stack) && !hasShulkerBoxContents(stack);
+    }
+
+    private static boolean hasShulkerBoxContents(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+    }
+
     private enum PageMode {
         GRID,
         DETAIL,
-        PAWN_CONFIRM
+        PAWN_CONFIRM,
+        EMPTY_SHULKER_CONFIRM
     }
 
     private record Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder, Component name) {

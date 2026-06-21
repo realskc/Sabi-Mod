@@ -1,6 +1,7 @@
 package top.sabi;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -13,8 +14,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 
 public class SabiPawnMachineMenu extends AbstractContainerMenu {
     public static final int QUICK_PAWN_INPUT_SLOT = 0;
@@ -24,14 +28,16 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_START = 2;
     private static final int PLAYER_INVENTORY_END = PLAYER_INVENTORY_START + 36;
 
-    private final SimpleContainer quickPawnInput = new SimpleContainer(1);
-    private final SimpleContainer detailPawnInput = new SimpleContainer(1);
+    private final PawnInputContainer quickPawnInput;
+    private final PawnInputContainer detailPawnInput;
     private final ContainerLevelAccess access;
     private final BlockPos pos;
+    private final Player owner;
     private Item selectedItem;
     private boolean quickPawnInputActive;
     private boolean detailPawnInputActive;
     private boolean processingPawnInput;
+    private boolean pendingInputSaveNeeded;
 
     public SabiPawnMachineMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf extraData) {
         this(containerId, playerInventory, extraData.readBlockPos());
@@ -40,7 +46,10 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     public SabiPawnMachineMenu(int containerId, Inventory playerInventory, BlockPos pos) {
         super(Sabi.PAWN_MACHINE_MENU.get(), containerId);
         this.pos = pos;
+        this.owner = playerInventory.player;
         this.access = ContainerLevelAccess.create(playerInventory.player.level(), pos);
+        this.quickPawnInput = new PawnInputContainer(playerInventory.player, true);
+        this.detailPawnInput = new PawnInputContainer(playerInventory.player, false);
 
         this.addSlot(new PawnInputSlot(this.quickPawnInput, 0, 154, 28, false));
         this.addSlot(new PawnInputSlot(this.detailPawnInput, 0, 139, 65, true));
@@ -87,7 +96,7 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             }
         } else {
             int targetSlot = activePawnInputSlot();
-            if (targetSlot < 0 || !this.moveItemStackTo(source, targetSlot, targetSlot + 1, false)) {
+            if (targetSlot < 0 || this.slots.get(targetSlot).hasItem() || !this.moveItemStackTo(source, targetSlot, targetSlot + 1, false)) {
                 return ItemStack.EMPTY;
             }
         }
@@ -117,6 +126,11 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     @Override
     public void removed(Player player) {
         super.removed(player);
+        this.returnPawnInputsToPlayer(player);
+        this.savePendingInputsIfNeeded();
+    }
+
+    public void returnPawnInputsToPlayer(Player player) {
         this.returnInputToPlayer(player, this.quickPawnInput);
         this.returnInputToPlayer(player, this.detailPawnInput);
     }
@@ -124,6 +138,12 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return stillValid(this.access, player, Sabi.PAWN_MACHINE.get());
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        this.savePendingInputsIfNeeded();
     }
 
     private int activePawnInputSlot() {
@@ -153,8 +173,15 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         }
 
         this.processingPawnInput = true;
-        ItemStack pawned = input.removeItemNoUpdate(0);
         SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(serverPlayer.level().getServer());
+        if (!requireSelectedItem && isShulkerBox(stack) && hasStoredItems(stack)) {
+            this.processShulkerBoxContents(serverPlayer, input, stack, config);
+            this.processingPawnInput = false;
+            this.broadcastChanges();
+            return;
+        }
+
+        ItemStack pawned = input.removeItemNoUpdate(0);
         if ((requireSelectedItem && (this.selectedItem == null || !pawned.is(this.selectedItem))) || !config.isAllowed(pawned.getItem())) {
             player.getInventory().placeItemBackInInventory(pawned);
             serverPlayer.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.item_not_allowed"), true);
@@ -166,6 +193,119 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         }
         this.processingPawnInput = false;
         this.broadcastChanges();
+    }
+
+    private void processShulkerBoxContents(ServerPlayer player, SimpleContainer input, ItemStack shulkerBox, SabiPawnMachineConfig.Config config) {
+        ItemContainerContents contents = shulkerBox.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
+        SabiPawnMachineStorage storage = SabiPawnMachineStorage.get(player.level().getServer());
+        long payout = 0L;
+        boolean storedAny = false;
+        boolean rejectedAny = false;
+        java.util.List<ItemStack> remainingItems = new java.util.ArrayList<>();
+
+        for (ItemStack containedStack : contents.nonEmptyItemCopyStream().toList()) {
+            if (config.isAllowed(containedStack.getItem())) {
+                storage.store(containedStack);
+                payout += (long)config.price(containedStack.getItem()).pawn() * containedStack.getCount();
+                storedAny = true;
+            } else {
+                remainingItems.add(containedStack);
+                rejectedAny = true;
+            }
+        }
+
+        if (storedAny) {
+            if (remainingItems.isEmpty()) {
+                shulkerBox.remove(DataComponents.CONTAINER);
+            } else {
+                shulkerBox.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(remainingItems));
+            }
+            input.setChanged();
+            SabiAccount.add(player, payout);
+            SabiAccount.sync(player);
+            SabiNetwork.refreshOpenPawnMachines(player.level().getServer());
+        }
+        if (rejectedAny) {
+            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.shulker_contains_unpawnable"), true);
+        }
+    }
+
+    private static boolean isShulkerBox(ItemStack stack) {
+        return stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock;
+    }
+
+    private static boolean hasStoredItems(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+    }
+
+    private void savePendingInputsIfNeeded() {
+        if (!this.pendingInputSaveNeeded || !(this.owner instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        this.pendingInputSaveNeeded = false;
+        serverPlayer.getInventory().setChanged();
+        serverPlayer.level().getServer().getPlayerList().saveAll();
+    }
+
+    private class PawnInputContainer extends SimpleContainer {
+        private final Player player;
+        private final boolean quick;
+
+        PawnInputContainer(Player player, boolean quick) {
+            super(1);
+            this.player = player;
+            this.quick = quick;
+        }
+
+        @Override
+        public ItemStack removeItem(int slot, int amount) {
+            ItemStack stack = super.removeItem(slot, amount);
+            this.persist();
+            return stack;
+        }
+
+        @Override
+        public ItemStack removeItemNoUpdate(int slot) {
+            ItemStack stack = super.removeItemNoUpdate(slot);
+            this.persist();
+            return stack;
+        }
+
+        @Override
+        public void setItem(int slot, ItemStack stack) {
+            super.setItem(slot, stack);
+            this.persist();
+        }
+
+        @Override
+        public void setItem(int slot, ItemStack stack, boolean moveCarriedToInventory) {
+            super.setItem(slot, stack, moveCarriedToInventory);
+            this.persist();
+        }
+
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            this.persist();
+        }
+
+        @Override
+        public void clearContent() {
+            super.clearContent();
+            this.persist();
+        }
+
+        private void persist() {
+            if (this.player.level().isClientSide()) {
+                return;
+            }
+            if (this.quick) {
+                SabiPawnMachinePendingInput.setQuick(this.player, this.getItem(0));
+            } else {
+                SabiPawnMachinePendingInput.setDetail(this.player, this.getItem(0));
+            }
+            SabiPawnMachineMenu.this.pendingInputSaveNeeded = true;
+        }
     }
 
     private class PawnInputSlot extends Slot {
