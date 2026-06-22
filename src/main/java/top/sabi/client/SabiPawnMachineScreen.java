@@ -54,6 +54,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     private Button doneButton;
     private PageMode pageMode = PageMode.GRID;
     private int scroll;
+    private boolean lastSyncedQuickPawnInputActive;
+    private boolean lastSyncedDetailPawnInputActive;
 
     public SabiPawnMachineScreen(SabiPawnMachineMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title, IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -133,13 +135,13 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 54, this.topPos + 112, 64, 20)
+                .bounds(this.leftPos + 54, this.topPos + 97, 64, 20)
                 .build());
         this.pawnCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 128, this.topPos + 112, 64, 20)
+                .bounds(this.leftPos + 128, this.topPos + 97, 64, 20)
                 .build());
 
         this.emptyShulkerConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
@@ -159,6 +161,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         this.doneButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
                 .bounds(this.leftPos + IMAGE_WIDTH - 60, this.topPos + 128, 48, 20)
                 .build());
+        this.updateWidgetStates();
     }
 
     @Override
@@ -175,6 +178,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.renderDetailPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.PAWN_CONFIRM) {
             this.renderPawnConfirmPage(graphics, panelX, panelY);
+        } else if (this.pageMode == PageMode.SHULKER_CONTENTS_CONFIRM) {
+            this.renderShulkerContentsConfirmPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM) {
             this.renderEmptyShulkerConfirmPage(graphics, panelX, panelY);
         } else {
@@ -260,9 +265,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
     private void renderPawnConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
         int contentX = panelX + 22;
-        int contentY = panelY + 42;
+        int contentY = panelY + 27;
         int contentWidth = IMAGE_WIDTH - 44;
-        int contentHeight = 82;
+        int contentHeight = 97;
 
         graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
         graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
@@ -282,6 +287,25 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         } else {
             graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", (long)row.pawnPrice * stack.getCount()), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
         }
+    }
+
+    private void renderShulkerContentsConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
+        int contentX = panelX + 22;
+        int contentY = panelY + 27;
+        int contentWidth = IMAGE_WIDTH - 44;
+        int contentHeight = 97;
+
+        graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
+        graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
+        graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.confirm_shulker_contents"), this.width / 2, contentY + 10, 0xFFFFFFFF);
+
+        ItemStack stack = this.quickPawnStack();
+        if (!stack.isEmpty()) {
+            graphics.item(stack, contentX + 18, contentY + 34);
+            graphics.text(this.font, stack.getHoverName(), contentX + 42, contentY + 32, 0xFFE7FFE9, false);
+        }
+        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning_1"), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
+        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning_2"), contentX + 42, contentY + 58, 0xFFFFE7A3, false);
     }
 
     private void renderEmptyShulkerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
@@ -421,7 +445,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         ItemStack stack = this.quickPawnStack();
         if (isShulkerBox(stack)) {
             if (hasShulkerBoxContents(stack)) {
-                this.sendQuickPawnConfirm();
+                this.pageMode = PageMode.SHULKER_CONTENTS_CONFIRM;
+                this.updateWidgetStates();
             } else {
                 this.pageMode = PageMode.EMPTY_SHULKER_CONFIRM;
                 this.updateWidgetStates();
@@ -479,12 +504,24 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         boolean detailPage = this.pageMode == PageMode.DETAIL;
         boolean gridPage = this.pageMode == PageMode.GRID;
         boolean pawnConfirmPage = this.pageMode == PageMode.PAWN_CONFIRM;
+        boolean shulkerContentsConfirmPage = this.pageMode == PageMode.SHULKER_CONTENTS_CONFIRM;
         boolean emptyShulkerConfirmPage = this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM;
         this.menu.setPawnInputMode(gridPage, detailPage);
+        this.syncPawnInputMode(gridPage, detailPage);
 
         this.updateGridWidgetStates(gridPage);
         this.updateDetailWidgetStates(detailPage, selected);
-        this.updateConfirmWidgetStates(pawnConfirmPage, emptyShulkerConfirmPage);
+        this.updateConfirmWidgetStates(pawnConfirmPage, shulkerContentsConfirmPage, emptyShulkerConfirmPage);
+    }
+
+    private void syncPawnInputMode(boolean quickPawnInputActive, boolean detailPawnInputActive) {
+        if (this.lastSyncedQuickPawnInputActive == quickPawnInputActive && this.lastSyncedDetailPawnInputActive == detailPawnInputActive) {
+            return;
+        }
+
+        this.lastSyncedQuickPawnInputActive = quickPawnInputActive;
+        this.lastSyncedDetailPawnInputActive = detailPawnInputActive;
+        ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineInputModePayload(this.menu.pos(), quickPawnInputActive, detailPawnInputActive));
     }
 
     private void updateGridWidgetStates(boolean gridPage) {
@@ -523,7 +560,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean emptyShulkerConfirmPage) {
+    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean shulkerContentsConfirmPage, boolean emptyShulkerConfirmPage) {
         if (this.quickPawnConfirmButton != null) {
             this.quickPawnConfirmButton.visible = pawnConfirmPage;
             this.quickPawnConfirmButton.active = this.rowForItem(this.quickPawnStack().getItem()) != null;
@@ -532,11 +569,11 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.pawnCancelButton.visible = pawnConfirmPage;
         }
         if (this.emptyShulkerConfirmButton != null) {
-            this.emptyShulkerConfirmButton.visible = emptyShulkerConfirmPage;
-            this.emptyShulkerConfirmButton.active = isEmptyShulkerBox(this.quickPawnStack());
+            this.emptyShulkerConfirmButton.visible = shulkerContentsConfirmPage || emptyShulkerConfirmPage;
+            this.emptyShulkerConfirmButton.active = shulkerContentsConfirmPage ? hasShulkerBoxContents(this.quickPawnStack()) : isEmptyShulkerBox(this.quickPawnStack());
         }
         if (this.emptyShulkerCancelButton != null) {
-            this.emptyShulkerCancelButton.visible = emptyShulkerConfirmPage;
+            this.emptyShulkerCancelButton.visible = shulkerContentsConfirmPage || emptyShulkerConfirmPage;
         }
     }
 
@@ -673,6 +710,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         GRID,
         DETAIL,
         PAWN_CONFIRM,
+        SHULKER_CONTENTS_CONFIRM,
         EMPTY_SHULKER_CONFIRM
     }
 

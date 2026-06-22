@@ -67,7 +67,7 @@ public final class SabiPriceResolverCli {
         int unresolved = 0;
 
         for (SabiPriceRules.AllowedItem allowedItem : SabiPriceRules.allowedItems(itemsRoot)) {
-            Optional<Integer> price = resolver.price(allowedItem.id());
+            Optional<Integer> price = resolver.resolvedPrice(allowedItem.id());
             if (price.isEmpty()) {
                 unresolved++;
             }

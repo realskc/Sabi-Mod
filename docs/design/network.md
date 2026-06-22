@@ -54,6 +54,13 @@ record PawnMachineItemEntry(
 - 内容：`BlockPos pos` + `Identifier itemId`
 - 用于详情页选中物品时同步 server menu
 
+`PawnMachineInputModePayload`
+
+- ID：`sabi:sabi_machine_input_mode`
+- 内容：`BlockPos pos` + `boolean quickPawnInputActive` + `boolean detailPawnInputActive`
+- 用于同步撒币机当前页面启用哪个典当槽
+- 原因：`Shift+Click` 背包物品时，实际移动逻辑由服务端 menu 执行；如果只在客户端 screen 设置槽激活状态，服务端会拒绝移动并把客户端预测放入槽内的物品同步回背包。
+
 `PawnMachineRedeemPayload`
 
 - ID：`sabi:sabi_machine_redeem`

@@ -279,6 +279,28 @@ public final class SabiPriceRules {
             return resolved;
         }
 
+        public Optional<Integer> resolvedPrice(String id) {
+            Optional<Integer> price = this.price(id);
+            if (price.isPresent()) {
+                return price;
+            }
+
+            Integer best = null;
+            for (Formula formula : this.formulas(id)) {
+                Optional<Integer> formulaPrice = this.formulaPrice(formula);
+                if (formulaPrice.isPresent() && (best == null || formulaPrice.get() < best)) {
+                    best = formulaPrice.get();
+                }
+            }
+            if (best == null) {
+                return Optional.empty();
+            }
+
+            Optional<Integer> resolved = Optional.of(best);
+            this.cache.put(id, resolved);
+            return resolved;
+        }
+
         public String sourceLabel(String id) {
             String source = this.baseSources.get(id);
             if (source != null) {

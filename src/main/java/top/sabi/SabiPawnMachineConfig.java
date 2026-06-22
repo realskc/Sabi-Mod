@@ -124,7 +124,7 @@ public final class SabiPawnMachineConfig {
                         continue;
                     }
 
-                    Optional<Integer> resolvedPrice = resolver.price(id.toString());
+                    Optional<Integer> resolvedPrice = resolver.resolvedPrice(id.toString());
                     if (resolvedPrice.isEmpty()) {
                         continue;
                     }

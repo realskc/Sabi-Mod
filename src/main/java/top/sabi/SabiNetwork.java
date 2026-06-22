@@ -35,6 +35,7 @@ public final class SabiNetwork {
         registrar.playToClient(BalanceSyncPayload.TYPE, BalanceSyncPayload.STREAM_CODEC, SabiNetwork::handleBalanceSync);
         registrar.playToClient(PawnMachinePayload.TYPE, PawnMachinePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineOpen);
         registrar.playToServer(AccountActionPayload.TYPE, AccountActionPayload.STREAM_CODEC, SabiNetwork::handleAccountAction);
+        registrar.playToServer(PawnMachineInputModePayload.TYPE, PawnMachineInputModePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineInputMode);
         registrar.playToServer(PawnMachineSelectPayload.TYPE, PawnMachineSelectPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineSelect);
         registrar.playToServer(PawnMachineRedeemPayload.TYPE, PawnMachineRedeemPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineRedeem);
         registrar.playToServer(PawnMachineBuyPayload.TYPE, PawnMachineBuyPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineBuy);
@@ -62,6 +63,15 @@ public final class SabiNetwork {
             serverPlayer.inventoryMenu.sendAllDataToRemote();
             serverPlayer.containerMenu.sendAllDataToRemote();
             SabiAccount.sync(player);
+        });
+    }
+
+    private static void handlePawnMachineInputMode(PawnMachineInputModePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player instanceof ServerPlayer serverPlayer && serverPlayer.containerMenu instanceof SabiPawnMachineMenu menu && menu.pos().equals(payload.pos())) {
+                menu.setPawnInputMode(payload.quickPawnInputActive(), payload.detailPawnInputActive());
+            }
         });
     }
 
@@ -309,6 +319,24 @@ public final class SabiNetwork {
                 PawnMachineItemEntry::redeemPrice,
                 PawnMachineItemEntry::new
         );
+    }
+
+    public record PawnMachineInputModePayload(BlockPos pos, boolean quickPawnInputActive, boolean detailPawnInputActive) implements CustomPacketPayload {
+        public static final Type<PawnMachineInputModePayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Sabi.MOD_ID, "sabi_machine_input_mode"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PawnMachineInputModePayload> STREAM_CODEC = StreamCodec.composite(
+                BlockPos.STREAM_CODEC,
+                PawnMachineInputModePayload::pos,
+                ByteBufCodecs.BOOL,
+                PawnMachineInputModePayload::quickPawnInputActive,
+                ByteBufCodecs.BOOL,
+                PawnMachineInputModePayload::detailPawnInputActive,
+                PawnMachineInputModePayload::new
+        );
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
     }
 
     public record PawnMachineSelectPayload(BlockPos pos, Identifier itemId) implements CustomPacketPayload {
