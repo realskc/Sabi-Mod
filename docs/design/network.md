@@ -32,9 +32,10 @@
 `PawnMachineNoticePayload`
 
 - ID：`sabi:sabi_machine_notice`
-- 内容：`BlockPos pos` + `PawnMachineNotice notice`
+- 内容：`BlockPos pos` + `PawnMachineNotice notice` + `PawnContainerKind containerKind`
 - 用于让当前撒币机界面显示需要玩家确认的提示弹窗
-- 当前通知：`SHULKER_CONTAINS_UNPAWNABLE`，表示非空潜影盒典当后仍有不可典当物品留在盒内
+- 当前通知：`CONTAINER_CONTAINS_UNPAWNABLE`，表示非空容器典当后仍有不可典当物品留在容器内
+- 当前容器类型：`SHULKER_BOX` 或 `BUNDLE`
 
 `PawnMachineItemEntry`：
 

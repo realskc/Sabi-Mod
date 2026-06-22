@@ -18,9 +18,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -68,12 +70,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     private Button backButton;
     private Button quickPawnConfirmButton;
     private Button pawnCancelButton;
-    private Button emptyShulkerConfirmButton;
-    private Button emptyShulkerCancelButton;
+    private Button containerConfirmButton;
+    private Button containerCancelButton;
     private Button noticeDoneButton;
     private Button doneButton;
     private PageMode pageMode = PageMode.GRID;
-    private SabiNetwork.PawnMachineNotice notice = SabiNetwork.PawnMachineNotice.SHULKER_CONTAINS_UNPAWNABLE;
+    private SabiNetwork.PawnMachineNotice notice = SabiNetwork.PawnMachineNotice.CONTAINER_CONTAINS_UNPAWNABLE;
+    private SabiNetwork.PawnContainerKind noticeContainerKind = SabiNetwork.PawnContainerKind.SHULKER_BOX;
+    private SabiNetwork.PawnContainerKind quickPawnContainerKind = SabiNetwork.PawnContainerKind.SHULKER_BOX;
     private int scroll;
     private boolean lastSyncedQuickPawnInputActive;
     private boolean lastSyncedDetailPawnInputActive;
@@ -112,8 +116,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    public void showNotice(SabiNetwork.PawnMachineNotice notice) {
+    public void showNotice(SabiNetwork.PawnMachineNotice notice, SabiNetwork.PawnContainerKind containerKind) {
         this.notice = notice;
+        this.noticeContainerKind = containerKind;
         this.pageMode = PageMode.NOTICE;
         this.updateWidgetStates();
     }
@@ -171,14 +176,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 .bounds(this.leftPos + POPUP_RIGHT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
 
-        this.emptyShulkerConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
+        this.containerConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
                     this.sendQuickPawnConfirm();
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
                 .bounds(this.leftPos + POPUP_LEFT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
-        this.emptyShulkerCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
+        this.containerCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
@@ -212,10 +217,10 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.renderDetailPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.PAWN_CONFIRM) {
             this.renderPawnConfirmPage(graphics, panelX, panelY);
-        } else if (this.pageMode == PageMode.SHULKER_CONTENTS_CONFIRM) {
-            this.renderShulkerContentsConfirmPage(graphics, panelX, panelY);
-        } else if (this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM) {
-            this.renderEmptyShulkerConfirmPage(graphics, panelX, panelY);
+        } else if (this.pageMode == PageMode.CONTAINER_CONTENTS_CONFIRM) {
+            this.renderContainerContentsConfirmPage(graphics, panelX, panelY);
+        } else if (this.pageMode == PageMode.EMPTY_CONTAINER_CONFIRM) {
+            this.renderEmptyContainerConfirmPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.NOTICE) {
             this.renderNoticePage(graphics, panelX, panelY);
         } else {
@@ -317,23 +322,23 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private void renderShulkerContentsConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
-        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_shulker_contents"));
+    private void renderContainerContentsConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_container_contents", this.quickPawnContainerKind.displayName()));
         ItemStack stack = this.quickPawnStack();
         renderPopupItem(graphics, popup, stack);
-        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning"), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
+        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.container_contents_warning", this.quickPawnContainerKind.displayName(), this.quickPawnContainerKind.displayName()), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
     }
 
-    private void renderEmptyShulkerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
-        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_empty_shulker"));
+    private void renderEmptyContainerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_empty_container", this.quickPawnContainerKind.displayName()));
         ItemStack stack = this.quickPawnStack();
         renderPopupItem(graphics, popup, stack);
-        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning"), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
+        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.empty_container_warning", this.quickPawnContainerKind.displayName(), this.quickPawnContainerKind.displayName()), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
     }
 
     private void renderNoticePage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
         PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, noticeTitle(this.notice));
-        renderPopupWrappedBody(graphics, popup, noticeBody(this.notice), popup.noticeBodyX(), popup.noticeBodyY(), 0xFFFFE7A3);
+        renderPopupWrappedBody(graphics, popup, noticeBody(this.notice, this.noticeContainerKind), popup.noticeBodyX(), popup.noticeBodyY(), 0xFFFFE7A3);
     }
 
     private PopupLayout renderPopupFrame(GuiGraphicsExtractor graphics, int panelX, int panelY, Component title) {
@@ -472,12 +477,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
     private void handleQuickPawnButton() {
         ItemStack stack = this.quickPawnStack();
-        if (isShulkerBox(stack)) {
-            if (hasShulkerBoxContents(stack)) {
-                this.pageMode = PageMode.SHULKER_CONTENTS_CONFIRM;
+        SabiNetwork.PawnContainerKind containerKind = pawnContainerKind(stack);
+        if (containerKind != null) {
+            this.quickPawnContainerKind = containerKind;
+            if (hasStoredItems(stack, containerKind)) {
+                this.pageMode = PageMode.CONTAINER_CONTENTS_CONFIRM;
                 this.updateWidgetStates();
             } else {
-                this.pageMode = PageMode.EMPTY_SHULKER_CONFIRM;
+                this.pageMode = PageMode.EMPTY_CONTAINER_CONFIRM;
                 this.updateWidgetStates();
             }
             return;
@@ -533,15 +540,15 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         boolean detailPage = this.pageMode == PageMode.DETAIL;
         boolean gridPage = this.pageMode == PageMode.GRID;
         boolean pawnConfirmPage = this.pageMode == PageMode.PAWN_CONFIRM;
-        boolean shulkerContentsConfirmPage = this.pageMode == PageMode.SHULKER_CONTENTS_CONFIRM;
-        boolean emptyShulkerConfirmPage = this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM;
+        boolean containerContentsConfirmPage = this.pageMode == PageMode.CONTAINER_CONTENTS_CONFIRM;
+        boolean emptyContainerConfirmPage = this.pageMode == PageMode.EMPTY_CONTAINER_CONFIRM;
         boolean noticePage = this.pageMode == PageMode.NOTICE;
         this.menu.setPawnInputMode(gridPage, detailPage);
         this.syncPawnInputMode(gridPage, detailPage);
 
         this.updateGridWidgetStates(gridPage);
         this.updateDetailWidgetStates(detailPage, selected);
-        this.updateConfirmWidgetStates(pawnConfirmPage, shulkerContentsConfirmPage, emptyShulkerConfirmPage, noticePage);
+        this.updateConfirmWidgetStates(pawnConfirmPage, containerContentsConfirmPage, emptyContainerConfirmPage, noticePage);
     }
 
     private void syncPawnInputMode(boolean quickPawnInputActive, boolean detailPawnInputActive) {
@@ -590,7 +597,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean shulkerContentsConfirmPage, boolean emptyShulkerConfirmPage, boolean noticePage) {
+    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean containerContentsConfirmPage, boolean emptyContainerConfirmPage, boolean noticePage) {
         if (this.quickPawnConfirmButton != null) {
             this.quickPawnConfirmButton.visible = pawnConfirmPage;
             this.quickPawnConfirmButton.active = this.rowForItem(this.quickPawnStack().getItem()) != null;
@@ -598,12 +605,14 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         if (this.pawnCancelButton != null) {
             this.pawnCancelButton.visible = pawnConfirmPage;
         }
-        if (this.emptyShulkerConfirmButton != null) {
-            this.emptyShulkerConfirmButton.visible = shulkerContentsConfirmPage || emptyShulkerConfirmPage;
-            this.emptyShulkerConfirmButton.active = shulkerContentsConfirmPage ? hasShulkerBoxContents(this.quickPawnStack()) : isEmptyShulkerBox(this.quickPawnStack());
+        if (this.containerConfirmButton != null) {
+            this.containerConfirmButton.visible = containerContentsConfirmPage || emptyContainerConfirmPage;
+            this.containerConfirmButton.active = containerContentsConfirmPage
+                    ? hasStoredItems(this.quickPawnStack(), this.quickPawnContainerKind)
+                    : isEmptyContainer(this.quickPawnStack(), this.quickPawnContainerKind);
         }
-        if (this.emptyShulkerCancelButton != null) {
-            this.emptyShulkerCancelButton.visible = shulkerContentsConfirmPage || emptyShulkerConfirmPage;
+        if (this.containerCancelButton != null) {
+            this.containerCancelButton.visible = containerContentsConfirmPage || emptyContainerConfirmPage;
         }
         if (this.noticeDoneButton != null) {
             this.noticeDoneButton.visible = noticePage;
@@ -727,27 +736,36 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         return this.topPos + 54;
     }
 
-    private static boolean isShulkerBox(ItemStack stack) {
-        return stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock;
+    private static SabiNetwork.PawnContainerKind pawnContainerKind(ItemStack stack) {
+        if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock) {
+            return SabiNetwork.PawnContainerKind.SHULKER_BOX;
+        }
+        if (stack.getItem() instanceof BundleItem) {
+            return SabiNetwork.PawnContainerKind.BUNDLE;
+        }
+        return null;
     }
 
-    private static boolean isEmptyShulkerBox(ItemStack stack) {
-        return isShulkerBox(stack) && !hasShulkerBoxContents(stack);
+    private static boolean isEmptyContainer(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return pawnContainerKind(stack) == containerKind && !hasStoredItems(stack, containerKind);
     }
 
-    private static boolean hasShulkerBoxContents(ItemStack stack) {
-        return stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+    private static boolean hasStoredItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return switch (containerKind) {
+            case SHULKER_BOX -> stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+            case BUNDLE -> !stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY).isEmpty();
+        };
     }
 
     private static Component noticeTitle(SabiNetwork.PawnMachineNotice notice) {
         return switch (notice) {
-            case SHULKER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_shulker_rejected");
+            case CONTAINER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_container_rejected");
         };
     }
 
-    private static Component noticeBody(SabiNetwork.PawnMachineNotice notice) {
+    private static Component noticeBody(SabiNetwork.PawnMachineNotice notice, SabiNetwork.PawnContainerKind containerKind) {
         return switch (notice) {
-            case SHULKER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_shulker_rejected_body");
+            case CONTAINER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_container_rejected_body", containerKind.displayName(), containerKind.displayName());
         };
     }
 
@@ -755,8 +773,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         GRID,
         DETAIL,
         PAWN_CONFIRM,
-        SHULKER_CONTENTS_CONFIRM,
-        EMPTY_SHULKER_CONFIRM,
+        CONTAINER_CONTENTS_CONFIRM,
+        EMPTY_CONTAINER_CONFIRM,
         NOTICE
     }
 

@@ -192,8 +192,8 @@ public final class SabiNetwork {
         }
     }
 
-    public static void showShulkerRejectedNotice(ServerPlayer player, BlockPos pos) {
-        PacketDistributor.sendToPlayer(player, new PawnMachineNoticePayload(pos, PawnMachineNotice.SHULKER_CONTAINS_UNPAWNABLE));
+    public static void showContainerRejectedNotice(ServerPlayer player, BlockPos pos, PawnContainerKind containerKind) {
+        PacketDistributor.sendToPlayer(player, new PawnMachineNoticePayload(pos, PawnMachineNotice.CONTAINER_CONTAINS_UNPAWNABLE, containerKind));
     }
 
     private static boolean redeem(ServerPlayer player, SabiPawnMachineStorage storage, Item item, int redeemPrice, int amount) {
@@ -330,13 +330,15 @@ public final class SabiNetwork {
         );
     }
 
-    public record PawnMachineNoticePayload(BlockPos pos, PawnMachineNotice notice) implements CustomPacketPayload {
+    public record PawnMachineNoticePayload(BlockPos pos, PawnMachineNotice notice, PawnContainerKind containerKind) implements CustomPacketPayload {
         public static final Type<PawnMachineNoticePayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Sabi.MOD_ID, "sabi_machine_notice"));
         public static final StreamCodec<RegistryFriendlyByteBuf, PawnMachineNoticePayload> STREAM_CODEC = StreamCodec.composite(
                 BlockPos.STREAM_CODEC,
                 PawnMachineNoticePayload::pos,
                 ByteBufCodecs.VAR_INT.map(PawnMachineNotice::byId, PawnMachineNotice::id),
                 PawnMachineNoticePayload::notice,
+                ByteBufCodecs.VAR_INT.map(PawnContainerKind::byId, PawnContainerKind::id),
+                PawnMachineNoticePayload::containerKind,
                 PawnMachineNoticePayload::new
         );
 
@@ -347,7 +349,7 @@ public final class SabiNetwork {
     }
 
     public enum PawnMachineNotice {
-        SHULKER_CONTAINS_UNPAWNABLE(0);
+        CONTAINER_CONTAINS_UNPAWNABLE(0);
 
         private final int id;
 
@@ -360,7 +362,32 @@ public final class SabiNetwork {
         }
 
         public static PawnMachineNotice byId(int id) {
-            return SHULKER_CONTAINS_UNPAWNABLE;
+            return CONTAINER_CONTAINS_UNPAWNABLE;
+        }
+    }
+
+    public enum PawnContainerKind {
+        SHULKER_BOX(0, "screen.sabi.sabi_machine.container_shulker_box"),
+        BUNDLE(1, "screen.sabi.sabi_machine.container_bundle");
+
+        private final int id;
+        private final String translationKey;
+
+        PawnContainerKind(int id, String translationKey) {
+            this.id = id;
+            this.translationKey = translationKey;
+        }
+
+        public int id() {
+            return this.id;
+        }
+
+        public Component displayName() {
+            return Component.translatable(this.translationKey);
+        }
+
+        public static PawnContainerKind byId(int id) {
+            return id == BUNDLE.id ? BUNDLE : SHULKER_BOX;
         }
     }
 

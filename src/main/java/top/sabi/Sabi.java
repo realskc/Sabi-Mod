@@ -6,7 +6,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -25,12 +24,10 @@ import net.neoforged.neoforge.network.IContainerFactory;
 public class Sabi {
     public static final String MOD_ID = "sabi";
     public static final int CURRENCY_STACK_SIZE = 64;
-    public static final int CURRENCY_EXCHANGE_RATE = 64;
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(BuiltInRegistries.MENU, MOD_ID);
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, MOD_ID);
 
     public static final DeferredItem<Item> SMALL_SABI = ITEMS.registerItem(
             "small_sabi",
@@ -76,27 +73,10 @@ public class Sabi {
             properties -> new BlockItem(PAWN_MACHINE.get(), properties)
     );
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CurrencyStackUpgradeRecipe>> SMALL_TO_MEDIUM_SABI_RECIPE = RECIPE_SERIALIZERS.register(
-            "small_sabi_to_medium_sabi",
-            () -> CurrencyStackUpgradeRecipe.serializer(SMALL_SABI, MEDIUM_SABI)
-    );
-
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CurrencyStackUpgradeRecipe>> MEDIUM_TO_BIG_SABI_RECIPE = RECIPE_SERIALIZERS.register(
-            "medium_sabi_to_big_sabi",
-            () -> CurrencyStackUpgradeRecipe.serializer(MEDIUM_SABI, BIG_SABI)
-    );
-
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CurrencyStackUpgradeRecipe>> BIG_TO_GIANT_SABI_RECIPE = RECIPE_SERIALIZERS.register(
-            "big_sabi_to_giant_sabi",
-            () -> CurrencyStackUpgradeRecipe.serializer(BIG_SABI, GIANT_SABI)
-    );
-
     public Sabi(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         MENUS.register(modEventBus);
-        RECIPE_SERIALIZERS.register(modEventBus);
-        SabiCurrencyExchange.register();
         SabiAccount.register(modEventBus);
         SabiPawnMachinePendingInput.register(modEventBus);
         SabiNetwork.register(modEventBus);

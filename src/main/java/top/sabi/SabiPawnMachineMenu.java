@@ -15,8 +15,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 
@@ -164,8 +166,9 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         }
 
         SabiPawnMachineConfig.Config config = SabiPawnMachineConfig.load(serverPlayer.level().getServer());
-        if (!requireSelectedItem && isShulkerBox(stack) && hasStoredItems(stack)) {
-            this.processShulkerBoxContents(serverPlayer, input, stack, config);
+        SabiNetwork.PawnContainerKind containerKind = pawnContainerKind(stack);
+        if (!requireSelectedItem && containerKind != null && hasStoredItems(stack, containerKind)) {
+            this.processContainerContents(serverPlayer, input, stack, containerKind, config);
             this.broadcastChanges();
             return;
         }
@@ -183,15 +186,14 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         this.broadcastChanges();
     }
 
-    private void processShulkerBoxContents(ServerPlayer player, SimpleContainer input, ItemStack shulkerBox, SabiPawnMachineConfig.Config config) {
-        ItemContainerContents contents = shulkerBox.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
+    private void processContainerContents(ServerPlayer player, SimpleContainer input, ItemStack container, SabiNetwork.PawnContainerKind containerKind, SabiPawnMachineConfig.Config config) {
         SabiPawnMachineStorage storage = SabiPawnMachineStorage.get(player.level().getServer());
         long payout = 0L;
         boolean storedAny = false;
         boolean rejectedAny = false;
         java.util.List<ItemStack> remainingItems = new java.util.ArrayList<>();
 
-        for (ItemStack containedStack : contents.nonEmptyItemCopyStream().toList()) {
+        for (ItemStack containedStack : containerItems(container, containerKind)) {
             if (config.isAllowed(containedStack.getItem())) {
                 storage.store(containedStack);
                 payout += (long)config.price(containedStack.getItem()).pawn() * containedStack.getCount();
@@ -204,9 +206,9 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
 
         if (storedAny) {
             if (remainingItems.isEmpty()) {
-                shulkerBox.remove(DataComponents.CONTAINER);
+                clearContainerItems(container, containerKind);
             } else {
-                shulkerBox.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(remainingItems));
+                setContainerItems(container, containerKind, remainingItems);
             }
             input.setChanged();
             SabiAccount.add(player, payout);
@@ -214,16 +216,52 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             SabiNetwork.refreshOpenPawnMachines(player.level().getServer());
         }
         if (rejectedAny) {
-            SabiNetwork.showShulkerRejectedNotice(player, this.pos);
+            SabiNetwork.showContainerRejectedNotice(player, this.pos, containerKind);
         }
     }
 
-    private static boolean isShulkerBox(ItemStack stack) {
-        return stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock;
+    private static SabiNetwork.PawnContainerKind pawnContainerKind(ItemStack stack) {
+        if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock) {
+            return SabiNetwork.PawnContainerKind.SHULKER_BOX;
+        }
+        if (stack.getItem() instanceof BundleItem) {
+            return SabiNetwork.PawnContainerKind.BUNDLE;
+        }
+        return null;
     }
 
-    private static boolean hasStoredItems(ItemStack stack) {
-        return stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+    private static boolean hasStoredItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return switch (containerKind) {
+            case SHULKER_BOX -> stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
+            case BUNDLE -> !stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY).isEmpty();
+        };
+    }
+
+    private static java.util.List<ItemStack> containerItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return switch (containerKind) {
+            case SHULKER_BOX -> stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().toList();
+            case BUNDLE -> stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY).itemCopyStream().toList();
+        };
+    }
+
+    private static void clearContainerItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        switch (containerKind) {
+            case SHULKER_BOX -> stack.remove(DataComponents.CONTAINER);
+            case BUNDLE -> stack.set(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+        }
+    }
+
+    private static void setContainerItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind, java.util.List<ItemStack> items) {
+        switch (containerKind) {
+            case SHULKER_BOX -> stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(items));
+            case BUNDLE -> {
+                BundleContents.Mutable contents = new BundleContents.Mutable(BundleContents.EMPTY);
+                for (ItemStack item : items) {
+                    contents.tryInsert(item.copy());
+                }
+                stack.set(DataComponents.BUNDLE_CONTENTS, contents.toImmutable());
+            }
+        }
     }
 
     private void savePendingInputsIfNeeded() {

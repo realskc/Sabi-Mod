@@ -13,7 +13,6 @@ src/main/java/top/sabi/Sabi.java
 - `DeferredRegister.Blocks BLOCKS`
 - `DeferredRegister.Items ITEMS`
 - `DeferredRegister<MenuType<?>> MENUS`
-- `DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS`
 - 玩家账户附件：`SabiAccount.register(modEventBus)`
 - 撒币机挂起典当槽附件：`SabiPawnMachinePendingInput.register(modEventBus)`
 - 网络 payload：`SabiNetwork.register(modEventBus)`
@@ -53,4 +52,3 @@ src/main/java/top/sabi/Sabi.java
 - `data/minecraft/tags/block/needs_diamond_tool.json`
 
 注意：中文文件必须使用 UTF-8。
-

@@ -11,9 +11,9 @@
 
 ## 系统
 
-- `currency.md`：实体撒币、兑换配方和为什么需要合成事件补扣。
+- `currency.md`：实体撒币和当前提供的兑换配方。
 - `account.md`：玩家账户、附件、同步和账户界面。
-- `sabi-machine-behavior.md`：撒币机交易行为、潜影盒规则和交互入口。
+- `sabi-machine-behavior.md`：撒币机交易行为、容器物品规则和交互入口。
 - `sabi-machine-pending-input.md`：典当槽防丢、玩家附件兜底和归还规则。
 - `sabi-machine-storage.md`：全局库存、SavedData、真实 ItemStack 保存。
 - `sabi-machine-ui.md`：撒币机客户端 UI 页面结构和交互。

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_big_sabi": {
+    "has_emerald": {
       "conditions": {
         "items": [
           {
-            "items": "sabi:big_sabi"
+            "items": "minecraft:emerald"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "sabi:big_sabi_to_giant_sabi"
+        "recipe": "sabi:emerald_to_medium_sabi"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_big_sabi"
+      "has_emerald"
     ]
   ],
   "rewards": {
     "recipes": [
-      "sabi:big_sabi_to_giant_sabi"
+      "sabi:emerald_to_medium_sabi"
     ]
   }
 }

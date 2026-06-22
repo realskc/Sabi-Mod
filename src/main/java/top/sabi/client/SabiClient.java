@@ -39,7 +39,7 @@ public final class SabiClient {
     public static void showPawnMachineNotice(top.sabi.SabiNetwork.PawnMachineNoticePayload payload) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.screen instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
-            pawnMachineScreen.showNotice(payload.notice());
+            pawnMachineScreen.showNotice(payload.notice(), payload.containerKind());
         }
     }
 
