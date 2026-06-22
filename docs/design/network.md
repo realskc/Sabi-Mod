@@ -29,6 +29,13 @@
 - 内容：`BlockPos pos` + `List<PawnMachineItemEntry>`
 - 用于刷新撒币机 UI 列表
 
+`PawnMachineNoticePayload`
+
+- ID：`sabi:sabi_machine_notice`
+- 内容：`BlockPos pos` + `PawnMachineNotice notice`
+- 用于让当前撒币机界面显示需要玩家确认的提示弹窗
+- 当前通知：`SHULKER_CONTAINS_UNPAWNABLE`，表示非空潜影盒典当后仍有不可典当物品留在盒内
+
 `PawnMachineItemEntry`：
 
 ```java

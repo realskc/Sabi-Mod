@@ -16,7 +16,7 @@
 - `sabi-machine-behavior.md`：撒币机交易行为、潜影盒规则和交互入口。
 - `sabi-machine-pending-input.md`：典当槽防丢、玩家附件兜底和归还规则。
 - `sabi-machine-storage.md`：全局库存、SavedData、真实 ItemStack 保存。
-- `sabi-machine-ui.md`：撒币机客户端 UI 页面和控件坐标。
+- `sabi-machine-ui.md`：撒币机客户端 UI 页面结构和交互。
 - `sabi-machine-pricing.md`：白名单、基础价、派生价和分组口径。
 - `network.md`：自定义 payload 和同步方向。
 - `price-tools.md`：价格生成器和交互式编辑脚本。

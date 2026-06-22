@@ -34,6 +34,7 @@ public final class SabiNetwork {
         PayloadRegistrar registrar = event.registrar(Sabi.MOD_ID).versioned("1");
         registrar.playToClient(BalanceSyncPayload.TYPE, BalanceSyncPayload.STREAM_CODEC, SabiNetwork::handleBalanceSync);
         registrar.playToClient(PawnMachinePayload.TYPE, PawnMachinePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineOpen);
+        registrar.playToClient(PawnMachineNoticePayload.TYPE, PawnMachineNoticePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineNotice);
         registrar.playToServer(AccountActionPayload.TYPE, AccountActionPayload.STREAM_CODEC, SabiNetwork::handleAccountAction);
         registrar.playToServer(PawnMachineInputModePayload.TYPE, PawnMachineInputModePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineInputMode);
         registrar.playToServer(PawnMachineSelectPayload.TYPE, PawnMachineSelectPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineSelect);
@@ -47,6 +48,10 @@ public final class SabiNetwork {
 
     private static void handlePawnMachineOpen(PawnMachinePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> top.sabi.client.SabiClient.openPawnMachine(payload));
+    }
+
+    private static void handlePawnMachineNotice(PawnMachineNoticePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> top.sabi.client.SabiClient.showPawnMachineNotice(payload));
     }
 
     private static void handleAccountAction(AccountActionPayload payload, IPayloadContext context) {
@@ -187,6 +192,10 @@ public final class SabiNetwork {
         }
     }
 
+    public static void showShulkerRejectedNotice(ServerPlayer player, BlockPos pos) {
+        PacketDistributor.sendToPlayer(player, new PawnMachineNoticePayload(pos, PawnMachineNotice.SHULKER_CONTAINS_UNPAWNABLE));
+    }
+
     private static boolean redeem(ServerPlayer player, SabiPawnMachineStorage storage, Item item, int redeemPrice, int amount) {
         int maxStackSize = new ItemStack(item).getMaxStackSize();
         if (amount > maxStackSize) {
@@ -319,6 +328,40 @@ public final class SabiNetwork {
                 PawnMachineItemEntry::redeemPrice,
                 PawnMachineItemEntry::new
         );
+    }
+
+    public record PawnMachineNoticePayload(BlockPos pos, PawnMachineNotice notice) implements CustomPacketPayload {
+        public static final Type<PawnMachineNoticePayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Sabi.MOD_ID, "sabi_machine_notice"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PawnMachineNoticePayload> STREAM_CODEC = StreamCodec.composite(
+                BlockPos.STREAM_CODEC,
+                PawnMachineNoticePayload::pos,
+                ByteBufCodecs.VAR_INT.map(PawnMachineNotice::byId, PawnMachineNotice::id),
+                PawnMachineNoticePayload::notice,
+                PawnMachineNoticePayload::new
+        );
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    public enum PawnMachineNotice {
+        SHULKER_CONTAINS_UNPAWNABLE(0);
+
+        private final int id;
+
+        PawnMachineNotice(int id) {
+            this.id = id;
+        }
+
+        public int id() {
+            return this.id;
+        }
+
+        public static PawnMachineNotice byId(int id) {
+            return SHULKER_CONTAINS_UNPAWNABLE;
+        }
     }
 
     public record PawnMachineInputModePayload(BlockPos pos, boolean quickPawnInputActive, boolean detailPawnInputActive) implements CustomPacketPayload {

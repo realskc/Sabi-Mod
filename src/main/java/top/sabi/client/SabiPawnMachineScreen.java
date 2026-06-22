@@ -24,9 +24,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import top.sabi.SabiAccount;
 import top.sabi.SabiNetwork;
 import top.sabi.SabiPawnMachineMenu;
-import top.sabi.SabiAccount;
 import top.sabi.SabiClientState;
 
 public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachineMenu> {
@@ -37,6 +37,25 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     private static final int CELL_SIZE = 18;
     private static final int GRID_WIDTH = GRID_COLUMNS * CELL_SIZE;
     private static final int GRID_HEIGHT = GRID_VISIBLE_ROWS * CELL_SIZE;
+    private static final int POPUP_X_OFFSET = 22;
+    private static final int POPUP_Y_OFFSET = 27;
+    private static final int POPUP_WIDTH = IMAGE_WIDTH - POPUP_X_OFFSET * 2;
+    private static final int POPUP_HEIGHT = 97;
+    private static final int POPUP_TITLE_Y_OFFSET = 10;
+    private static final int POPUP_ITEM_X_OFFSET = 18;
+    private static final int POPUP_ITEM_Y_OFFSET = 34;
+    private static final int POPUP_ITEM_TEXT_X_OFFSET = 42;
+    private static final int POPUP_ITEM_NAME_Y_OFFSET = 32;
+    private static final int POPUP_BODY_Y_OFFSET = 46;
+    private static final int POPUP_NOTICE_BODY_X_OFFSET = 18;
+    private static final int POPUP_NOTICE_BODY_Y_OFFSET = 42;
+    private static final int POPUP_TEXT_RIGHT_INSET = 9;
+    private static final int POPUP_BUTTON_Y_OFFSET = 97;
+    private static final int POPUP_LEFT_BUTTON_X_OFFSET = 54;
+    private static final int POPUP_SINGLE_BUTTON_X_OFFSET = 90;
+    private static final int POPUP_RIGHT_BUTTON_X_OFFSET = 128;
+    private static final int POPUP_BUTTON_WIDTH = 64;
+    private static final int POPUP_BUTTON_HEIGHT = 20;
 
     private List<Row> rows = List.of();
     private List<Row> filteredRows = List.of();
@@ -51,8 +70,10 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     private Button pawnCancelButton;
     private Button emptyShulkerConfirmButton;
     private Button emptyShulkerCancelButton;
+    private Button noticeDoneButton;
     private Button doneButton;
     private PageMode pageMode = PageMode.GRID;
+    private SabiNetwork.PawnMachineNotice notice = SabiNetwork.PawnMachineNotice.SHULKER_CONTAINS_UNPAWNABLE;
     private int scroll;
     private boolean lastSyncedQuickPawnInputActive;
     private boolean lastSyncedDetailPawnInputActive;
@@ -89,6 +110,12 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.selectedItemId = null;
             this.pageMode = PageMode.GRID;
         }
+    }
+
+    public void showNotice(SabiNetwork.PawnMachineNotice notice) {
+        this.notice = notice;
+        this.pageMode = PageMode.NOTICE;
+        this.updateWidgetStates();
     }
 
     @Override
@@ -135,13 +162,13 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 54, this.topPos + 97, 64, 20)
+                .bounds(this.leftPos + POPUP_LEFT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
         this.pawnCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 128, this.topPos + 97, 64, 20)
+                .bounds(this.leftPos + POPUP_RIGHT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
 
         this.emptyShulkerConfirmButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
@@ -149,13 +176,20 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 54, this.topPos + 97, 64, 20)
+                .bounds(this.leftPos + POPUP_LEFT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
         this.emptyShulkerCancelButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.cancel"), button -> {
                     this.pageMode = PageMode.GRID;
                     this.updateWidgetStates();
                 })
-                .bounds(this.leftPos + 128, this.topPos + 97, 64, 20)
+                .bounds(this.leftPos + POPUP_RIGHT_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
+                .build());
+
+        this.noticeDoneButton = this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.confirm"), button -> {
+                    this.pageMode = PageMode.GRID;
+                    this.updateWidgetStates();
+                })
+                .bounds(this.leftPos + POPUP_SINGLE_BUTTON_X_OFFSET, this.topPos + POPUP_BUTTON_Y_OFFSET, POPUP_BUTTON_WIDTH, POPUP_BUTTON_HEIGHT)
                 .build());
 
         this.doneButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
@@ -182,6 +216,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.renderShulkerContentsConfirmPage(graphics, panelX, panelY);
         } else if (this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM) {
             this.renderEmptyShulkerConfirmPage(graphics, panelX, panelY);
+        } else if (this.pageMode == PageMode.NOTICE) {
+            this.renderNoticePage(graphics, panelX, panelY);
         } else {
             this.renderSearchIcon(graphics, panelX + 14, panelY + 33);
             this.renderGridPage(graphics, mouseX, mouseY, panelX, panelY);
@@ -264,67 +300,60 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
     }
 
     private void renderPawnConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
-        int contentX = panelX + 22;
-        int contentY = panelY + 27;
-        int contentWidth = IMAGE_WIDTH - 44;
-        int contentHeight = 97;
-
-        graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
-        graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
-        graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.confirm_pawn"), this.width / 2, contentY + 10, 0xFFFFFFFF);
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_pawn"));
 
         ItemStack stack = this.quickPawnStack();
         if (stack.isEmpty()) {
-            graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.no_pawn_item"), this.width / 2, contentY + 38, 0xFFFFE7A3);
+            graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.no_pawn_item"), this.width / 2, popup.y() + 38, 0xFFFFE7A3);
             return;
         }
 
         Row row = this.rowForItem(stack.getItem());
-        graphics.item(stack, contentX + 18, contentY + 34);
-        graphics.text(this.font, stack.getHoverName(), contentX + 42, contentY + 32, 0xFFE7FFE9, false);
+        renderPopupItem(graphics, popup, stack);
         if (row == null) {
-            graphics.text(this.font, Component.translatable("message.sabi.sabi_machine.item_not_allowed"), contentX + 42, contentY + 46, 0xFFFF9090, false);
+            graphics.text(this.font, Component.translatable("message.sabi.sabi_machine.item_not_allowed"), popup.itemTextX(), popup.bodyY(), 0xFFFF9090, false);
         } else {
-            graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", (long)row.pawnPrice * stack.getCount()), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
+            graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.pawn_price", (long)row.pawnPrice * stack.getCount()), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3, false);
         }
     }
 
     private void renderShulkerContentsConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
-        int contentX = panelX + 22;
-        int contentY = panelY + 27;
-        int contentWidth = IMAGE_WIDTH - 44;
-        int contentHeight = 97;
-
-        graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
-        graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
-        graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.confirm_shulker_contents"), this.width / 2, contentY + 10, 0xFFFFFFFF);
-
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_shulker_contents"));
         ItemStack stack = this.quickPawnStack();
-        if (!stack.isEmpty()) {
-            graphics.item(stack, contentX + 18, contentY + 34);
-            graphics.text(this.font, stack.getHoverName(), contentX + 42, contentY + 32, 0xFFE7FFE9, false);
-        }
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning_1"), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning_2"), contentX + 42, contentY + 58, 0xFFFFE7A3, false);
+        renderPopupItem(graphics, popup, stack);
+        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.shulker_contents_warning"), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
     }
 
     private void renderEmptyShulkerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
-        int contentX = panelX + 22;
-        int contentY = panelY + 27;
-        int contentWidth = IMAGE_WIDTH - 44;
-        int contentHeight = 97;
-
-        graphics.fill(contentX, contentY, contentX + contentWidth, contentY + contentHeight, 0xAA000000);
-        graphics.outline(contentX, contentY, contentWidth, contentHeight, 0xFF555555);
-        graphics.centeredText(this.font, Component.translatable("screen.sabi.sabi_machine.confirm_empty_shulker"), this.width / 2, contentY + 10, 0xFFFFFFFF);
-
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_empty_shulker"));
         ItemStack stack = this.quickPawnStack();
-        if (!stack.isEmpty()) {
-            graphics.item(stack, contentX + 18, contentY + 34);
-            graphics.text(this.font, stack.getHoverName(), contentX + 42, contentY + 32, 0xFFE7FFE9, false);
+        renderPopupItem(graphics, popup, stack);
+        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning"), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
+    }
+
+    private void renderNoticePage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
+        PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, noticeTitle(this.notice));
+        renderPopupWrappedBody(graphics, popup, noticeBody(this.notice), popup.noticeBodyX(), popup.noticeBodyY(), 0xFFFFE7A3);
+    }
+
+    private PopupLayout renderPopupFrame(GuiGraphicsExtractor graphics, int panelX, int panelY, Component title) {
+        PopupLayout popup = PopupLayout.at(panelX, panelY);
+        graphics.fill(popup.x(), popup.y(), popup.x() + popup.width(), popup.y() + popup.height(), 0xAA000000);
+        graphics.outline(popup.x(), popup.y(), popup.width(), popup.height(), 0xFF555555);
+        graphics.centeredText(this.font, title, this.width / 2, popup.y() + POPUP_TITLE_Y_OFFSET, 0xFFFFFFFF);
+        return popup;
+    }
+
+    private void renderPopupItem(GuiGraphicsExtractor graphics, PopupLayout popup, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return;
         }
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning_1"), contentX + 42, contentY + 46, 0xFFFFE7A3, false);
-        graphics.text(this.font, Component.translatable("screen.sabi.sabi_machine.empty_shulker_warning_2"), contentX + 42, contentY + 58, 0xFFFFE7A3, false);
+        graphics.item(stack, popup.itemX(), popup.itemY());
+        graphics.text(this.font, stack.getHoverName(), popup.itemTextX(), popup.itemNameY(), 0xFFE7FFE9, false);
+    }
+
+    private void renderPopupWrappedBody(GuiGraphicsExtractor graphics, PopupLayout popup, Component body, int x, int y, int color) {
+        graphics.textWithWordWrap(this.font, body, x, y, popup.textRight() - x, color, false);
     }
 
     private void renderDetailPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
@@ -506,12 +535,13 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         boolean pawnConfirmPage = this.pageMode == PageMode.PAWN_CONFIRM;
         boolean shulkerContentsConfirmPage = this.pageMode == PageMode.SHULKER_CONTENTS_CONFIRM;
         boolean emptyShulkerConfirmPage = this.pageMode == PageMode.EMPTY_SHULKER_CONFIRM;
+        boolean noticePage = this.pageMode == PageMode.NOTICE;
         this.menu.setPawnInputMode(gridPage, detailPage);
         this.syncPawnInputMode(gridPage, detailPage);
 
         this.updateGridWidgetStates(gridPage);
         this.updateDetailWidgetStates(detailPage, selected);
-        this.updateConfirmWidgetStates(pawnConfirmPage, shulkerContentsConfirmPage, emptyShulkerConfirmPage);
+        this.updateConfirmWidgetStates(pawnConfirmPage, shulkerContentsConfirmPage, emptyShulkerConfirmPage, noticePage);
     }
 
     private void syncPawnInputMode(boolean quickPawnInputActive, boolean detailPawnInputActive) {
@@ -560,7 +590,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean shulkerContentsConfirmPage, boolean emptyShulkerConfirmPage) {
+    private void updateConfirmWidgetStates(boolean pawnConfirmPage, boolean shulkerContentsConfirmPage, boolean emptyShulkerConfirmPage, boolean noticePage) {
         if (this.quickPawnConfirmButton != null) {
             this.quickPawnConfirmButton.visible = pawnConfirmPage;
             this.quickPawnConfirmButton.active = this.rowForItem(this.quickPawnStack().getItem()) != null;
@@ -574,6 +604,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
         if (this.emptyShulkerCancelButton != null) {
             this.emptyShulkerCancelButton.visible = shulkerContentsConfirmPage || emptyShulkerConfirmPage;
+        }
+        if (this.noticeDoneButton != null) {
+            this.noticeDoneButton.visible = noticePage;
         }
     }
 
@@ -706,12 +739,63 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         return stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().findAny().isPresent();
     }
 
+    private static Component noticeTitle(SabiNetwork.PawnMachineNotice notice) {
+        return switch (notice) {
+            case SHULKER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_shulker_rejected");
+        };
+    }
+
+    private static Component noticeBody(SabiNetwork.PawnMachineNotice notice) {
+        return switch (notice) {
+            case SHULKER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_shulker_rejected_body");
+        };
+    }
+
     private enum PageMode {
         GRID,
         DETAIL,
         PAWN_CONFIRM,
         SHULKER_CONTENTS_CONFIRM,
-        EMPTY_SHULKER_CONFIRM
+        EMPTY_SHULKER_CONFIRM,
+        NOTICE
+    }
+
+    private record PopupLayout(int x, int y, int width, int height) {
+        private static PopupLayout at(int panelX, int panelY) {
+            return new PopupLayout(panelX + POPUP_X_OFFSET, panelY + POPUP_Y_OFFSET, POPUP_WIDTH, POPUP_HEIGHT);
+        }
+
+        private int itemX() {
+            return this.x + POPUP_ITEM_X_OFFSET;
+        }
+
+        private int itemY() {
+            return this.y + POPUP_ITEM_Y_OFFSET;
+        }
+
+        private int itemTextX() {
+            return this.x + POPUP_ITEM_TEXT_X_OFFSET;
+        }
+
+        private int itemNameY() {
+            return this.y + POPUP_ITEM_NAME_Y_OFFSET;
+        }
+
+        private int bodyY() {
+            return this.y + POPUP_BODY_Y_OFFSET;
+        }
+
+        private int noticeBodyX() {
+            return this.x + POPUP_NOTICE_BODY_X_OFFSET;
+        }
+
+        private int noticeBodyY() {
+            return this.y + POPUP_NOTICE_BODY_Y_OFFSET;
+        }
+
+        private int textRight() {
+            return this.x + this.width - POPUP_TEXT_RIGHT_INSET;
+        }
     }
 
     private record Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder, Component name) {

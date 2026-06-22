@@ -5,11 +5,6 @@
 - `client/SabiPawnMachineScreen.java`
 - `SabiPawnMachineMenu.java`
 
-## 尺寸
-
-- `IMAGE_WIDTH = 244`
-- `IMAGE_HEIGHT = 238`
-
 ## 页面模式
 
 - `GRID`：主列表页。
@@ -17,16 +12,25 @@
 - `PAWN_CONFIRM`：主页面快速典当确认页。
 - `SHULKER_CONTENTS_CONFIRM`：主页面非空潜影盒内容典当确认页。
 - `EMPTY_SHULKER_CONFIRM`：主页面空潜影盒典当确认页。
+- `NOTICE`：主页面操作结果提示页，需要玩家点击确认后返回主列表页。
+
+## 共用弹窗布局
+
+`PAWN_CONFIRM`、`SHULKER_CONTENTS_CONFIRM`、`EMPTY_SHULKER_CONFIRM` 和 `NOTICE` 使用 `SabiPawnMachineScreen` 中的共享弹窗布局 helper 统一管理布局。
+
+- 弹窗内容框、标题、物品图标、物品名称、正文起点和正文右边界都由代码中的布局常量决定。
+- 普通弹窗正文从物品名称下方开始；提示弹窗正文从弹窗正文区域左侧开始。
+- 弹窗正文作为单段文本自动换行。
+- 双按钮弹窗使用确认/取消按钮；单按钮提示弹窗只显示确认按钮。
 
 ## 主列表页
 
 关键控件：
 
-- 搜索框：`leftPos + 30, topPos + 28, 118 x 20`
-- 快速典当槽：menu slot 0，坐标 `154, 28`
-- 快速典当按钮：`leftPos + 176, topPos + 28`
-- 物品表格：9 列 x 4 行，每格 `18 x 18`
-- 网格位置：`gridX = leftPos + (IMAGE_WIDTH - GRID_WIDTH) / 2`，`gridY = topPos + 54`
+- 搜索框
+- 快速典当槽：menu slot 0
+- 快速典当按钮
+- 物品表格：固定行列的可滚动网格，具体坐标和尺寸以 `SabiPawnMachineScreen` 为准。
 
 行为：
 
@@ -34,6 +38,7 @@
 - 支持搜索中文显示名和完整物品 ID。
 - `Shift+Click` 玩家背包物品时，只会在快速典当槽为空时放入该槽。
 - 普通物品典当确认页、非空潜影盒内容典当确认页和空潜影盒典当确认页使用同一套弹窗位置和确认/取消按钮位置。
+- 如果非空潜影盒典当后仍有不可典当物品留在盒内，界面会显示提示弹窗；该弹窗只有确认按钮，正文作为单段文本按灰色内容框宽度自动换行。
 
 排序：
 

@@ -50,14 +50,9 @@ AttachmentType.serializable(AccountData::new)
 
 `SabiClient` 监听 `InventoryScreen` 的渲染和鼠标点击。
 
-账户框位置：
-
-- `accountX = screen.getLeftPos() + 8`
-- `accountY = screen.getTopPos() - 24`
-- 尺寸：`60 x 18`
+账户框位置和尺寸由 `SabiClient` 中的渲染常量决定，文档不记录具体像素值。
 
 设计原因：
 
 - 只在按 E 打开的玩家背包界面显示，避免普通 HUD 没有鼠标时无法点击。
 - 点击账户框打开 `SabiAccountScreen`。
-

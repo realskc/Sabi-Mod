@@ -214,7 +214,7 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
             SabiNetwork.refreshOpenPawnMachines(player.level().getServer());
         }
         if (rejectedAny) {
-            player.sendSystemMessage(Component.translatable("message.sabi.sabi_machine.shulker_contains_unpawnable"), true);
+            SabiNetwork.showShulkerRejectedNotice(player, this.pos);
         }
     }
 

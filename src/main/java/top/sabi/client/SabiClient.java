@@ -36,6 +36,13 @@ public final class SabiClient {
         }
     }
 
+    public static void showPawnMachineNotice(top.sabi.SabiNetwork.PawnMachineNoticePayload payload) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
+            pawnMachineScreen.showNotice(payload.notice());
+        }
+    }
+
     private static void onScreenMousePressed(ScreenEvent.MouseButtonPressed.Pre event) {
         if (!(event.getScreen() instanceof InventoryScreen inventoryScreen) || event.getMouseButtonEvent().button() != 0) {
             return;
