@@ -31,14 +31,14 @@ public final class SabiClient {
 
     public static void openPawnMachine(top.sabi.SabiNetwork.PawnMachinePayload payload) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.screen instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
+        if (minecraft.gui.screen() instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
             pawnMachineScreen.update(payload);
         }
     }
 
     public static void showPawnMachineNotice(top.sabi.SabiNetwork.PawnMachineNoticePayload payload) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.screen instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
+        if (minecraft.gui.screen() instanceof SabiPawnMachineScreen pawnMachineScreen && pawnMachineScreen.sameMachine(payload.pos())) {
             pawnMachineScreen.showNotice(payload.notice(), payload.containerKind());
         }
     }
@@ -49,7 +49,7 @@ public final class SabiClient {
         }
 
         if (isInside(inventoryScreen, (int)event.getMouseX(), (int)event.getMouseY())) {
-            Minecraft.getInstance().setScreen(new SabiAccountScreen());
+            Minecraft.getInstance().gui.setScreen(new SabiAccountScreen());
             event.setCanceled(true);
         }
     }
