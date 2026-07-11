@@ -23,7 +23,7 @@ VANILLA_ASSETS_ROOT = (
     REPO_ROOT
     / "build"
     / "neoForm"
-    / "neoFormJoined26.1.2-1"
+    / "neoFormJoined26.2-1"
     / "steps"
     / "transformSource"
     / "transformed"

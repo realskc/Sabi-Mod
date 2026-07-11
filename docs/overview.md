@@ -4,10 +4,10 @@ Sabi 是一个基于 NeoForge 的 Minecraft Java 版 Mod。
 
 - Mod ID：`sabi`
 - Java 包名：`top.sabi`
-- Minecraft：`26.1.2`
-- NeoForge：`26.1.2.41-beta`
+- Minecraft：`26.2`
+- NeoForge：`26.2.0.6-beta`
 - Java/JDK：`25`
-- 当前 Mod 版本：`1.0.0`
+- 当前 Mod 版本：`1.1.0`
 
 ## 当前主题
 

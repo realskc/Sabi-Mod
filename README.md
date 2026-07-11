@@ -11,10 +11,10 @@ Sabi 是一个基于 NeoForge 的 Minecraft Mod，主题是“撒币”经济系
 
 ## 版本
 
-- Minecraft：`26.1.2`
-- NeoForge：`26.1.2.41-beta`
+- Minecraft：`26.2`
+- NeoForge：`26.2.0.6-beta`
 - Mod ID：`sabi`
-- 当前 Mod 版本：`1.0.0`
+- 当前 Mod 版本：`1.1.0`
 
 ## 构建
 

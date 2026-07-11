@@ -22,7 +22,7 @@ python -m py_compile tools\edit_sabi_prices.py
 复制目标来自 `gradle.properties`：
 
 ```properties
-pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.1.2-NeoForge_26.1.2.73/mods
+pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.2-NeoForge_26.2.0.6-beta/mods
 ```
 
 如果其他机器没有这个目录，需要修改 `gradle.properties` 或临时调整该属性。
@@ -36,4 +36,3 @@ pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.1.2-NeoForge_26.1.
 5. 改撒币机行为时同时检查菜单、存储、网络和客户端界面。
 6. 改账户行为时同时检查账户、客户端入口、账户界面和网络。
 7. 完成后运行 `compileJava` 和完整 `build`。
-
