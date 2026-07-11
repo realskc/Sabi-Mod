@@ -44,15 +44,15 @@ public class SabiPawnMachineStorage extends SavedData {
         return server.getDataStorage().computeIfAbsent(TYPE);
     }
 
-    public int storedCount(Item item) {
+    public long storedCount(Item item) {
         long count = 0;
         Deque<ItemStack> stack = this.storedItemsByItem.get(item);
         if (stack != null) {
             for (ItemStack itemStack : stack) {
-                count += itemStack.getCount();
+                count = saturatingAdd(count, itemStack.getCount());
             }
         }
-        return (int)Math.min(Integer.MAX_VALUE, count);
+        return count;
     }
 
     public void store(ItemStack stack) {
@@ -65,11 +65,17 @@ public class SabiPawnMachineStorage extends SavedData {
         }
 
         Deque<ItemStack> itemStacks = this.storedItemsByItem.computeIfAbsent(stack.getItem(), ignored -> new ArrayDeque<>());
+        int remaining = stack.getCount();
         ItemStack top = itemStacks.peek();
-        if (top != null && ItemStack.isSameItemSameComponents(top, stack)) {
-            top.grow(stack.getCount());
-        } else {
-            itemStacks.push(stack.copy());
+        if (top != null && ItemStack.isSameItemSameComponents(top, stack) && top.getCount() < MAX_SERIALIZED_STACK_SIZE) {
+            int merged = Math.min(remaining, MAX_SERIALIZED_STACK_SIZE - top.getCount());
+            top.grow(merged);
+            remaining -= merged;
+        }
+        while (remaining > 0) {
+            int count = Math.min(remaining, MAX_SERIALIZED_STACK_SIZE);
+            itemStacks.push(stack.copyWithCount(count));
+            remaining -= count;
         }
         if (markDirty) {
             this.setDirty();
@@ -123,5 +129,9 @@ public class SabiPawnMachineStorage extends SavedData {
             result.add(stack.copyWithCount(count));
             remaining -= count;
         }
+    }
+
+    private static long saturatingAdd(long left, int right) {
+        return left > Long.MAX_VALUE - right ? Long.MAX_VALUE : left + right;
     }
 }

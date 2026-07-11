@@ -42,7 +42,7 @@
 ```java
 record PawnMachineItemEntry(
     Identifier itemId,
-    int storedCount,
+    long storedCount,
     int pawnPrice,
     int redeemPrice
 )

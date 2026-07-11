@@ -101,7 +101,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             originalOrder++;
         }
         nextRows.sort((left, right) -> {
-            int storedCountCompare = Integer.compare(right.storedCount, left.storedCount);
+            int storedCountCompare = Long.compare(right.storedCount, left.storedCount);
             if (storedCountCompare != 0) {
                 return storedCountCompare;
             }
@@ -326,14 +326,18 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_container_contents", this.quickPawnContainerKind.displayName()));
         ItemStack stack = this.quickPawnStack();
         renderPopupItem(graphics, popup, stack);
-        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.container_contents_warning", this.quickPawnContainerKind.displayName(), this.quickPawnContainerKind.displayName()), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
+        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.container_contents_warning", this.containerPawnValue(stack, this.quickPawnContainerKind)), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
     }
 
     private void renderEmptyContainerConfirmPage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
         PopupLayout popup = renderPopupFrame(graphics, panelX, panelY, Component.translatable("screen.sabi.sabi_machine.confirm_empty_container", this.quickPawnContainerKind.displayName()));
         ItemStack stack = this.quickPawnStack();
         renderPopupItem(graphics, popup, stack);
-        renderPopupWrappedBody(graphics, popup, Component.translatable("screen.sabi.sabi_machine.empty_container_warning", this.quickPawnContainerKind.displayName(), this.quickPawnContainerKind.displayName()), popup.itemTextX(), popup.bodyY(), 0xFFFFE7A3);
+        Row row = this.rowForItem(stack.getItem());
+        Component body = row == null
+                ? Component.translatable("message.sabi.sabi_machine.item_not_allowed")
+                : Component.translatable("screen.sabi.sabi_machine.empty_container_warning", (long)row.pawnPrice * stack.getCount());
+        renderPopupWrappedBody(graphics, popup, body, popup.itemTextX(), popup.bodyY(), row == null ? 0xFFFF9090 : 0xFFFFE7A3);
     }
 
     private void renderNoticePage(GuiGraphicsExtractor graphics, int panelX, int panelY) {
@@ -609,7 +613,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
             this.containerConfirmButton.visible = containerContentsConfirmPage || emptyContainerConfirmPage;
             this.containerConfirmButton.active = containerContentsConfirmPage
                     ? hasStoredItems(this.quickPawnStack(), this.quickPawnContainerKind)
-                    : isEmptyContainer(this.quickPawnStack(), this.quickPawnContainerKind);
+                    : isEmptyContainer(this.quickPawnStack(), this.quickPawnContainerKind)
+                            && this.rowForItem(this.quickPawnStack().getItem()) != null;
         }
         if (this.containerCancelButton != null) {
             this.containerCancelButton.visible = containerContentsConfirmPage || emptyContainerConfirmPage;
@@ -757,6 +762,22 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         };
     }
 
+    private long containerPawnValue(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return containerItems(stack, containerKind)
+                .mapToLong(contained -> {
+                    Row row = this.rowForItem(contained.getItem());
+                    return row == null ? 0L : (long)row.pawnPrice * contained.getCount();
+                })
+                .sum();
+    }
+
+    private static java.util.stream.Stream<ItemStack> containerItems(ItemStack stack, SabiNetwork.PawnContainerKind containerKind) {
+        return switch (containerKind) {
+            case SHULKER_BOX -> stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream();
+            case BUNDLE -> stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY).itemCopyStream();
+        };
+    }
+
     private static Component noticeTitle(SabiNetwork.PawnMachineNotice notice) {
         return switch (notice) {
             case CONTAINER_CONTAINS_UNPAWNABLE -> Component.translatable("screen.sabi.sabi_machine.notice_container_rejected");
@@ -816,8 +837,8 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         }
     }
 
-    private record Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder, Component name) {
-        Row(Identifier itemId, Item item, int storedCount, int pawnPrice, int redeemPrice, int originalOrder) {
+    private record Row(Identifier itemId, Item item, long storedCount, int pawnPrice, int redeemPrice, int originalOrder, Component name) {
+        Row(Identifier itemId, Item item, long storedCount, int pawnPrice, int redeemPrice, int originalOrder) {
             this(itemId, item, storedCount, pawnPrice, redeemPrice, originalOrder, displayName(item));
         }
 

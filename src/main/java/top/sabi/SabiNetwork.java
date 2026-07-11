@@ -316,11 +316,11 @@ public final class SabiNetwork {
         }
     }
 
-    public record PawnMachineItemEntry(Identifier itemId, int storedCount, int pawnPrice, int redeemPrice) {
+    public record PawnMachineItemEntry(Identifier itemId, long storedCount, int pawnPrice, int redeemPrice) {
         public static final StreamCodec<RegistryFriendlyByteBuf, PawnMachineItemEntry> STREAM_CODEC = StreamCodec.composite(
                 Identifier.STREAM_CODEC,
                 PawnMachineItemEntry::itemId,
-                ByteBufCodecs.VAR_INT,
+                ByteBufCodecs.VAR_LONG,
                 PawnMachineItemEntry::storedCount,
                 ByteBufCodecs.VAR_INT,
                 PawnMachineItemEntry::pawnPrice,
