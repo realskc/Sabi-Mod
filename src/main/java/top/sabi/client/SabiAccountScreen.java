@@ -5,7 +5,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import top.sabi.SabiAccount;
 import top.sabi.SabiClientState;
 import top.sabi.SabiNetwork;
@@ -23,7 +23,7 @@ public class SabiAccountScreen extends Screen {
         int panelY = this.height / 2 - 58;
 
         this.amountBox = new EditBox(this.font, panelX + 20, panelY + 52, 160, 20, Component.translatable("screen.sabi.withdraw_amount"));
-        this.amountBox.setFilter(value -> value.isEmpty() || value.matches("[0-9]{1,18}"));
+        this.amountBox.setMaxLength(18);
         this.amountBox.setValue("64");
         this.addRenderableWidget(this.amountBox);
 
@@ -32,7 +32,7 @@ public class SabiAccountScreen extends Screen {
                 .build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("button.sabi.deposit_all"), button ->
-                ClientPacketDistributor.sendToServer(new SabiNetwork.AccountActionPayload(SabiNetwork.AccountAction.DEPOSIT_ALL, 0))
+                ClientPlayNetworking.send(new SabiNetwork.AccountActionPayload(SabiNetwork.AccountAction.DEPOSIT_ALL, 0))
         ).bounds(panelX + 104, panelY + 78, 76, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.onClose())
@@ -61,7 +61,7 @@ public class SabiAccountScreen extends Screen {
         }
 
         if (amount > 0) {
-            ClientPacketDistributor.sendToServer(new SabiNetwork.AccountActionPayload(SabiNetwork.AccountAction.WITHDRAW, amount));
+            ClientPlayNetworking.send(new SabiNetwork.AccountActionPayload(SabiNetwork.AccountAction.WITHDRAW, amount));
         }
     }
 }

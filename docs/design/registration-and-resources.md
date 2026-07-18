@@ -10,12 +10,11 @@ src/main/java/top/sabi/Sabi.java
 
 注册内容：
 
-- `DeferredRegister.Blocks BLOCKS`
-- `DeferredRegister.Items ITEMS`
-- `DeferredRegister<MenuType<?>> MENUS`
-- 玩家账户附件：`SabiAccount.register(modEventBus)`
-- 撒币机挂起典当槽附件：`SabiPawnMachinePendingInput.register(modEventBus)`
-- 网络 payload：`SabiNetwork.register(modEventBus)`
+- 使用原版 `Registry.register` 注册方块、物品和菜单类型
+- 使用 `ExtendedMenuType` 传输撒币机方块坐标
+- 玩家账户附件：`SabiAccount.register()`
+- 撒币机挂起典当槽附件：`SabiPawnMachinePendingInput.register()`
+- 网络 payload：`SabiNetwork.registerServer()`
 
 ## 创造模式物品栏
 

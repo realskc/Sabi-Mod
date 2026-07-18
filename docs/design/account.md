@@ -12,12 +12,7 @@
 
 账户是玩家附件，不是物品：
 
-```java
-AttachmentType.serializable(AccountData::new)
-    .copyOnDeath()
-    .sync(AccountData.STREAM_CODEC)
-    .build()
-```
+账户使用 Fabric Data Attachment API 注册为持久化的 `AttachmentType<Long>`，并开启 `copyOnDeath`。
 
 账户数据：
 
@@ -32,8 +27,6 @@ AttachmentType.serializable(AccountData::new)
 服务端在以下时机同步余额：
 
 - 登录
-- 切维度
-- 重生
 - 账户交易后
 
 同步 payload 是 `BalanceSyncPayload`。
@@ -48,7 +41,7 @@ AttachmentType.serializable(AccountData::new)
 
 ## 背包界面入口
 
-`SabiClient` 监听 `InventoryScreen` 的渲染和鼠标点击。
+`SabiClient` 通过 Fabric Screen API 在 `InventoryScreen` 初始化后加入账户按钮。
 
 账户框位置和尺寸由 `SabiClient` 中的渲染常量决定，文档不记录具体像素值。
 

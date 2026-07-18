@@ -7,13 +7,7 @@
 - `client/SabiClient.java`
 - `client/SabiPawnMachineScreen.java`
 
-所有 payload 在 `SabiNetwork.registerPayloads` 注册。
-
-协议版本：
-
-```text
-1
-```
+payload codec 使用 Fabric `PayloadTypeRegistry` 注册，服务端接收器使用 `ServerPlayNetworking`，客户端接收器使用 `ClientPlayNetworking`。
 
 ## 服务端到客户端
 

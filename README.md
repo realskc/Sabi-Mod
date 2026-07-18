@@ -1,6 +1,6 @@
 # Sabi Mod
 
-Sabi 是一个基于 NeoForge 的 Minecraft Mod，主题是“撒币”经济系统和后续的德州扑克玩法。
+Sabi 是一个基于 Fabric 的 Minecraft Mod，主题是“撒币”经济系统和后续的德州扑克玩法。
 
 ## 主要内容
 
@@ -12,9 +12,10 @@ Sabi 是一个基于 NeoForge 的 Minecraft Mod，主题是“撒币”经济系
 ## 版本
 
 - Minecraft：`26.2`
-- NeoForge：`26.2.0.6-beta`
+- Fabric Loader：`0.18.4`
+- Fabric API：`0.154.2+26.2`
 - Mod ID：`sabi`
-- 当前 Mod 版本：`1.1.0`
+- 当前 Mod 版本：`1.2.0`
 
 ## 构建
 
@@ -25,3 +26,9 @@ Sabi 是一个基于 NeoForge 的 Minecraft Mod，主题是“撒币”经济系
 ```
 
 构建完成后，mod 文件会生成在 `build/libs/` 目录中。
+
+项目支持通过根目录的 `local.properties` 将构建产物自动复制到本机启动器实例。这个文件是可选的，并已被 Git 忽略；下载仓库后即使没有它，也可以正常执行构建。如果需要自动复制，可自行创建该文件：
+
+```properties
+pcl_mods_dir=D:/path/to/your/minecraft-instance/mods
+```

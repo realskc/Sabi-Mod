@@ -1,7 +1,6 @@
 package top.sabi;
 
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.registries.DeferredItem;
 
 public enum CurrencyDenomination {
     SMALL(1),
@@ -19,7 +18,7 @@ public enum CurrencyDenomination {
         return this.value;
     }
 
-    public DeferredItem<Item> item() {
+    public Item item() {
         return switch (this) {
             case SMALL -> Sabi.SMALL_SABI;
             case MEDIUM -> Sabi.MEDIUM_SABI;

@@ -13,49 +13,45 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public final class SabiNetwork {
     private SabiNetwork() {
     }
 
-    public static void register(IEventBus modEventBus) {
-        modEventBus.addListener(SabiNetwork::registerPayloads);
+    public static void registerServer() {
+        PayloadTypeRegistry.clientboundPlay().register(BalanceSyncPayload.TYPE, BalanceSyncPayload.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(PawnMachinePayload.TYPE, PawnMachinePayload.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(PawnMachineNoticePayload.TYPE, PawnMachineNoticePayload.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(AccountActionPayload.TYPE, AccountActionPayload.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PawnMachineInputModePayload.TYPE, PawnMachineInputModePayload.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PawnMachineSelectPayload.TYPE, PawnMachineSelectPayload.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PawnMachineRedeemPayload.TYPE, PawnMachineRedeemPayload.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(PawnMachineBuyPayload.TYPE, PawnMachineBuyPayload.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(AccountActionPayload.TYPE, SabiNetwork::handleAccountAction);
+        ServerPlayNetworking.registerGlobalReceiver(PawnMachineInputModePayload.TYPE, SabiNetwork::handlePawnMachineInputMode);
+        ServerPlayNetworking.registerGlobalReceiver(PawnMachineSelectPayload.TYPE, SabiNetwork::handlePawnMachineSelect);
+        ServerPlayNetworking.registerGlobalReceiver(PawnMachineRedeemPayload.TYPE, SabiNetwork::handlePawnMachineRedeem);
+        ServerPlayNetworking.registerGlobalReceiver(PawnMachineBuyPayload.TYPE, SabiNetwork::handlePawnMachineBuy);
     }
 
-    private static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(Sabi.MOD_ID).versioned("1");
-        registrar.playToClient(BalanceSyncPayload.TYPE, BalanceSyncPayload.STREAM_CODEC, SabiNetwork::handleBalanceSync);
-        registrar.playToClient(PawnMachinePayload.TYPE, PawnMachinePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineOpen);
-        registrar.playToClient(PawnMachineNoticePayload.TYPE, PawnMachineNoticePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineNotice);
-        registrar.playToServer(AccountActionPayload.TYPE, AccountActionPayload.STREAM_CODEC, SabiNetwork::handleAccountAction);
-        registrar.playToServer(PawnMachineInputModePayload.TYPE, PawnMachineInputModePayload.STREAM_CODEC, SabiNetwork::handlePawnMachineInputMode);
-        registrar.playToServer(PawnMachineSelectPayload.TYPE, PawnMachineSelectPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineSelect);
-        registrar.playToServer(PawnMachineRedeemPayload.TYPE, PawnMachineRedeemPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineRedeem);
-        registrar.playToServer(PawnMachineBuyPayload.TYPE, PawnMachineBuyPayload.STREAM_CODEC, SabiNetwork::handlePawnMachineBuy);
+    public static void registerClient() {
+        ClientPlayNetworking.registerGlobalReceiver(BalanceSyncPayload.TYPE,
+                (payload, context) -> context.client().execute(() -> SabiClientState.setBalance(payload.balance())));
+        ClientPlayNetworking.registerGlobalReceiver(PawnMachinePayload.TYPE,
+                (payload, context) -> context.client().execute(() -> top.sabi.client.SabiClient.openPawnMachine(payload)));
+        ClientPlayNetworking.registerGlobalReceiver(PawnMachineNoticePayload.TYPE,
+                (payload, context) -> context.client().execute(() -> top.sabi.client.SabiClient.showPawnMachineNotice(payload)));
     }
 
-    private static void handleBalanceSync(BalanceSyncPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> SabiClientState.setBalance(payload.balance()));
-    }
-
-    private static void handlePawnMachineOpen(PawnMachinePayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> top.sabi.client.SabiClient.openPawnMachine(payload));
-    }
-
-    private static void handlePawnMachineNotice(PawnMachineNoticePayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> top.sabi.client.SabiClient.showPawnMachineNotice(payload));
-    }
-
-    private static void handleAccountAction(AccountActionPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    private static void handleAccountAction(AccountActionPayload payload, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (!(player instanceof ServerPlayer serverPlayer)) {
                 return;
@@ -71,8 +67,8 @@ public final class SabiNetwork {
         });
     }
 
-    private static void handlePawnMachineInputMode(PawnMachineInputModePayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    private static void handlePawnMachineInputMode(PawnMachineInputModePayload payload, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (player instanceof ServerPlayer serverPlayer && serverPlayer.containerMenu instanceof SabiPawnMachineMenu menu && menu.pos().equals(payload.pos())) {
                 menu.setPawnInputMode(payload.quickPawnInputActive(), payload.detailPawnInputActive());
@@ -80,8 +76,8 @@ public final class SabiNetwork {
         });
     }
 
-    private static void handlePawnMachineSelect(PawnMachineSelectPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    private static void handlePawnMachineSelect(PawnMachineSelectPayload payload, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (!(player instanceof ServerPlayer serverPlayer) || !(serverPlayer.containerMenu instanceof SabiPawnMachineMenu menu) || !menu.pos().equals(payload.pos())) {
                 return;
@@ -94,8 +90,8 @@ public final class SabiNetwork {
         });
     }
 
-    private static void handlePawnMachineRedeem(PawnMachineRedeemPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    private static void handlePawnMachineRedeem(PawnMachineRedeemPayload payload, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (!(player instanceof ServerPlayer serverPlayer)) {
                 return;
@@ -128,8 +124,8 @@ public final class SabiNetwork {
         });
     }
 
-    private static void handlePawnMachineBuy(PawnMachineBuyPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    private static void handlePawnMachineBuy(PawnMachineBuyPayload payload, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (!(player instanceof ServerPlayer serverPlayer)) {
                 return;
@@ -160,13 +156,18 @@ public final class SabiNetwork {
     }
 
     public static void openPawnMachine(ServerPlayer player, BlockPos pos) {
-        player.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, menuPlayer) -> new SabiPawnMachineMenu(containerId, inventory, pos),
-                        Component.translatable("screen.sabi.sabi_machine")
-                ),
-                buffer -> buffer.writeBlockPos(pos)
-        );
+        player.openMenu(new ExtendedMenuProvider<BlockPos>() {
+            @Override
+            public BlockPos getScreenOpeningData(ServerPlayer player) { return pos; }
+
+            @Override
+            public Component getDisplayName() { return Component.translatable("screen.sabi.sabi_machine"); }
+
+            @Override
+            public SabiPawnMachineMenu createMenu(int id, net.minecraft.world.entity.player.Inventory inventory, Player menuPlayer) {
+                return new SabiPawnMachineMenu(id, inventory, pos);
+            }
+        });
         refreshPawnMachine(player, pos);
     }
 
@@ -181,7 +182,7 @@ public final class SabiNetwork {
                 entries.add(new PawnMachineItemEntry(id, storage.storedCount(item), price.pawn(), price.redeem()));
             }
         }
-        PacketDistributor.sendToPlayer(player, new PawnMachinePayload(pos, entries));
+        ServerPlayNetworking.send(player, new PawnMachinePayload(pos, entries));
     }
 
     public static void refreshOpenPawnMachines(MinecraftServer server) {
@@ -193,7 +194,7 @@ public final class SabiNetwork {
     }
 
     public static void showContainerRejectedNotice(ServerPlayer player, BlockPos pos, PawnContainerKind containerKind) {
-        PacketDistributor.sendToPlayer(player, new PawnMachineNoticePayload(pos, PawnMachineNotice.CONTAINER_CONTAINS_UNPAWNABLE, containerKind));
+        ServerPlayNetworking.send(player, new PawnMachineNoticePayload(pos, PawnMachineNotice.CONTAINER_CONTAINS_UNPAWNABLE, containerKind));
     }
 
     private static boolean redeem(ServerPlayer player, SabiPawnMachineStorage storage, Item item, int redeemPrice, int amount) {
@@ -251,7 +252,7 @@ public final class SabiNetwork {
     }
 
     private static boolean isPawnMachine(ServerPlayer player, BlockPos pos) {
-        return player.level().getBlockState(pos).is(Sabi.PAWN_MACHINE.get());
+        return player.level().getBlockState(pos).is(Sabi.PAWN_MACHINE);
     }
 
     public record BalanceSyncPayload(long balance) implements CustomPacketPayload {

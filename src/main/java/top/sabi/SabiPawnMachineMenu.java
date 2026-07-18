@@ -40,12 +40,8 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
     private boolean detailPawnInputActive;
     private boolean pendingInputSaveNeeded;
 
-    public SabiPawnMachineMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf extraData) {
-        this(containerId, playerInventory, extraData.readBlockPos());
-    }
-
     public SabiPawnMachineMenu(int containerId, Inventory playerInventory, BlockPos pos) {
-        super(Sabi.PAWN_MACHINE_MENU.get(), containerId);
+        super(Sabi.PAWN_MACHINE_MENU, containerId);
         this.pos = pos;
         this.owner = playerInventory.player;
         this.access = ContainerLevelAccess.create(playerInventory.player.level(), pos);
@@ -130,7 +126,7 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, Sabi.PAWN_MACHINE.get());
+        return stillValid(this.access, player, Sabi.PAWN_MACHINE);
     }
 
     @Override
@@ -300,12 +296,6 @@ public class SabiPawnMachineMenu extends AbstractContainerMenu {
         @Override
         public void setItem(int slot, ItemStack stack) {
             super.setItem(slot, stack);
-            this.persist();
-        }
-
-        @Override
-        public void setItem(int slot, ItemStack stack, boolean moveCarriedToInventory) {
-            super.setItem(slot, stack, moveCarriedToInventory);
             this.persist();
         }
 

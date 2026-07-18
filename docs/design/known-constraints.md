@@ -30,7 +30,7 @@
 
 ## 版本升级
 
-NeoForge / Minecraft API 名称可能随 26.x 更新改变。
+Fabric API / Minecraft API 名称可能随 26.x 更新改变。
 
 升级时优先重新跑 build，再审计：
 
@@ -40,4 +40,3 @@ NeoForge / Minecraft API 名称可能随 26.x 更新改变。
 - `GuiGraphicsExtractor`
 - Data Components
 - 自定义 payload 注册 API
-

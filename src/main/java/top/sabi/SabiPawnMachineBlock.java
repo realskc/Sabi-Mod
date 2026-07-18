@@ -39,7 +39,7 @@ public class SabiPawnMachineBlock extends Block {
     }
 
     private static void openPawnMachine(Level level, BlockPos pos, Player player) {
-        if (level instanceof ServerLevel && player instanceof ServerPlayer serverPlayer && level.getBlockState(pos).is(Sabi.PAWN_MACHINE.get())) {
+        if (level instanceof ServerLevel && player instanceof ServerPlayer serverPlayer && level.getBlockState(pos).is(Sabi.PAWN_MACHINE)) {
             SabiNetwork.openPawnMachine(serverPlayer, pos);
         }
     }

@@ -15,17 +15,11 @@
 python -m py_compile tools\edit_sabi_prices.py
 ```
 
-## copyModToPcl
+## 构建产物
 
-`build.gradle` 在 `build` 任务结束后自动执行 `copyModToPcl`。
+Fabric jar 生成在 `build/libs/`。默认情况下构建任务不会写入启动器的 mods 目录；部署实例需要安装匹配版本的 Fabric Loader 与 Fabric API。
 
-复制目标来自 `gradle.properties`：
-
-```properties
-pcl_mods_dir=D:/Portable Softwares/PCL/.minecraft/versions/26.2-NeoForge_26.2.0.6-beta/mods
-```
-
-如果其他机器没有这个目录，需要修改 `gradle.properties` 或临时调整该属性。
+如果项目根目录存在被 Git 忽略的 `local.properties`，并配置了 `pcl_mods_dir`，完整 `build` 会在结束后自动把 jar 复制到该本地 PCL 实例的 mods 目录。机器相关的实际路径不要写入受版本控制的文件。
 
 ## 后续 Agent 工作流
 

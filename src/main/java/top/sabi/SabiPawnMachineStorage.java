@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.util.datafix.DataFixTypes;
 
 public class SabiPawnMachineStorage extends SavedData {
     private static final int MAX_SERIALIZED_STACK_SIZE = 99;
@@ -24,7 +25,8 @@ public class SabiPawnMachineStorage extends SavedData {
     private static final SavedDataType<SabiPawnMachineStorage> TYPE = new SavedDataType<>(
             Identifier.fromNamespaceAndPath(Sabi.MOD_ID, "sabi_machine_storage"),
             SabiPawnMachineStorage::new,
-            CODEC
+            CODEC,
+            DataFixTypes.LEVEL
     );
 
     private final Map<Item, Deque<ItemStack>> storedItemsByItem = new HashMap<>();

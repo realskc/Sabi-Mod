@@ -1,13 +1,14 @@
 # Mod 概览
 
-Sabi 是一个基于 NeoForge 的 Minecraft Java 版 Mod。
+Sabi 是一个基于 Fabric 的 Minecraft Java 版 Mod。
 
 - Mod ID：`sabi`
 - Java 包名：`top.sabi`
 - Minecraft：`26.2`
-- NeoForge：`26.2.0.6-beta`
+- Fabric Loader：`0.18.4`
+- Fabric API：`0.154.2+26.2`
 - Java/JDK：`25`
-- 当前 Mod 版本：`1.1.0`
+- 当前 Mod 版本：`1.2.0`
 
 ## 当前主题
 

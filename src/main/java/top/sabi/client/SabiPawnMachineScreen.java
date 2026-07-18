@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import top.sabi.SabiAccount;
 import top.sabi.SabiNetwork;
 import top.sabi.SabiPawnMachineMenu;
@@ -245,7 +245,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
                 this.pageMode = PageMode.DETAIL;
                 this.menu.selectItem(this.filteredRows.get(index).item);
                 this.menu.setPawnInputMode(false, true);
-                ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineSelectPayload(this.menu.pos(), this.selectedItemId));
+                ClientPlayNetworking.send(new SabiNetwork.PawnMachineSelectPayload(this.menu.pos(), this.selectedItemId));
                 this.updateWidgetStates();
                 return true;
             }
@@ -270,7 +270,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (this.minecraft.options.keyInventory.isActiveAndMatches(InputConstants.getKey(event))) {
+        if (this.minecraft.options.keyInventory.matches(InputConstants.getKey(event))) {
             return !this.isEditBoxFocused();
         }
         return super.keyPressed(event);
@@ -502,9 +502,9 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
         Row selected = this.selectedRow();
         if (selected != null) {
             if (selected.hasStoredItems()) {
-                ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineRedeemPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
+                ClientPlayNetworking.send(new SabiNetwork.PawnMachineRedeemPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
             } else {
-                ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineBuyPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
+                ClientPlayNetworking.send(new SabiNetwork.PawnMachineBuyPayload(this.menu.pos(), selected.itemId, this.parseAmount()));
             }
             this.onClose();
         }
@@ -562,7 +562,7 @@ public class SabiPawnMachineScreen extends AbstractContainerScreen<SabiPawnMachi
 
         this.lastSyncedQuickPawnInputActive = quickPawnInputActive;
         this.lastSyncedDetailPawnInputActive = detailPawnInputActive;
-        ClientPacketDistributor.sendToServer(new SabiNetwork.PawnMachineInputModePayload(this.menu.pos(), quickPawnInputActive, detailPawnInputActive));
+        ClientPlayNetworking.send(new SabiNetwork.PawnMachineInputModePayload(this.menu.pos(), quickPawnInputActive, detailPawnInputActive));
     }
 
     private void updateGridWidgetStates(boolean gridPage) {
